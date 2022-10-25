@@ -18,7 +18,7 @@ const newQuestion = (newId: string) => ({
   id: newId,
   questionName: '',
   answerType: QUESTION_TYPES.YES_NO,
-  answerOptionList: ['답변 옵션1'],
+  answerOptionList: ['답변 옵션1', '답변 옵션2'],
 });
 
 
@@ -48,21 +48,13 @@ export default class ModuleSurvey extends VuexModule {
     this.survey.questionList.push(question);
   }
 
-  // // 질문 수정
-  // @Mutation
-  // private updateQuestion(question: IQuestion) {
-  //   const foundIndex = this.survey.questionList.findIndex((i) => i.id === question.id);
-  //   this.survey.questionList[foundIndex] = question;
-  // }
-
   // 질문 삭제
   @Mutation
-  private deleteQuestion(deleteId: string) {
+  private deleteQuestion(questionId: string) {
     this.survey.questionList = this.survey.questionList.filter(
-      (item) => item.id !== deleteId
+      (item) => item.id !== questionId
     );
   }
-
 
   // 특정 질문의 질문내용 수정
   @Mutation
@@ -107,9 +99,12 @@ export default class ModuleSurvey extends VuexModule {
   private saveSurvey(survey: ISurvey) {
     this.surveyList.push(survey);
   }
+  // ---------------------------MUTATION END----------------------------
 
 
-  //설문명 수정
+
+  // ---------------------------ACTION START----------------------------
+  //설문 제목 수정
   @Action
   public fetchUpdateSurveyName(surveyName: string) {
     this.updateSurveyName(surveyName);
@@ -120,6 +115,12 @@ export default class ModuleSurvey extends VuexModule {
   public fetchAddQuestion() {
     const newId = uniqueId();
     this.addQuestion(newQuestion(newId));
+  }
+
+  // 질문 삭제
+  @Action
+  public fetchDeleteQuestion(questionId: string) {
+    this.deleteQuestion(questionId);
   }
 
   // 특정 질문 내용 수정
@@ -152,5 +153,11 @@ export default class ModuleSurvey extends VuexModule {
   @Action
   public fetchDeleteAnswerOption({ questionId, answerOptionIndex }: {questionId: string, answerOptionIndex: number}) {
     this.deleteAnswerOption({ questionId, answerOptionIndex });
+  }
+
+  // 설문 저장
+  @Action
+  public fetchSaveSurvey() {
+    this.saveSurvey(this.survey);
   }
 }

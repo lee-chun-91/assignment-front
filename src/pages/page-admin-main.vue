@@ -1,7 +1,7 @@
 <template>
   <div class="admin-main">
-    <div class="admin-main-content" v-show="infoListEmpty">만들어진 설문이 아직 없습니다.</div>
-    <div class="admin-main-content" v-show="!infoListEmpty">
+    <div class="admin-main-content" v-show="isSurveyListEmpty">만들어진 설문이 아직 없습니다.</div>
+    <div class="admin-main-content" v-show="!isSurveyListEmpty">
       <table class="table">
         <thead class="table__thead">
         <tr class="table__tr">
@@ -72,6 +72,13 @@ export default class PageAdminMain extends Vue {
   // endregion
 
   // region computed
+  get surveyList() {
+    return $surveyStore.surveyList;
+  }
+
+  get isSurveyListEmpty() {
+    return $surveyStore.surveyList.length === 0;
+  }
   // endregion
 
   // region method
