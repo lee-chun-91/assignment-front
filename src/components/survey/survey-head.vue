@@ -1,7 +1,8 @@
 <template>
   <div class="survey-title">
-    <input type="text" className="survey-title__input"  placeholder="제목 없는 설문지"
-           name="title" />
+    <label for="설문지 제목"></label>
+    <input type="text" id="설문지 제목" className="survey-title__input" placeholder="제목 없는 설문지"
+           name="title" :value="surveyName" @input="updateSurveyName"/>
   </div>
 </template>
 
@@ -9,6 +10,7 @@
 import {
   Vue, Component, Prop, Emit,
 } from 'vue-property-decorator';
+import { $surveyStore } from '@/store';
 
 @Component({})
 export default class SurveyHead extends Vue {
@@ -20,9 +22,19 @@ export default class SurveyHead extends Vue {
   // endregion
 
   // region computed
+  get surveyName() {
+    return $surveyStore.survey.surveyName;
+  }
   // endregion
 
   // region method
+  updateSurveyName(e: InputEvent) {
+    if(!e.target) {
+      return;
+    }
+    const eventTarget = e.target as HTMLInputElement;
+    $surveyStore.fetchUpdateSurveyName(eventTarget.value);
+  }
   // endregion
 
   // region emit

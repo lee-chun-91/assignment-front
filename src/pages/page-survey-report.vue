@@ -1,13 +1,23 @@
 <template>
-  <div class="survey-report">page-survey-report</div>
+  <div class="survey-report">
+    <div>총 참여자</div>
+    <div>금일 참여자</div>
+    <div>
+      survey.questionList 에서 question 순회하며 report-question 컴포넌트 띄우기
+      <report-question></report-question>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import {
   Vue, Component, Prop, Emit,
 } from 'vue-property-decorator';
+import ReportQuestion from '@/components/survey-report/report-question.vue';
 
-@Component({})
+@Component({
+  components: { ReportQuestion }
+})
 export default class PageSurveyReport extends Vue {
   // region prop
   // endregion
