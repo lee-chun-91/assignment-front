@@ -1,28 +1,29 @@
 <template>
   <div class="survey-create">
     <survey-head></survey-head>
-    <question-list :questionList="survey.questionList"></question-list>
+    <question-list></question-list>
   </div>
 </template>
 
 <script lang="ts">
-export interface survey {
-  surveyName: string;
-  questionList: question[];
-}
-
-export interface question {
-  id : string;
-  questionName: string;
-  questionType: string;
-  answerList: string[];
-}
+// export interface survey {
+//   surveyName: string;
+//   questionList: question[];
+// }
+//
+// export interface question {
+//   id : string;
+//   questionName: string;
+//   questionType: string;
+//   answerList: string[];
+// }
 
 import {
   Vue, Component, Prop, Emit,
 } from 'vue-property-decorator';
 import SurveyHead from '@/components/survey/survey-head.vue';
 import QuestionList from '@/components/survey/question-list.vue';
+// import { uniqueId } from 'lodash';
 
 @Component({
   components: {
@@ -35,16 +36,21 @@ export default class PageSurveyCreate extends Vue {
   // endregion
 
   // region local
-  survey = {
-    surveyName: '',
-    questionList: [
-      { id: '',
-        questionName: '',
-        questionType: '',
-        answerList: [''],
-      }
-    ],
-  }
+  // survey = {
+  //   surveyName: '',
+  //   questionList: [
+  //     { id: uniqueId(),
+  //       questionName: '',
+  //       questionType: '',
+  //       answerList: [''],
+  //     },
+  //     { id: uniqueId(),
+  //       questionName: '',
+  //       questionType: '',
+  //       answerList: [''],
+  //     }
+  //   ],
+  // }
   // endregion
 
   // region computed

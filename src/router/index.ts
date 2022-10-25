@@ -16,36 +16,36 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'defaultLayout',
+    // name: 'defaultLayout',
     component: DefaultLayout,
     children: [
       {
-        path: '/',
+        path: '',
         name: 'adminMain',
         component: PageAdminMain,
       },
       {
-        path: '/create',
+        path: 'create',
         name: 'surveyCreate',
         component: PageSurveyCreate,
       },
       {
-        path: '/update/:surveyId',
+        path: 'update/:surveyId',
         name: 'surveyUpdate',
         component: PageSurveyUpdate,
       },
       {
-        path: '/report/:surveyId',
+        path: 'report/:surveyId',
         name: 'surveyReport',
         component: PageSurveyReport,
       },
       {
-        path: '/log/:surveyId',
+        path: 'log/:surveyId',
         name: 'surveyLog',
         component: PageSurveyLog,
       },
       {
-        path: '/log/:surveyId/:respondentName',
+        path: 'log/:surveyId/:respondentName',
         name: 'surveyLogDetail',
         component: PageSurveyLogDetail,
       },
@@ -54,16 +54,16 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/',
-    name: 'emptyLayout',
+    // name: 'emptyLayout',
     component: EmptyLayout,
     children: [
       {
-        path: '/signIn',
+        path: 'signIn',
         name: 'signIn',
         component: PageSignIn,
       },
       {
-        path: '/survey/:surveyId',
+        path: 'survey/:surveyId',
         name: 'surveyResponse',
         component: PageSurveyResponse,
       },
@@ -73,7 +73,7 @@ const routes: Array<RouteConfig> = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  // base: process.env.BASE_URL,
   routes
 });
 
