@@ -9,6 +9,7 @@
       <option value="2">다중선택</option>
     </select>
     <answer-list :questionId="questionId"></answer-list>
+    <el-button type="danger" icon="el-icon-delete" circle @click="deleteQuestion"></el-button>
   </div>
 </template>
 
@@ -25,9 +26,6 @@ import { $surveyStore } from '@/store';
 export default class QuestionContainer extends Vue {
   // region prop
   @Prop( { type: String }) questionId!: string
-  // @Prop( { type: String }) questionName!: string
-  // @Prop( { type: Number }) answerType!: number
-  // @Prop( { type: Array }) answerOptionList!: []
   // endregion
 
   // region local
@@ -62,6 +60,10 @@ export default class QuestionContainer extends Vue {
     const eventTarget = e.target as HTMLSelectElement;
     const answerType = Number(eventTarget.value);
     $surveyStore.fetchUpdateAnswerType({ questionId, answerType });
+  }
+
+  deleteQuestion() {
+    $surveyStore.fetchDeleteQuestion(this.questionId);
   }
   // endregion
 
