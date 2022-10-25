@@ -9,7 +9,7 @@
     </div>
     <div class="admin-header__breadcrumb">
       <div>admin > </div>
-      <button>설문지 추가</button>
+      <router-link to="/create"><button>설문지 추가</button></router-link>
     </div>
   </div>
 </template>

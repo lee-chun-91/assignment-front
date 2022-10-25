@@ -1,14 +1,20 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
-import { uniqueId } from 'lodash';
 
-export interface Iresponse {
-  // response 스키마 타입 세팅 필요
+export interface IResponse {
+  userName: string;
   surveyName: string;
-  questionList: [];
+  questionAnswerList: IQuestionAnswer[];
+}
+
+export interface IQuestionAnswer {
+  id : string;
+  answerList: string[]
 }
 
 
 @Module({ namespaced: true, name: 'response' })
 export default class ModuleResponse extends VuexModule {
   // 초기값
+  responseList: IResponse[] = [];
+
 }
