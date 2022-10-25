@@ -9,16 +9,16 @@
                @start="dragging = true"
                @end="dragging = false"
     >
-      <div class="question-list-item" v-for="{ id, questionName, questionType, answerList } in questionList"
+      <div class="question-list-item" v-for="{ id } in questionList"
            :key="id">
-        <question-container :questionId="id"
-                            :questionName="questionName"
-                            :questionType="questionType"
-                            :answerList="answerList">
+        <question-container :questionId="id">
+<!--                            :questionName="questionName"-->
+<!--                            :answerType="answerType"-->
+<!--                            :answerOptionList="answerOptionList">-->
         </question-container>
       </div>
     </draggable>
-    <el-button type="primary" round>질문 추가</el-button>
+    <el-button type="primary" round @click="addQuestion">질문 추가</el-button>
   </div>
 <!--  transition version-->
 
@@ -34,7 +34,7 @@
   <!--      </li>-->
   <!--    </transition-group>-->
   <!--  </draggable>-->
-</template>
+</template>vue chart.js
 
 
 <script lang="ts">
@@ -75,6 +75,10 @@ export default class QuestionList extends Vue {
   // region method
   checkMove(e : MoveEvent<number>) {
     window.console.log('Future index: ' + e.draggedContext.futureIndex);
+  }
+
+  addQuestion() {
+    $surveyStore.fetchAddQuestion();
   }
 
   // endregion
