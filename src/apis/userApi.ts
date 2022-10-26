@@ -2,7 +2,10 @@ import { instance } from './config';
 
 export const userApi = {
   // 관리자 로그인
-  adminLogin: () => {return;},
+  adminLogin: (userInfo: { username: string, password: string}) => {
+    const data = instance.post('api/user/login', userInfo);
+    return data;
+  },
 
   // 관리자 로그인 체크
   isLogin: () => {return;},

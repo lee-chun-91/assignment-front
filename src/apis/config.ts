@@ -1,10 +1,7 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const instance = axios.create({
   baseURL: 'https://localhost:7063/',
-  headers: {
-    'content-Type': 'application/json;charset=utf-8',
-  },
 });
 
 instance.interceptors.request.use(
@@ -20,5 +17,17 @@ instance.interceptors.request.use(
   (error) => {
     console.log(error, 'error');
     return;
+  }
+);
+
+instance.interceptors.response.use(
+  (response: AxiosResponse) => {
+    console.log('response', response);
+    localStorage.setItem('accessToken', response.data);
+    return response;
+  },
+  (error) => {
+    console.log('error', error);
+    return Promise.reject(error);
   }
 );
