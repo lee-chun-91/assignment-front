@@ -61,6 +61,13 @@ const routes: Array<RouteConfig> = [
         path: 'signIn',
         name: 'signIn',
         component: PageSignIn,
+        beforeEnter(to, from, next) {
+          if(localStorage.getItem('accessToken')){
+            next({ name:'adminMain' });
+          }else{
+            next();
+          }
+        }
       },
       {
         path: 'response/:surveyId',
