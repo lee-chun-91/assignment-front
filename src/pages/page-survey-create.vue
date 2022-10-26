@@ -2,6 +2,7 @@
   <div class="survey-create">
     <survey-head></survey-head>
     <question-list></question-list>
+    <el-button type="primary" round @click="addQuestion">+ 질문 추가</el-button>
     <el-button type="success" icon="el-icon-check" round @click="saveSurvey">설문지 저장하기</el-button>
   </div>
 </template>
@@ -31,6 +32,10 @@ export default class PageSurveyCreate extends Vue {
   // endregion
 
   // region method
+  addQuestion() {
+    $surveyStore.fetchAddQuestion();
+  }
+
   saveSurvey() {
     $surveyStore.fetchSaveSurvey();
     // 저장 성공여부에 따른 메시지 박스 show

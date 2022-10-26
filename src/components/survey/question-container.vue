@@ -36,15 +36,13 @@ export default class QuestionContainer extends Vue {
 
   // region computed
   get questionName() {
-    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.id === this.questionId);
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
     return $surveyStore.survey.questionList[foundIndex].questionName;
   }
   // endregion
 
   // region method
   updateQuestionName(questionId: string, e: InputEvent) {
-    console.log(e);
-    console.log(e.target);
     if (!e.target) {
       return;
     }
@@ -65,12 +63,6 @@ export default class QuestionContainer extends Vue {
   deleteQuestion() {
     $surveyStore.fetchDeleteQuestion(this.questionId);
   }
-  // endregion
-
-  // region emit
-  // endregion
-
-  // region lifecycle
   // endregion
 }
 </script>

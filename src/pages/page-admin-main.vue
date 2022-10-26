@@ -1,6 +1,7 @@
 <template>
   <div class="admin-main">
-    <div class="admin-main-content" v-show="isSurveyListEmpty">만들어진 설문이 아직 없습니다.</div>
+    <router-link to="/create"><button>설문지 추가</button></router-link>
+    <div class="admin-main-content" v-show="isSurveyListEmpty">생성된 설문이 없습니다.</div>
     <div class="admin-main-content" v-show="!isSurveyListEmpty">
       <table class="table">
         <thead class="table__thead">
@@ -16,36 +17,14 @@
         <tbody class="table__tbody">
         <tr class="table__tr"
             :key="index"
-            v-for="(info, index) in infoList"
-            :class="coloredRow(index)"
+            v-for="(survey, index) in surveyList"
         >
-          <td>{{ info.name }}</td>
-          <td>{{ info.email }}</td>
-          <td>{{ info.phoneNumber }}</td>
-          <td>{{ info.date }}</td>
-          <td>
-            <router-link
-              :to="{
-                  name: 'updateInfo',
-                  params: { id: info.id },
-                }"
-            >
-              <el-button
-                type="primary"
-                size="small"
-                icon="el-icon-edit"
-              ></el-button
-              ></router-link>
-          </td>
-          <td>
-            <div @click="deleteItem(info.id)">
-              <el-button
-                type="primary"
-                size="small"
-                icon="el-icon-delete"
-              ></el-button>
-            </div>
-          </td>
+          <td>{{ survey.surveyName }}</td>
+          <td>{{ survey.questionList.length }}개</td>
+          <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey.surveyId }}">설문지 수정</router-link></td>
+          <td><router-link :to="{ name: 'surveyReport', params: { surveyId: survey.surveyId }}">리포트 보기</router-link></td>
+          <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey.surveyId }}">설문지 로그</router-link></td>
+          <td><router-link :to="{ name: 'surveyResponse', params: { surveyId: survey.surveyId }}">설문지 배포</router-link></td>
         </tr>
         </tbody>
       </table>
