@@ -19,12 +19,12 @@
             :key="index"
             v-for="(survey, index) in surveyList"
         >
-          <td>{{ survey.surveyName }}</td>
-          <td>{{ survey.questionList.length }}개</td>
-          <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey.surveyId }}">설문지 수정</router-link></td>
-          <td><router-link :to="{ name: 'surveyReport', params: { surveyId: survey.surveyId }}">리포트 보기</router-link></td>
-          <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey.surveyId }}">설문지 로그</router-link></td>
-          <td><router-link :to="{ name: 'surveyResponse', params: { surveyId: survey.surveyId }}">설문지 배포</router-link></td>
+          <td>{{ survey.survey_name }}</td>
+          <td>{{ survey.question_list.length }}개</td>
+          <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey.survey_id }}">설문지 수정</router-link></td>
+          <td><router-link :to="{ name: 'surveyReport', params: { surveyId: survey.survey_id }}">리포트 보기</router-link></td>
+          <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey.survey_id }}">설문지 로그</router-link></td>
+          <td><router-link :to="{ name: 'surveyResponse', params: { surveyId: survey.survey_id }}">설문지 배포</router-link></td>
         </tr>
         </tbody>
       </table>
@@ -34,11 +34,10 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import AdminHeader from '@/layouts/admin-header.vue';
 import { $surveyStore } from '@/store';
+import { ISurvey } from '@/store/modules/module-survey';
 
 @Component({
   components: { AdminHeader }
@@ -56,7 +55,7 @@ export default class PageAdminMain extends Vue {
   }
 
   get isSurveyListEmpty() {
-    return $surveyStore.surveyList.length === 0;
+    return this.surveyList.length === 0;
   }
   // endregion
 
@@ -67,7 +66,6 @@ export default class PageAdminMain extends Vue {
   // endregion
 
   // region lifecycle
-
   // endregion
 }
 </script>

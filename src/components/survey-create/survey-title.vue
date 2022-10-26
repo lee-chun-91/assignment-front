@@ -13,7 +13,7 @@ import {
 import { $surveyStore } from '@/store';
 
 @Component({})
-export default class SurveyHead extends Vue {
+export default class SurveyTitle extends Vue {
 
   // region prop
   // endregion
@@ -23,7 +23,7 @@ export default class SurveyHead extends Vue {
 
   // region computed
   get surveyName() {
-    return $surveyStore.survey.surveyName;
+    return $surveyStore.survey.survey_name;
   }
   // endregion
 

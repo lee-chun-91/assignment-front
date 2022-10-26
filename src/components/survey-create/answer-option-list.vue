@@ -1,17 +1,17 @@
 <template>
-  <div class="answer-list">
-    <div v-for="(item, index) in answerOptionList" :key="index">
+  <div class="answer-option-list">
+    <div class="answer-option" v-for="(item, index) in answerOptionList" :key="index">
       <div v-if="isRadioButton">
         <label :for="index">
-          <input type="radio" :id="index" :value="item" name="answer" />
-          <input type="text" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
+          <input type="radio" :value="item" :name="questionId"/>
+          <input type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button square size="mini" @click="deleteAnswerOption(questionId, index)">삭제</el-button>
         </label>
       </div>
       <div v-else-if="isCheckbox">
         <label :for="index">
-          <input type="checkbox" :id="index" :value="item" name="answer" />
-          <input type="text" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
+          <input type="checkbox" :value="item" :name="questionId"/>
+          <input type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button square size="mini" @click="deleteAnswerOption(questionId, index)">삭제</el-button>
         </label>
       </div>
@@ -21,14 +21,12 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { QUESTION_TYPES } from '@/const/index';
 import { $surveyStore } from '@/store';
 
 @Component({})
-export default class AnswerList extends Vue {
+export default class AnswerOptionList extends Vue {
   // region prop
   @Prop( { type: String }) questionId!: string
   // endregion
@@ -40,13 +38,13 @@ export default class AnswerList extends Vue {
 
   // region computed
   get answerType() {
-    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
-    return $surveyStore.survey.questionList[foundIndex].answerType;
+    const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
+    return $surveyStore.survey.question_list[foundIndex].answer_type;
   }
 
   get answerOptionList() {
-    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
-    return $surveyStore.survey.questionList[foundIndex].answerOptionList;
+    const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
+    return $surveyStore.survey.question_list[foundIndex].answer_option_list;
   }
   get isRadioButton() {
     return this.answerType === QUESTION_TYPES.YES_NO || this.answerType === QUESTION_TYPES.ONE_CHOICE;
@@ -57,7 +55,7 @@ export default class AnswerList extends Vue {
   }
 
   // get isParticipation() {
-  //   return String(this.$route.params) === '/survey/:surveyId';
+  //   return String(this.$route.params) === '/survey-create-create/:surveyId';
   // }
   //
   // get isLog() {
@@ -81,11 +79,11 @@ export default class AnswerList extends Vue {
     }
     const eventTarget = e.target as HTMLInputElement;
     const answerOption = eventTarget.value;
-    $surveyStore.fetchUpdateAnswerOption( { questionId, answerOptionIndex, answerOption });
+    $surveyStore.fetchUpdateAnswerOption( { question_id: questionId, answerOptionIndex, answerOption });
   }
   //
   deleteAnswerOption(questionId: string, answerOptionIndex: number) {
-    $surveyStore.fetchDeleteAnswerOption({ questionId, answerOptionIndex });
+    $surveyStore.fetchDeleteAnswerOption({ question_id: questionId, answerOptionIndex });
   }
   // endregion
 

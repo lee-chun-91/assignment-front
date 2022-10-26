@@ -15,29 +15,25 @@
 
 <script lang="ts">
 
-import AnswerList from '@/components/survey/answer-list.vue';
+import AnswerList from '@/components/survey-create/answer-option-list.vue';
 import { Vue, Component, Prop } from 'vue-property-decorator';
-// import { QUESTION_TYPES } from '@/const/index';
 import { $surveyStore } from '@/store';
 
 @Component({
   components: { AnswerList }
 })
-export default class QuestionContainer extends Vue {
+export default class Question extends Vue {
   // region prop
   @Prop( { type: String }) questionId!: string
   // endregion
 
   // region local
-  // questionTypesYesNo = QUESTION_TYPES.YES_NO
-  // questionTypesOneChoice = QUESTION_TYPES.ONE_CHOICE
-  // questionTypesMultipleChoice = QUESTION_TYPES.MULTIPLE_CHOICE
   // endregion
 
   // region computed
   get questionName() {
-    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
-    return $surveyStore.survey.questionList[foundIndex].questionName;
+    const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
+    return $surveyStore.survey.question_list[foundIndex].question_name;
   }
   // endregion
 
@@ -48,7 +44,7 @@ export default class QuestionContainer extends Vue {
     }
     const eventTarget = e.target as HTMLInputElement;
     const questionName = eventTarget.value;
-    $surveyStore.fetchUpdateQuestionName({ questionId, questionName });
+    $surveyStore.fetchUpdateQuestionName({ question_id: this.questionId, question_name: questionName });
   }
 
   updateAnswerType(questionId: string, e: Event) {
@@ -57,7 +53,7 @@ export default class QuestionContainer extends Vue {
     }
     const eventTarget = e.target as HTMLSelectElement;
     const answerType = Number(eventTarget.value);
-    $surveyStore.fetchUpdateAnswerType({ questionId, answerType });
+    $surveyStore.fetchUpdateAnswerType({ question_id: this.questionId, answer_type: answerType });
   }
 
   deleteQuestion() {
