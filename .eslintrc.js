@@ -19,5 +19,6 @@ module.exports = {
     semi: [2, 'always'], // 세미콜론
     quotes: ['error', 'single', { allowTemplateLiterals: true }], // 싱글쿼트, 템플릿리터럴 허용,
     'jsx-quotes': ['error', 'prefer-double'], // jsx 내에서는 더블쿼트
+    '@typescript-eslint/no-non-null-assertion': 'off' // ! 사용에 대한 허용
   }
 };
