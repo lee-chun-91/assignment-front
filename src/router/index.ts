@@ -63,7 +63,7 @@ const routes: Array<RouteConfig> = [
         component: PageSignIn,
       },
       {
-        path: 'survey/:surveyId',
+        path: 'response/:surveyId',
         name: 'surveyResponse',
         component: PageSurveyResponse,
       },
@@ -72,7 +72,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   // base: process.env.BASE_URL,
   routes
 });

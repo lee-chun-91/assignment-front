@@ -12,9 +12,9 @@
                @end="dragging = false"
     >
       <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
-        <div class="question-list-item" v-for="{ questionId } in questionList" :key="questionId">
+        <div class="question-list-item" v-for="{ question_id } in questionList" :key="question_id">
           <i class="el-icon-rank handle"></i>
-          <question-container :questionId="questionId"></question-container>
+          <question :questionId="question_id"></question>
         </div>
       </transition-group>
     </draggable>
@@ -27,9 +27,9 @@ import {
 } from 'vue-property-decorator';
 import draggable, { MoveEvent } from 'vuedraggable';
 import { $surveyStore } from '@/store';
-import QuestionContainer from '@/components/survey/question-container.vue';
+import Question from '@/components/survey-create/question.vue';
 
-@Component({ components: { draggable, QuestionContainer } })
+@Component({ components: { draggable, Question } })
 export default class QuestionList extends Vue {
   // region local
   enabled = true
@@ -38,9 +38,9 @@ export default class QuestionList extends Vue {
 
   // region computed
   get questionList() {
-    return $surveyStore.survey.questionList.map((question) => {
-      return question;
-    });
+    return $surveyStore.survey.question_list;
+    // return $surveyStore.survey.question_list.map((question) => {
+    //   return question;
   }
   // endregion
 
