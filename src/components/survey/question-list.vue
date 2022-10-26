@@ -1,41 +1,25 @@
 <template>
   <div class="question-list">
-<!--  basic-->
-    <draggable :questionList="questionList"
-               :disabled="!enabled"
+    <draggable
+               :questionList="questionList"
                class="question-list-draggable"
+               handle=".handle"
+               animation="200"
+               group="description"
+               :disabled="!enabled"
                ghost-class="ghost"
-               :move="checkMove"
                @start="dragging = true"
                @end="dragging = false"
     >
-      <div class="question-list-item" v-for="{ id } in questionList"
-           :key="id">
-        <question-container :questionId="id">
-<!--                            :questionName="questionName"-->
-<!--                            :answerType="answerType"-->
-<!--                            :answerOptionList="answerOptionList">-->
-        </question-container>
-      </div>
+      <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
+        <div class="question-list-item" v-for="{ questionId } in questionList" :key="questionId">
+          <i class="el-icon-rank handle"></i>
+          <question-container :questionId="questionId"></question-container>
+        </div>
+      </transition-group>
     </draggable>
-    <el-button type="primary" round @click="addQuestion">질문 추가</el-button>
   </div>
-<!--  transition version-->
-
-  <!--  <draggable class="question-list" tag="ul" v-model="questionList" v-bind="dragOptions" @start="drag = true"-->
-  <!--             @end="drag = false">-->
-  <!--    <transition-group type="transition" :name="!drag ? 'flip-list' : null">-->
-  <!--      <li class="question-list-item"-->
-  <!--          v-for="question in questionList" :key="question.id">-->
-  <!--        <question-container :class="question.fixed ? 'fa fa-anchor' : 'glyphicon glyphicon-pushpin'"-->
-  <!--                            @click="question.fixed = !question.fixed"-->
-  <!--                            aria-hidden="true">-->
-  <!--        </question-container>-->
-  <!--      </li>-->
-  <!--    </transition-group>-->
-  <!--  </draggable>-->
-</template>vue chart.js
-
+</template>
 
 <script lang="ts">
 import {
@@ -47,13 +31,9 @@ import QuestionContainer from '@/components/survey/question-container.vue';
 
 @Component({ components: { draggable, QuestionContainer } })
 export default class QuestionList extends Vue {
-  // region prop
-  // @Prop({ type: Array, required: true }) questionList!: question[];
-  // endregion
-
   // region local
   enabled = true
-  dragging = false
+  dragging= false
   // endregion
 
   // region computed
@@ -62,34 +42,15 @@ export default class QuestionList extends Vue {
       return question;
     });
   }
-  // dragOptions() {
-  //   return {
-  //     animation: 200,
-  //     group: 'description',
-  //     disabled: false,
-  //     ghostClass: 'ghost'
-  //   };
-  // }
   // endregion
 
   // region method
-  checkMove(e : MoveEvent<number>) {
-    window.console.log('Future index: ' + e.draggedContext.futureIndex);
-  }
-
-  addQuestion() {
-    $surveyStore.fetchAddQuestion();
-  }
-
   // endregion
 
   // region emit
   // endregion
 
   // region lifecycle
-  created() {
-    console.log($surveyStore.survey);
-  }
   // endregion
 }
 </script>

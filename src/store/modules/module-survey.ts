@@ -3,19 +3,30 @@ import { uniqueId } from 'lodash';
 import { QUESTION_TYPES } from '@/const/index';
 
 export interface ISurvey {
+  surveyId?: string;
   surveyName: string;
   questionList: IQuestion[];
 }
 
 export interface IQuestion {
-  id : string;
+  questionId : string;
   questionName: string;
   answerType: number;
   answerOptionList: string[];
 }
 
+const initialSurvey: ISurvey = {
+  surveyName: '',
+  questionList: [
+    { questionId: uniqueId(),
+      questionName: '',
+      answerType: QUESTION_TYPES.YES_NO,
+      answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
+    },
+  ],
+};
 const newQuestion = (newId: string) => ({
-  id: newId,
+  questionId: newId,
   questionName: '',
   answerType: QUESTION_TYPES.YES_NO,
   answerOptionList: ['답변 옵션1', '답변 옵션2'],
@@ -25,15 +36,11 @@ const newQuestion = (newId: string) => ({
 @Module({ namespaced: true, name: 'survey' })
 export default class ModuleSurvey extends VuexModule {
   surveyList: ISurvey[] = []
-  survey: ISurvey = {
-    surveyName: '',
-    questionList: [
-      { id: uniqueId(),
-        questionName: '',
-        answerType: QUESTION_TYPES.YES_NO,
-        answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
-      },
-    ],
+  survey: ISurvey = initialSurvey
+
+  @Mutation
+  private setInitialSurvey() {
+    this.survey = initialSurvey;
   }
 
   // 설문제목 수정
@@ -52,29 +59,30 @@ export default class ModuleSurvey extends VuexModule {
   @Mutation
   private deleteQuestion(questionId: string) {
     this.survey.questionList = this.survey.questionList.filter(
-      (item) => item.id !== questionId
+      (item) => item.questionId !== questionId
     );
   }
 
   // 특정 질문의 질문내용 수정
   @Mutation
   private updateQuestionName({ questionId, questionName }: {questionId: string, questionName: string}) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.id === questionId);
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     this.survey.questionList[foundIndex] = { ...this.survey.questionList[foundIndex], questionName };
   }
 
   // 특정 질문의 답변타입 수정
   @Mutation
   private updateAnswerType({ questionId, answerType }: {questionId: string, answerType: number}) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.id === questionId);
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     this.survey.questionList[foundIndex].answerType = answerType;
   }
 
   // 특정 질문의 답변옵션 추가
   @Mutation
   private addAnswerOption({ questionId, newAnswerOption }: {questionId: string, newAnswerOption: string}) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.id === questionId);
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     console.log(foundIndex);
+    console.log(newAnswerOption);
     this.survey.questionList[foundIndex].answerOptionList.push(newAnswerOption);
   }
 
@@ -83,21 +91,24 @@ export default class ModuleSurvey extends VuexModule {
   @Mutation
   private updateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
     answerOptionIndex: number, answerOption: string}) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.id === questionId);
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     this.survey.questionList[foundIndex].answerOptionList[answerOptionIndex] = answerOption;
   }
 
   // 특정 질문의 답변옵션 삭제
   @Mutation
   private deleteAnswerOption({ questionId, answerOptionIndex }: { questionId: string, answerOptionIndex: number }) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.id === questionId);
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     this.survey.questionList[foundIndex].answerOptionList.splice(answerOptionIndex, 1);
   }
 
   // 설문 저장
   @Mutation
   private saveSurvey(survey: ISurvey) {
-    this.surveyList.push(survey);
+    // surveyId 부여는 임시
+    // API 연동 이후 삭제 예정
+    const surveyId = uniqueId();
+    this.surveyList.push({ ...survey, surveyId });
   }
   // ---------------------------MUTATION END----------------------------
 
@@ -159,5 +170,6 @@ export default class ModuleSurvey extends VuexModule {
   @Action
   public fetchSaveSurvey() {
     this.saveSurvey(this.survey);
+    this.setInitialSurvey();
   }
 }

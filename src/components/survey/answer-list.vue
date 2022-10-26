@@ -3,20 +3,20 @@
     <div v-for="(item, index) in answerOptionList" :key="index">
       <div v-if="isRadioButton">
         <label :for="index">
-          <input type="radio" :id="index" value="item" name="answer" />
+          <input type="radio" :id="index" :value="item" name="answer" />
           <input type="text" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button square size="mini" @click="deleteAnswerOption(questionId, index)">삭제</el-button>
         </label>
       </div>
       <div v-else-if="isCheckbox">
-        <label for="item">
-          <input type="checkbox" id="item" name="item" />
+        <label :for="index">
+          <input type="checkbox" :id="index" :value="item" name="answer" />
           <input type="text" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button square size="mini" @click="deleteAnswerOption(questionId, index)">삭제</el-button>
         </label>
       </div>
     </div>
-    <el-button square size="mini" @click="addAnswerOption">답변 옵션 추가</el-button>
+    <el-button square size="mini" @click="addAnswerOption">+ 답변 옵션 추가</el-button>
   </div>
 </template>
 
@@ -40,12 +40,12 @@ export default class AnswerList extends Vue {
 
   // region computed
   get answerType() {
-    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.id === this.questionId);
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
     return $surveyStore.survey.questionList[foundIndex].answerType;
   }
 
   get answerOptionList() {
-    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.id === this.questionId);
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
     return $surveyStore.survey.questionList[foundIndex].answerOptionList;
   }
   get isRadioButton() {
