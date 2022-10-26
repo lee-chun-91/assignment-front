@@ -1,7 +1,7 @@
 <template>
   <div class="atomic-input">
     <label :for="title"></label>
-    <input type="text" :id="title" :placeholder="placeholder" :value="inputValue"
+    <input type="text" :id="title" :placeholder="placeholder" :value="value"
            @input="handleInput"/>
   </div>
 </template>
@@ -16,17 +16,18 @@ export default class AtomicInput extends Vue {
   // region prop
   @Prop({ type: String }) readonly title!: string
   @Prop({ type: String }) readonly placeholder!: string
-  @Prop({ type: String }) inputValue!: string
+  @Prop({ type: String }) value!: string
   // endregion
 
   // region emit
   @Emit()
   handleInput(event: InputEvent) {
+    console.log('handle input event !');
     if (!event.target) {
       return undefined;
     }
     const eventTarget = event.target as HTMLInputElement;
-    return eventTarget;
+    return eventTarget.value;
   }
   // endregion
 }

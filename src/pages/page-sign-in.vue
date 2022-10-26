@@ -1,17 +1,16 @@
 <template>
   <div class="sign-in">
-    <AtomicInput title="id" placeholder="id를 입력해주세요" :inputValue="id.value" @handle-input="updateId"></AtomicInput>
-    <AtomicInput title="password" placeholder="password를 입력해주세요" :inputValue="password.value" @handle-input="updatePassword"></AtomicInput>
-    <AtomicButton name="로그인"></AtomicButton>
+    <AtomicInput title="id" placeholder="id를 입력해주세요" :value="username" @handle-input="updateId"></AtomicInput>
+    <AtomicInput title="password" placeholder="password를 입력해주세요" :value="password" @handle-input="updatePassword"></AtomicInput>
+    <el-button type="success" name="로그인" @click="login" round>로그인</el-button>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import AtomicButton from '@/components/sign-in/atomic-button.vue';
 import AtomicInput from '@/components/sign-in/atomic-input.vue';
+import { $adminStore } from '@/store';
 
 @Component({
   components: { AtomicButton, AtomicInput },
@@ -21,15 +20,8 @@ export default class PageSignIn extends Vue {
   // endregion
 
   // region local
-  id= {
-    value: '',
-    isValid: false,
-  }
-
-  password = {
-    value: '',
-    isValid: false,
-  }
+  username = '';
+  password = '';
   // endregion
 
   // region computed
@@ -37,11 +29,15 @@ export default class PageSignIn extends Vue {
 
   // region method
   updateId(value: string) {
-    this.id.value = value;
+    this.username = value;
   }
 
   updatePassword(value: string) {
-    this.password.value = value;
+    this.password = value;
+  }
+
+  login() {
+    $adminStore.fetchLogin({ username: this.username, password: this.password });
   }
   // endregion
 

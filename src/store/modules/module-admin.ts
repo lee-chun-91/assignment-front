@@ -1,6 +1,12 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 // import { userApi } from '@/apis/userApi';
 import router from '@/router';
+import { userApi } from '@/apis/userApi';
+
+export interface IAdminInfo {
+  username: string,
+  password: string,
+}
 
 @Module({ namespaced: true, name: 'admin' })
 export default class ModuleAdmin extends VuexModule {
@@ -19,8 +25,8 @@ export default class ModuleAdmin extends VuexModule {
   }
 
   @Action
-  public fetchLogin() {
-    // userApi.adminLogin().then(() => this.login());
+  public async fetchLogin(userInfo: IAdminInfo) {
+    await userApi.adminLogin(userInfo);
   }
 
   @Action

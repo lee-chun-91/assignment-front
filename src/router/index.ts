@@ -10,6 +10,7 @@ import PageSurveyResponse from '@/pages/page-survey-response.vue';
 import DefaultLayout from '@/layouts/default-layout.vue';
 import EmptyLayout from '@/layouts/empty-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
+import { $adminStore } from '@/store';
 
 Vue.use(VueRouter);
 
@@ -61,13 +62,13 @@ const routes: Array<RouteConfig> = [
         path: 'signIn',
         name: 'signIn',
         component: PageSignIn,
-        beforeEnter(to, from, next) {
-          if(localStorage.getItem('accessToken')){
-            next({ name:'adminMain' });
-          }else{
-            next();
-          }
-        }
+        // beforeEnter(to, from, next) {
+        //   if(localStorage.getItem('accessToken')){
+        //     next({ name:'adminMain' });
+        //   }else{
+        //     return false;
+        //   }
+        // }
       },
       {
         path: 'response/:surveyId',
@@ -83,5 +84,11 @@ const router = new VueRouter({
   // base: process.env.BASE_URL,
   routes
 });
+
+router.beforeEach(async (to, from, next) => {
+  if( !$adminStore.isLogin && to.name !== 'signIn') next({ name: 'signIn' });
+  else next();
+});
+
 
 export default router;

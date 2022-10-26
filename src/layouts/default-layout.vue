@@ -11,6 +11,7 @@ import {
   Vue, Component, Prop, Emit,
 } from 'vue-property-decorator';
 import AdminHeader from '@/layouts/admin-header.vue';
+import { $adminStore } from '@/store';
 
 @Component({
   components: { AdminHeader }
