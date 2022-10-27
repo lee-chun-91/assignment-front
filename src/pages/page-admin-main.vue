@@ -21,13 +21,17 @@
         >
           <td>{{ survey.survey_name }}</td>
           <td>{{ survey.question_list.length }}개</td>
-          <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey.survey_id }}">설문지 수정</router-link></td>
-          <td><router-link :to="{ name: 'surveyReport', params: { surveyId: survey.survey_id }}">리포트 보기</router-link></td>
-          <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey.survey_id }}">설문지 로그</router-link></td>
-          <td><router-link :to="{ name: 'surveyResponse', params: { surveyId: survey.survey_id }}">설문지 배포</router-link></td>
+          <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey._id }}">설문지 수정</router-link></td>
+          <td><router-link :to="{ name: 'surveyReport', params: { surveyId: survey._id }}">리포트 보기</router-link></td>
+          <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey._id }}">설문지 로그</router-link></td>
+          <td><router-link :to="{ name: 'surveyResponse', params: { surveyId: survey._id }}">설문지 배포</router-link></td>
         </tr>
         </tbody>
       </table>
+      <el-pagination layout="prev, pager, next"
+                     :page-size="5"
+                     :total="total"
+                     @current-change="handleCurrentChange"></el-pagination>
     </div>
   </div>
 
@@ -37,7 +41,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 import AdminHeader from '@/layouts/admin-header.vue';
 import { $surveyStore } from '@/store';
-import { ISurvey } from '@/store/modules/module-survey';
 
 @Component({
   components: { AdminHeader }
@@ -51,21 +54,36 @@ export default class PageAdminMain extends Vue {
 
   // region computed
   get surveyList() {
-    return $surveyStore.surveyList;
+    return $surveyStore.surveyList.data;
   }
 
   get isSurveyListEmpty() {
-    return this.surveyList.length === 0;
+    return $surveyStore.surveyList.data.length === 0;
+  }
+
+  get total() {
+    return $surveyStore.surveyList.total;
   }
   // endregion
 
   // region method
+  // async getSurveyList(page: number) {
+  //   await $surveyStore.
+  // }
+  async handleCurrentChange(page: number) {
+
+    console.log(`current page: ${page}`);
+    await $surveyStore.fetchGetSurveyList(page);
+  }
   // endregion
 
   // region emit
   // endregion
 
   // region lifecycle
+  async created() {
+    await $surveyStore.fetchGetSurveyList(1);
+  }
   // endregion
 }
 </script>

@@ -2,21 +2,24 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const instance = axios.create({
   baseURL: 'https://localhost:7063/',
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     const accessToken = localStorage.getItem('accessToken');
 
-    if (config && accessToken) {
-      config.headers!['authorization'] = accessToken;
+    if (accessToken) {
+      config.headers!.Authorization = `Bearer ${accessToken}`;
       return config;
     }
     return config;
   },
   (error) => {
     console.log(error, 'error');
-    return;
+    return Promise.reject(error);
   }
 );
 

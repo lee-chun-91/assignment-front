@@ -1,8 +1,12 @@
 import { instance } from './config';
+import { ISurvey } from '@/store/modules/module-survey';
 
 export const surveyApi = {
   // 설문지 저장
-  saveSurvey: () => {return;},
+  saveSurvey: (survey: ISurvey) => {
+    const data = instance.post('api/survey/saveSurvey', survey);
+    return data;
+  },
 
   // 설문지 수정
   updateSurvey: () => {return;},
@@ -11,5 +15,9 @@ export const surveyApi = {
   changeSurveyStatus: () => {return;},
 
   //
-  getSurveyList: () => {return;},
+  getSurveyList: (page: number) => {
+    const data = instance.get('api/survey/getSurveyList',
+      { params: { page: page } });
+    return data;
+  },
 };

@@ -1,9 +1,15 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import { uniqueId } from 'lodash';
 import { QUESTION_TYPES } from '@/const/index';
+import { surveyApi } from '@/apis/surveyApi';
+
+export interface ISurveyList {
+  total: number;
+  data: ISurvey[];
+}
 
 export interface ISurvey {
-  survey_id?: string;
+  _id?: string;
   survey_name: string;
   question_list: IQuestion[];
 }
@@ -25,7 +31,10 @@ const newQuestion = (newId: string) => ({
 
 @Module({ namespaced: true, name: 'survey' })
 export default class ModuleSurvey extends VuexModule {
-  surveyList: ISurvey[] = []
+  surveyList: ISurveyList = {
+    total: 0,
+    data: []
+  }
   survey: ISurvey = {
     survey_name: '',
     question_list: [
@@ -114,13 +123,23 @@ export default class ModuleSurvey extends VuexModule {
   }
 
   // 설문 저장
+  // @Mutation
+  // private saveSurvey() {
+  //   this.surveyList.push();
+  // }
+
+  // 설문 리스트 get 후 state 에 저장
   @Mutation
-  private saveSurvey() {
-    // survey_id 부여는 임시
-    // API 연동 이후 삭제 예정
-    const survey_id = uniqueId();
-    this.surveyList.push({ ...this.survey, survey_id });
+  private getSurveyList(surveyList: ISurveyList) {
+    this.surveyList = surveyList;
+    // if (page === 1) {
+    //   this.surveyList = surveyList;
+    // }
+    // else {
+    //   this.surveyList.push(...surveyList);
+    // }
   }
+
   // ---------------------------MUTATION END----------------------------
 
 
@@ -179,8 +198,22 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 저장
   @Action
   public async fetchSaveSurvey() {
-    await this.saveSurvey();
-    await this.setInitialSurvey();
-    // this.setInitialSurvey();
+    return await surveyApi.saveSurvey(this.survey)
+      .then((res) => {
+        this.setInitialSurvey();
+      })
+      .catch((error) => console.log(error));
   }
+
+  // 설문 리스트 불러오기
+  @Action
+  public async fetchGetSurveyList(page: number) {
+    await surveyApi.getSurveyList(page)
+      .then((res) => {
+        console.log(res.data);
+        this.getSurveyList(res.data);
+      })
+      .catch((error) => console.log(error));
+  }
+
 }
