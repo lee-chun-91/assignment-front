@@ -10,7 +10,7 @@ import PageSurveyResponse from '@/pages/page-survey-response.vue';
 import DefaultLayout from '@/layouts/default-layout.vue';
 import EmptyLayout from '@/layouts/empty-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
-import { $adminStore } from '@/store';
+import { $adminStore, $surveyStore } from '@/store';
 
 Vue.use(VueRouter);
 
@@ -86,8 +86,17 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if( !$adminStore.isLogin && to.name !== 'signIn') next({ name: 'signIn' });
-  else next();
+  // 로컬 스토리지에 유저정보 저장 여부 확인
+  const username = localStorage.getItem('username');
+  const token = localStorage.getItem('accessToken');
+
+  // 유저정보 없으면 회원가입 화면으로
+  if( (!username) && (!token) && (to.name !== 'signIn')) {next({ name: 'signIn' });}
+  // 유저정보 있으면 setLoggedInfo
+  else {
+    $adminStore.fetchSetLoggedInfo();
+    next();
+  }
 });
 
 
