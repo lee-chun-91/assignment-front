@@ -11,6 +11,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import AtomicButton from '@/components/sign-in/atomic-button.vue';
 import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import { $adminStore } from '@/store';
+import router from '@/router';
 
 @Component({
   components: { AtomicButton, AtomicInput },
@@ -37,7 +38,12 @@ export default class PageSignIn extends Vue {
   }
 
   login() {
-    $adminStore.fetchLogin({ username: this.username, password: this.password });
+    $adminStore.fetchLogin({ username: this.username, password: this.password })
+      .catch((error) => {
+        this.$alert(error, '로그인 오류', {
+          confirmButtonText: 'OK',
+        });
+      });
   }
   // endregion
 

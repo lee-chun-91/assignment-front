@@ -20,14 +20,14 @@ instance.interceptors.request.use(
   }
 );
 
-instance.interceptors.response.use(
-  (response: AxiosResponse) => {
-    console.log('response', response);
-    localStorage.setItem('accessToken', response.data);
-    return response;
-  },
-  (error) => {
-    console.log('error', error);
-    return Promise.reject(error);
-  }
-);
+// instance.interceptors.response.use(
+// (response: AxiosResponse) => {
+// console.log('response', response);
+// localStorage.setItem('accessToken', response.data);
+// return response;
+// },
+// (error) => {
+// console.log('error', error.response.data);
+// return Promise.reject(error);
+// }
+// );
