@@ -50,6 +50,7 @@ export default class ModuleAdmin extends VuexModule {
   @Action
   public fetchLogout() {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('username');
     this.logout();
     router.push( { name: 'signIn' });
   }
