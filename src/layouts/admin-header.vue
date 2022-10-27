@@ -3,8 +3,8 @@
     <div class="admin-header__title">
       <h2>설문조사 관리자</h2>
       <p>
-        xxx님 안녕하세요
-        <a>로그아웃</a>
+        {{ username }}님 안녕하세요
+        <el-button size="mini" @click="logout">로그아웃</el-button>
       </p>
     </div>
     <div class="admin-header__breadcrumb">
@@ -17,6 +17,7 @@
 import {
   Vue, Component, Prop, Emit,
 } from 'vue-property-decorator';
+import { $adminStore } from '@/store';
 
 @Component({})
 export default class AdminHeader extends Vue {
@@ -27,9 +28,15 @@ export default class AdminHeader extends Vue {
   // endregion
 
   // region computed
+  get username() {
+    return $adminStore.username;
+  }
   // endregion
 
   // region method
+  logout() {
+    $adminStore.fetchLogout();
+  }
   // endregion
 
   // region emit
