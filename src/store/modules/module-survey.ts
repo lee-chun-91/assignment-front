@@ -49,7 +49,6 @@ export default class ModuleSurvey extends VuexModule {
   // ---------------------------MUTATION START----------------------------
   @Mutation
   private setInitialSurvey() {
-    console.log('setInitialSurvey!');
     const initialSurvey: ISurvey = {
       survey_name: '',
       question_list: [
@@ -122,22 +121,16 @@ export default class ModuleSurvey extends VuexModule {
     this.survey.question_list[foundIndex].answer_option_list.splice(answerOptionIndex, 1);
   }
 
-  // 설문 저장
-  // @Mutation
-  // private saveSurvey() {
-  //   this.surveyList.push();
-  // }
-
   // 설문 리스트 get 후 state 에 저장
   @Mutation
   private getSurveyList(surveyList: ISurveyList) {
     this.surveyList = surveyList;
-    // if (page === 1) {
-    //   this.surveyList = surveyList;
-    // }
-    // else {
-    //   this.surveyList.push(...surveyList);
-    // }
+  }
+
+  // 설문지 데이터 받아와서 state 에 저장
+  @Mutation
+  private setSurvey(survey: ISurvey) {
+    this.survey = survey;
   }
 
   // ---------------------------MUTATION END----------------------------
@@ -205,7 +198,12 @@ export default class ModuleSurvey extends VuexModule {
       .catch((error) => console.log(error));
   }
 
-  // 설문 리스트 불러오기
+  @Action
+  public fetchSetInitialSurvey() {
+    this.setInitialSurvey();
+  }
+
+  // 설문 리스트 get
   @Action
   public async fetchGetSurveyList(page: number) {
     await surveyApi.getSurveyList(page)
@@ -216,4 +214,21 @@ export default class ModuleSurvey extends VuexModule {
       .catch((error) => console.log(error));
   }
 
+  // 설문 get
+  @Action
+  public async fetchGetSurvey(surveyId: string) {
+    return await surveyApi.getSurvey(surveyId)
+      .then((res) => this.setSurvey(res.data))
+      .catch((error) => console.log(error));
+  }
+
+  // 설문 수정
+  @Action
+  public async fetchUpdateSurvey({ surveyId, survey }: {surveyId: string, survey: ISurvey}) {
+    return await surveyApi.updateSurvey({ surveyId, survey })
+      .then((res) => {
+        this.setInitialSurvey();
+      })
+      .catch((error) => console.log(error));
+  }
 }

@@ -3,7 +3,7 @@
     <label for="질문내용"></label>
     <input type="text" id="질문내용" className="question__input"  placeholder="질문을 입력해주세요"
            name="questionName" :value="questionName" @input="updateQuestionName(questionId, $event)"/>
-    <select name="questionType" @change="updateAnswerType(questionId, $event)">
+    <select name="questionType" :value="answerType" @change="updateAnswerType(questionId, $event)">
       <option value="0">YES/NO</option>
       <option value="1">단일선택</option>
       <option value="2">다중선택</option>
@@ -34,6 +34,11 @@ export default class Question extends Vue {
   get questionName() {
     const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
     return $surveyStore.survey.question_list[foundIndex].question_name;
+  }
+
+  get answerType() {
+    const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
+    return $surveyStore.survey.question_list[foundIndex].answer_type;
   }
   // endregion
 

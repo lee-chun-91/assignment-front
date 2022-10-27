@@ -22,7 +22,6 @@ export default class AtomicInput extends Vue {
   // region emit
   @Emit()
   handleInput(event: InputEvent) {
-    console.log('handle input event !');
     if (!event.target) {
       return undefined;
     }
