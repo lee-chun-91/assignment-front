@@ -26,12 +26,19 @@ export default class ModuleAdmin extends VuexModule {
     this.isLogin = false;
   }
 
+  @Mutation
+  private setLoggedInfo(username: string) {
+    this.username = username;
+    this.isLogin = true;
+  }
+
   @Action({ rawError: true })
   public async fetchLogin(userInfo: IAdminInfo) {
     return new Promise((resolve, reject) => {
       userApi.adminLogin(userInfo)
         .then((res) => {
           localStorage.setItem('accessToken', res.data);
+          localStorage.setItem('username', userInfo.username);
           this.login(userInfo.username);
           router.push( { name: 'adminMain' });
         })
@@ -46,6 +53,17 @@ export default class ModuleAdmin extends VuexModule {
     this.logout();
     router.push( { name: 'signIn' });
   }
+
+  @Action
+  public fetchSetLoggedInfo() {
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('accessToken');
+
+    if (username && token) {
+      this.setLoggedInfo(username);
+    }
+  }
+
   // @Action
   // public loginCheck() {
   //   if (localStorage.getItem('accessToken')) {
