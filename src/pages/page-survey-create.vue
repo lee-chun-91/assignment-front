@@ -10,9 +10,7 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import SurveyTitle from '@/components/survey-create/survey-title.vue';
 import QuestionList from '@/components/survey-create/question-list.vue';
 import { $surveyStore } from '@/store';
@@ -57,6 +55,9 @@ export default class PageSurveyCreate extends Vue {
   // endregion
 
   // region lifecycle
+  created() {
+    $surveyStore.fetchSetInitialSurvey();
+  }
   // endregion
 }
 </script>

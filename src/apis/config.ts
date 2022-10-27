@@ -1,10 +1,11 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 export const instance = axios.create({
   baseURL: 'https://localhost:7063/',
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Accept': 'application/json',
+    'Content-Type': 'application/json; charset=utf-8'
+  },
 });
 
 instance.interceptors.request.use(

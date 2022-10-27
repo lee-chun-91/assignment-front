@@ -1,5 +1,6 @@
 <template>
   <div class="sign-in">
+    <h1 class="sign-in-title">설문지 시스템</h1>
     <AtomicInput title="id" placeholder="id를 입력해주세요" :value="username" @handle-input="updateId"></AtomicInput>
     <AtomicInput title="password" placeholder="password를 입력해주세요" :value="password" @handle-input="updatePassword"></AtomicInput>
     <el-button type="success" name="로그인" @click="login" round>로그인</el-button>
@@ -11,7 +12,6 @@ import { Vue, Component } from 'vue-property-decorator';
 import AtomicButton from '@/components/sign-in/atomic-button.vue';
 import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import { $adminStore } from '@/store';
-import router from '@/router';
 
 @Component({
   components: { AtomicButton, AtomicInput },
