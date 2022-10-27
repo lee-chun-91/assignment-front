@@ -11,17 +11,19 @@ export interface IAdminInfo {
 @Module({ namespaced: true, name: 'admin' })
 export default class ModuleAdmin extends VuexModule {
   // 초기값
+  username = '';
   isLogin = false;
 
   @Mutation
-  private login() {
+  private login(username: string) {
+    this.username = username;
     this.isLogin = true;
   }
 
   @Mutation
   private logout() {
+    this.username = '';
     this.isLogin = false;
-    localStorage.removeItem('access_token');
   }
 
   @Action({ rawError: true })
@@ -30,7 +32,7 @@ export default class ModuleAdmin extends VuexModule {
       userApi.adminLogin(userInfo)
         .then((res) => {
           localStorage.setItem('accessToken', res.data);
-          this.login();
+          this.login(userInfo.username);
           router.push( { name: 'adminMain' });
         })
         .catch((error) => {
@@ -38,6 +40,12 @@ export default class ModuleAdmin extends VuexModule {
     });
   }
 
+  @Action
+  public fetchLogout() {
+    localStorage.removeItem('accessToken');
+    this.logout();
+    router.push( { name: 'signIn' });
+  }
   // @Action
   // public loginCheck() {
   //   if (localStorage.getItem('accessToken')) {
