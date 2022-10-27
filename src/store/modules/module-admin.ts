@@ -32,7 +32,7 @@ export default class ModuleAdmin extends VuexModule {
     this.isLogin = true;
   }
 
-  @Action({ rawError: true })
+  @Action
   public async fetchLogin(userInfo: IAdminInfo) {
     return new Promise((resolve, reject) => {
       userApi.adminLogin(userInfo)

@@ -1,0 +1,13 @@
+.survey-create {
+  margin: auto;
+  padding: 30px;
+  //display: flex;
+  //flex-direction: column;
+  //justify-content: center;
+
+  .btn-field {
+    &__button {
+      width: 20vw;
+    }
+  }
+}
