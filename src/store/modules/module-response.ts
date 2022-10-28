@@ -1,4 +1,5 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
+import { responseApi } from '@/apis/reponseApi';
 
 export interface IResponse {
   userName: string;
@@ -45,20 +46,41 @@ export default class ModuleResponse extends VuexModule {
   }
 
   // @Mutation
-  private addQuestionAnswer(data: IQuestionAnswer) {
-    this.response.questionAnswer.push(data);
+  private updateQuestionAnswer(data: {questionId: string, answer: string}) {
+    null;
   }
 
   // ---------------------------MUTATION END----------------------------
 
   // ---------------------------ACTION START----------------------------
+
+
+  //
   @Action
-  public fetchSecResponseItem({ userName, surveyId }: Omit<IResponse, 'questionAnswer'>) {
+  public async fetchUserCheck({ userName, surveyId }: Pick<IResponse, 'userName'|'surveyId'>) {
+    const params: Pick<IBackResponse, 'user_name'|'survey_id'> = {
+      user_name: userName,
+      survey_id: surveyId,
+    };
+    return await responseApi.responseUserChecK(params)
+      .then((res) => {
+        const result: string = res.data.result;
+        if (result === 'new_user') {
+          this.setResponse({ userName, surveyId });
+        }
+        return result;
+      })
+      .catch((res) => console.log('userCheck catch', res));
+  }
+  //
+  @Action
+  public fetchSetResponseItem({ userName, surveyId }: Pick<IResponse, 'userName'|'surveyId'>) {
     this.setResponse({ userName, surveyId });
   }
 
-  @Action fetchAddQuestionAnswer(data: IQuestionAnswer) {
-    this.addQuestionAnswer(data);
+  // 질문에 대한 답변 update
+  @Action fetchUpdateQuestionAnswer(data: { questionId:string, answer:string }) {
+    this.updateQuestionAnswer(data);
   }
 
 }

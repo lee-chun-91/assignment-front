@@ -3,13 +3,13 @@
     <div v-for="(item, index) in answerOptionList" :key="index">
       <div class="answer-option" v-if="isRadioButton">
         <label :for="index">
-          <input type="radio" :value="item" :name="questionId"/>
+          <input type="radio" :value="item" @change="checkAnswer($event)" :name="questionId"/>
         </label>
         <div>{{item}}</div>
       </div>
       <div class="answer-option" v-else-if="isCheckbox">
         <label :for="index">
-          <input type="checkbox" :value="item" :name="questionId"/>
+          <input type="checkbox" :value="item" @change="checkAnswer($event)" :name="questionId"/>
         </label>
         <div>{{item}}</div>
       </div>
@@ -20,7 +20,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { QUESTION_TYPES } from '@/const/index';
-import { $surveyStore } from '@/store';
+import { $responseStore, $surveyStore } from '@/store';
 
 @Component({})
 export default class AnswerOptionList extends Vue {
@@ -53,6 +53,14 @@ export default class AnswerOptionList extends Vue {
   // endregion
 
   // region method
+  checkAnswer(e: MouseEvent) {
+    const selected = e.target as HTMLInputElement;
+    console.log(selected.value);
+    console.log(selected);
+    console.log(this.questionId);
+    // $responseStore.fetchUpdateQuestionAnswer({ questionId: this.questionId, answer: selected.value });
+  }
+
   // endregion
 
   // region emit
