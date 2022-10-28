@@ -12,9 +12,9 @@
                @end="dragging = false"
     >
       <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
-        <div class="question-list-item" v-for="{ question_id } in questionList" :key="question_id">
+        <div class="question-list-item" v-for="{ questionId } in questionList" :key="questionId">
           <i class="el-icon-rank handle"></i>
-          <question :questionId="question_id"></question>
+          <question :questionId="questionId"></question>
         </div>
       </transition-group>
     </draggable>
@@ -38,7 +38,7 @@ export default class QuestionList extends Vue {
 
   // region computed
   get questionList() {
-    return $surveyStore.survey.question_list;
+    return $surveyStore.survey.questionList;
     // return $surveyStore.survey.question_list.map((question) => {
     //   return question;
   }

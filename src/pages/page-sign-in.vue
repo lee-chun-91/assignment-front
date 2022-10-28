@@ -1,7 +1,7 @@
 <template>
   <div class="sign-in">
     <h1 class="sign-in-title">설문지 시스템</h1>
-    <AtomicInput title="id" placeholder="id를 입력해주세요" :value="username" @handle-input="updateId"></AtomicInput>
+    <AtomicInput title="id" placeholder="id를 입력해주세요" :value="userName" @handle-input="updateId"></AtomicInput>
     <AtomicInput title="password" placeholder="password를 입력해주세요" :value="password" @handle-input="updatePassword"></AtomicInput>
     <el-button type="success" name="로그인" @click="login" round>로그인</el-button>
   </div>
@@ -21,7 +21,7 @@ export default class PageSignIn extends Vue {
   // endregion
 
   // region local
-  username = '';
+  userName = '';
   password = '';
   // endregion
 
@@ -30,7 +30,7 @@ export default class PageSignIn extends Vue {
 
   // region method
   updateId(value: string) {
-    this.username = value;
+    this.userName = value;
   }
 
   updatePassword(value: string) {
@@ -38,7 +38,7 @@ export default class PageSignIn extends Vue {
   }
 
   login() {
-    $adminStore.fetchLogin({ username: this.username, password: this.password })
+    $adminStore.fetchLogin({ userName: this.userName, password: this.password })
       .catch((error) => {
         this.$alert(error, '로그인 오류', {
           confirmButtonText: 'OK',

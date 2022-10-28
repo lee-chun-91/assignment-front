@@ -1,5 +1,5 @@
 import { instance } from './config';
-import { ISurvey } from '@/store/modules/module-survey';
+import { IBackSurvey, ISurvey } from '@/store/modules/module-survey';
 
 export const surveyApi = {
   // 설문지 get
@@ -10,15 +10,14 @@ export const surveyApi = {
   },
 
   // 설문지 저장
-  saveSurvey: (survey: ISurvey) => {
+  saveSurvey: (survey: IBackSurvey) => {
     const data = instance.post('api/survey/saveSurvey', survey);
     return data;
   },
 
   // 설문지 수정
-  updateSurvey: ({ surveyId, survey }: {surveyId: string, survey:ISurvey}) => {
-    console.log(surveyId);
-    const data = instance.post(`api/survey/updateSurvey/${surveyId}`, survey);
+  updateSurvey: ({ surveyId, backSurvey }: {surveyId: string, backSurvey:IBackSurvey}) => {
+    const data = instance.post(`api/survey/updateSurvey/${surveyId}`, backSurvey);
     return data;
   },
 

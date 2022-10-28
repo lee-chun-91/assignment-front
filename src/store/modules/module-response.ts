@@ -1,20 +1,31 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 
 export interface IResponse {
+  userName: string;
+  surveyId: string;
+  questionAnswer: IQuestionAnswer[];
+}
+
+export interface IBackResponse {
   user_name: string;
-  survey_id: string;
-  question_answer: IQuestionAnswer[];
+  survey_id: string,
+  question_answer: IBackQuestionAnswer[];
 }
 
 export interface IQuestionAnswer {
+  questionId : string;
+  answer: string[];
+}
+
+export interface IBackQuestionAnswer {
   question_id : string;
   answer: string[];
 }
 
 const initialResponse: IResponse = {
-  user_name: '',
-  survey_id: '',
-  question_answer: [],
+  userName: '',
+  surveyId: '',
+  questionAnswer: [],
 };
 
 
@@ -28,22 +39,22 @@ export default class ModuleResponse extends VuexModule {
   // ---------------------------MUTATION START----------------------------
 
   @Mutation
-  private setResponseItem({ userName, surveyId }: {userName: string, surveyId: string}) {
-    this.response.user_name = userName;
-    this.response.survey_id = surveyId;
+  private setResponse({ userName, surveyId }: Omit<IResponse, 'questionAnswer'>) {
+    this.response.userName = userName;
+    this.response.surveyId = surveyId;
   }
 
   // @Mutation
   private addQuestionAnswer(data: IQuestionAnswer) {
-    this.response.question_answer.push(data);
+    this.response.questionAnswer.push(data);
   }
 
   // ---------------------------MUTATION END----------------------------
 
   // ---------------------------ACTION START----------------------------
   @Action
-  public fetchSecResponseItem({ userName, surveyId }: {userName: string, surveyId: string}) {
-    this.setResponseItem({ userName, surveyId });
+  public fetchSecResponseItem({ userName, surveyId }: Omit<IResponse, 'questionAnswer'>) {
+    this.setResponse({ userName, surveyId });
   }
 
   @Action fetchAddQuestionAnswer(data: IQuestionAnswer) {

@@ -1,8 +1,8 @@
 <template>
   <div class="question-list">
-    <div class="question-list-item" v-for="{ question_id, question_name, answer_option_list } in questionList" :key="question_id">
-      <div>{{question_name}}</div>
-      <answer-option-list :answerOptionList="answer_option_list" :questionId="question_id"></answer-option-list>
+    <div class="question-list-item" v-for="{ questionId, questionName, answerOptionList } in questionList" :key="questionId">
+      <div>{{questionName}}</div>
+      <answer-option-list :answerOptionList="answerOptionList" :questionId="questionId"></answer-option-list>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default class QuestionList extends Vue {
 
   // region computed
   get questionList() {
-    return $surveyStore.survey.question_list;
+    return $surveyStore.survey.questionList;
   }
   // endregion
 

@@ -4,42 +4,53 @@ import router from '@/router';
 import { userApi } from '@/apis/userApi';
 
 export interface IAdminInfo {
-  username: string,
+  userName: string,
+  password: string,
+}
+
+export interface IBackAdminInfo {
+  user_name: string,
   password: string,
 }
 
 @Module({ namespaced: true, name: 'admin' })
 export default class ModuleAdmin extends VuexModule {
   // 초기값
-  username = '';
+  userName = '';
   isLogin = false;
 
   @Mutation
-  private login(username: string) {
-    this.username = username;
+  private login(userName: string) {
+    this.userName = userName;
     this.isLogin = true;
   }
 
   @Mutation
   private logout() {
-    this.username = '';
+    this.userName = '';
     this.isLogin = false;
   }
 
   @Mutation
-  private setLoggedInfo(username: string) {
-    this.username = username;
+  private setLoggedInfo(userName: string) {
+    this.userName = userName;
     this.isLogin = true;
   }
 
   @Action
   public async fetchLogin(userInfo: IAdminInfo) {
+    const backUserInfo: IBackAdminInfo = {
+      user_name: userInfo.userName,
+      password: userInfo.password,
+    };
+    // console.log('userInfo', userInfo);
+    // console.log('backUserInfo', backUserInfo);
     return new Promise((resolve, reject) => {
-      userApi.adminLogin(userInfo)
+      userApi.adminLogin(backUserInfo)
         .then((res) => {
           localStorage.setItem('accessToken', res.data);
-          localStorage.setItem('username', userInfo.username);
-          this.login(userInfo.username);
+          localStorage.setItem('userName', userInfo.userName);
+          this.login(userInfo.userName);
           router.push( { name: 'adminMain' });
         })
         .catch((error) => {
@@ -50,29 +61,18 @@ export default class ModuleAdmin extends VuexModule {
   @Action
   public fetchLogout() {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('username');
+    localStorage.removeItem('userName');
     this.logout();
     router.push( { name: 'signIn' });
   }
 
   @Action
   public fetchSetLoggedInfo() {
-    const username = localStorage.getItem('username');
+    const userName = localStorage.getItem('userName');
     const token = localStorage.getItem('accessToken');
 
-    if (username && token) {
-      this.setLoggedInfo(username);
+    if (userName && token) {
+      this.setLoggedInfo(userName);
     }
   }
-
-  // @Action
-  // public loginCheck() {
-  //   if (localStorage.getItem('accessToken')) {
-  //     return;
-  //   } else {
-  //     router.push({
-  //       name: 'signIn'
-  //     });
-  //   }
-  // }
 }
