@@ -1,8 +1,9 @@
 import { instance } from './config';
+import { IBackAdminInfo } from '@/store/modules/module-admin';
 
 export const userApi = {
   // 관리자 로그인
-  adminLogin: (userInfo: { username: string, password: string}) => {
+  adminLogin: (userInfo: IBackAdminInfo) => {
     const data = instance.post('api/user/login', userInfo);
     return data;
   },

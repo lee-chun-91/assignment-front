@@ -2,7 +2,7 @@
   <div class="survey-response">
     <div v-if="!checkedUser">
       <h1 class="sign-in-title">설문지 응답</h1>
-      <AtomicInput title="username" placeholder="이름을 입력해주세요" :value="username" @handle-input="updateUsername"></AtomicInput>
+      <AtomicInput title="username" placeholder="이름을 입력해주세요" :value="userName" @handle-input="updateUsername"></AtomicInput>
       <el-button type="success" name="설문 시작" @click="userCheck" round>설문 시작</el-button>
     </div>
     <div v-else>
@@ -27,7 +27,7 @@ export default class PageSurveyResponse extends Vue {
   // endregion
 
   // region local
-  username = '';
+  userName = '';
   checkedUser = false;
   // endregion
 
@@ -39,7 +39,7 @@ export default class PageSurveyResponse extends Vue {
 
   // region method
   updateUsername(value: string) {
-    this.username = value;
+    this.userName = value;
   }
 
   userCheck() {

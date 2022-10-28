@@ -19,8 +19,8 @@
             :key="index"
             v-for="(survey, index) in surveyList"
         >
-          <td>{{ survey.survey_name }}</td>
-          <td>{{ survey.question_list.length }}개</td>
+          <td>{{ survey.surveyName }}</td>
+          <td>{{ survey.questionList.length }}개</td>
           <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey._id }}">설문지 수정</router-link></td>
           <td><router-link :to="{ name: 'surveyReport', params: { surveyId: survey._id }}">리포트 보기</router-link></td>
           <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey._id }}">설문지 로그</router-link></td>
@@ -29,7 +29,7 @@
         </tbody>
       </table>
       <el-pagination layout="prev, pager, next"
-                     :page-size="5"
+                     :page-size="10"
                      :total="total"
                      @current-change="handleCurrentChange"></el-pagination>
     </div>
@@ -64,6 +64,10 @@ export default class PageAdminMain extends Vue {
   get total() {
     return $surveyStore.surveyList.total;
   }
+
+  get perPage() {
+    return $surveyStore.surveyList.perPage;
+  }
   // endregion
 
   // region method
@@ -71,7 +75,6 @@ export default class PageAdminMain extends Vue {
   //   await $surveyStore.
   // }
   async handleCurrentChange(page: number) {
-
     console.log(`current page: ${page}`);
     await $surveyStore.fetchGetSurveyList(page);
   }

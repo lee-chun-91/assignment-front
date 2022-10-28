@@ -21,7 +21,7 @@ export default class SurveyTitle extends Vue {
 
   // region computed
   get surveyName() {
-    return $surveyStore.survey.survey_name;
+    return $surveyStore.survey.surveyName;
   }
   // endregion
 

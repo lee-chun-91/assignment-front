@@ -1,9 +1,9 @@
 <template>
   <div class="admin-header">
     <div class="admin-header__title">
-      <h2>설문조사 관리자</h2>
+      <h2><router-link :to="{ path: '/'}">설문지 관리 시스템</router-link></h2>
       <p>
-        {{ username }}님 안녕하세요
+        {{ userName }}님 안녕하세요
         <el-button size="mini" @click="logout">로그아웃</el-button>
       </p>
     </div>
@@ -28,8 +28,8 @@ export default class AdminHeader extends Vue {
   // endregion
 
   // region computed
-  get username() {
-    return $adminStore.username;
+  get userName() {
+    return $adminStore.userName;
   }
   // endregion
 

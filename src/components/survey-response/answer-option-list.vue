@@ -35,13 +35,13 @@ export default class AnswerOptionList extends Vue {
 
   // region computed
   get answerType() {
-    const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
-    return $surveyStore.survey.question_list[foundIndex].answer_type;
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
+    return $surveyStore.survey.questionList[foundIndex].answerType;
   }
 
   get answerOptionList() {
-    const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
-    return $surveyStore.survey.question_list[foundIndex].answer_option_list;
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
+    return $surveyStore.survey.questionList[foundIndex].answerOptionList;
   }
   get isRadioButton() {
     return this.answerType === QUESTION_TYPES.YES_NO || this.answerType === QUESTION_TYPES.ONE_CHOICE;

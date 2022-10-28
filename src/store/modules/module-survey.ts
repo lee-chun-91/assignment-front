@@ -5,16 +5,36 @@ import { surveyApi } from '@/apis/surveyApi';
 
 export interface ISurveyList {
   total: number;
+  perPage: number;
   data: ISurvey[];
+}
+
+export interface IBackSurveyList {
+  total: number;
+  per_page: number;
+  data: IBackSurvey[];
 }
 
 export interface ISurvey {
   _id?: string;
+  surveyName: string;
+  questionList: IQuestion[];
+}
+
+export interface IBackSurvey {
+  _id?: string;
   survey_name: string;
-  question_list: IQuestion[];
+  question_list: IBackQuestion[];
 }
 
 export interface IQuestion {
+  questionId : string;
+  questionName: string;
+  answerType: number;
+  answerOptionList: string[];
+}
+
+export interface IBackQuestion {
   question_id : string;
   question_name: string;
   answer_type: number;
@@ -22,10 +42,10 @@ export interface IQuestion {
 }
 
 const newQuestion = (newId: string) => ({
-  question_id: newId,
-  question_name: '',
-  answer_type: QUESTION_TYPES.YES_NO,
-  answer_option_list: ['답변 옵션 1', '답변 옵션 2'],
+  questionId: newId,
+  questionName: '',
+  answerType: QUESTION_TYPES.YES_NO,
+  answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
 });
 
 
@@ -33,15 +53,16 @@ const newQuestion = (newId: string) => ({
 export default class ModuleSurvey extends VuexModule {
   surveyList: ISurveyList = {
     total: 0,
+    perPage: 0,
     data: []
   }
   survey: ISurvey = {
-    survey_name: '',
-    question_list: [
-      { question_id: uniqueId(),
-        question_name: '',
-        answer_type: QUESTION_TYPES.YES_NO,
-        answer_option_list: ['답변 옵션 1', '답변 옵션 2'],
+    surveyName: '',
+    questionList: [
+      { questionId: uniqueId(),
+        questionName: '',
+        answerType: QUESTION_TYPES.YES_NO,
+        answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
       },
     ],
   };
@@ -50,12 +71,12 @@ export default class ModuleSurvey extends VuexModule {
   @Mutation
   private setInitialSurvey() {
     const initialSurvey: ISurvey = {
-      survey_name: '',
-      question_list: [
-        { question_id: uniqueId(),
-          question_name: '',
-          answer_type: QUESTION_TYPES.YES_NO,
-          answer_option_list: ['답변 옵션 1', '답변 옵션 2'],
+      surveyName: '',
+      questionList: [
+        { questionId: uniqueId(),
+          questionName: '',
+          answerType: QUESTION_TYPES.YES_NO,
+          answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
         },
       ],
     };
@@ -65,72 +86,117 @@ export default class ModuleSurvey extends VuexModule {
   // 설문제목 수정
   @Mutation
   private updateSurveyName(surveyName: string) {
-    this.survey.survey_name = surveyName;
+    this.survey.surveyName = surveyName;
   }
 
   // 질문 추가
   @Mutation
   private addQuestion(question: IQuestion) {
-    this.survey.question_list.push(question);
+    this.survey.questionList.push(question);
   }
 
   // 질문 삭제
   @Mutation
   private deleteQuestion(question_id: string) {
-    this.survey.question_list = this.survey.question_list.filter(
-      (item) => item.question_id !== question_id
+    this.survey.questionList = this.survey.questionList.filter(
+      (item) => item.questionId !== question_id
     );
   }
 
   // 특정 질문의 질문내용 수정
   @Mutation
-  private updateQuestionName({ question_id, question_name }: {question_id: string, question_name: string}) {
-    const foundIndex = this.survey.question_list.findIndex((i) => i.question_id === question_id);
-    this.survey.question_list[foundIndex] = { ...this.survey.question_list[foundIndex], question_name };
+  private updateQuestionName({ questionId, questionName }: Pick<IQuestion, 'questionId'|'questionName'>) {
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    this.survey.questionList[foundIndex] = { ...this.survey.questionList[foundIndex], questionName };
   }
 
   // 특정 질문의 답변타입 수정
   @Mutation
-  private updateAnswerType({ question_id, answer_type }: {question_id: string, answer_type: number}) {
-    const foundIndex = this.survey.question_list.findIndex((i) => i.question_id === question_id);
-    this.survey.question_list[foundIndex].answer_type = answer_type;
+  private updateAnswerType({ questionId, answerType }: Pick<IQuestion, 'questionId'|'answerType'>) {
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    this.survey.questionList[foundIndex].answerType = answerType;
   }
 
   // 특정 질문의 답변옵션 추가
   @Mutation
-  private addAnswerOption(question_id: string) {
-    const foundIndex = this.survey.question_list.findIndex((i) => i.question_id === question_id);
-    const answerOptionLength = this.survey.question_list[foundIndex].answer_option_list.length;
+  private addAnswerOption(questionId: string) {
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    const answerOptionLength = this.survey.questionList[foundIndex].answerOptionList.length;
     const newAnswerOption = `답변 옵션 ${answerOptionLength + 1}`;
-    this.survey.question_list[foundIndex].answer_option_list.push(newAnswerOption);
+    this.survey.questionList[foundIndex].answerOptionList.push(newAnswerOption);
   }
 
 
   // 특정 질문의 답변옵션 수정
   @Mutation
-  private updateAnswerOption({ question_id, answerOptionIndex, answerOption }: {question_id: string,
+  private updateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
     answerOptionIndex: number, answerOption: string}) {
-    const foundIndex = this.survey.question_list.findIndex((i) => i.question_id === question_id);
-    this.survey.question_list[foundIndex].answer_option_list[answerOptionIndex] = answerOption;
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    this.survey.questionList[foundIndex].answerOptionList[answerOptionIndex] = answerOption;
   }
 
   // 특정 질문의 답변옵션 삭제
   @Mutation
-  private deleteAnswerOption({ question_id, answerOptionIndex }: { question_id: string, answerOptionIndex: number }) {
-    const foundIndex = this.survey.question_list.findIndex((i) => i.question_id === question_id);
-    this.survey.question_list[foundIndex].answer_option_list.splice(answerOptionIndex, 1);
+  private deleteAnswerOption({ questionId, answerOptionIndex }: { questionId: string, answerOptionIndex: number }) {
+    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    this.survey.questionList[foundIndex].answerOptionList.splice(answerOptionIndex, 1);
   }
 
   // 설문 리스트 get 후 state 에 저장
   @Mutation
-  private getSurveyList(surveyList: ISurveyList) {
+  private getSurveyList(backSurveyList: IBackSurveyList) {
+    // export interface ISurvey {
+    //   _id?: string;
+    //   surveyName: string;
+    //   questionList: IQuestion[];
+    // }
+    //
+    // export interface IBackSurvey {
+    //   _id?: string;
+    //   survey_name: string;
+    //   question_list: IBackQuestion[];
+    // }
+
+    const data: ISurvey[] = backSurveyList.data.map((s) => {
+      const questionList: IQuestion[] = s.question_list.map((q) => {return {
+        questionId: q.question_id,
+        questionName: q.question_name,
+        answerType: q.answer_type,
+        answerOptionList: q.answer_option_list
+      };});
+
+      return {
+        _id: s._id,
+        surveyName: s.survey_name,
+        questionList,
+      };});
+
+    const surveyList: ISurveyList = {
+      total: backSurveyList.total,
+      perPage: backSurveyList.per_page,
+      data
+    };
+
+
     this.surveyList = surveyList;
   }
 
   // 설문지 데이터 받아와서 state 에 저장
   @Mutation
-  private setSurvey(survey: ISurvey) {
-    this.survey = survey;
+  private setSurvey(backSurvey: IBackSurvey) {
+    const questionList = backSurvey.question_list.map((q) => {return {
+      questionId: q.question_id,
+      questionName: q.question_name,
+      answerType: q.answer_type,
+      answerOptionList: q.answer_option_list,
+    };});
+
+    const frontSurvey: ISurvey = {
+      _id: backSurvey._id,
+      surveyName: backSurvey.survey_name,
+      questionList,
+    };
+    this.survey = frontSurvey;
   }
 
   // ---------------------------MUTATION END----------------------------
@@ -153,45 +219,57 @@ export default class ModuleSurvey extends VuexModule {
 
   // 질문 삭제
   @Action
-  public fetchDeleteQuestion(question_id: string) {
-    this.deleteQuestion(question_id);
+  public fetchDeleteQuestion(questionId: string) {
+    this.deleteQuestion(questionId);
   }
 
   // 특정 질문 내용 수정
   @Action
-  public fetchUpdateQuestionName({ question_id, question_name }: {question_id: string, question_name: string}) {
-    this.updateQuestionName({ question_id, question_name });
+  public fetchUpdateQuestionName({ questionId, questionName }: Pick<IQuestion, 'questionId'|'questionName'>) {
+    this.updateQuestionName({ questionId, questionName });
   }
 
   // 특정 질문 답변 타입 수정
   @Action
-  public fetchUpdateAnswerType({ question_id , answer_type }: {question_id: string, answer_type: number}) {
-    this.updateAnswerType({ question_id, answer_type });
+  public fetchUpdateAnswerType({ questionId , answerType }: Pick<IQuestion, 'questionId'|'answerType'>) {
+    this.updateAnswerType({ questionId, answerType });
   }
 
   // 특정 질문 답변 옵션 추가
   @Action
-  public fetchAddAnswerOption(question_id: string) {
-    this.addAnswerOption(question_id);
+  public fetchAddAnswerOption(questionId: string) {
+    this.addAnswerOption(questionId);
   }
 
   // 특정 질문 답변 옵션 수정
   @Action
-  public fetchUpdateAnswerOption({ question_id, answerOptionIndex, answerOption }: {question_id: string,
+  public fetchUpdateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
     answerOptionIndex: number, answerOption: string}) {
-    this.updateAnswerOption({ question_id, answerOptionIndex, answerOption });
+    this.updateAnswerOption({ questionId, answerOptionIndex, answerOption });
   }
 
   // 특정 질문 답변 옵션 삭제
   @Action
-  public fetchDeleteAnswerOption({ question_id, answerOptionIndex }: {question_id: string, answerOptionIndex: number}) {
-    this.deleteAnswerOption({ question_id, answerOptionIndex });
+  public fetchDeleteAnswerOption({ questionId, answerOptionIndex }: {questionId: string, answerOptionIndex: number}) {
+    this.deleteAnswerOption({ questionId, answerOptionIndex });
   }
 
   // 설문 저장
   @Action
   public async fetchSaveSurvey() {
-    return await surveyApi.saveSurvey(this.survey)
+    const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
+      question_id : q.questionId,
+      question_name: q.questionName,
+      answer_type: q.answerType,
+      answer_option_list: q.answerOptionList,
+    }; });
+
+    const backSurvey: IBackSurvey = {
+      survey_name: this.survey.surveyName,
+      question_list: question_list
+    };
+
+    return await surveyApi.saveSurvey(backSurvey)
       .then((res) => {
         this.setInitialSurvey();
       })
@@ -225,7 +303,19 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 수정
   @Action
   public async fetchUpdateSurvey({ surveyId, survey }: {surveyId: string, survey: ISurvey}) {
-    return await surveyApi.updateSurvey({ surveyId, survey })
+    const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
+      question_id : q.questionId,
+      question_name: q.questionName,
+      answer_type: q.answerType,
+      answer_option_list: q.answerOptionList,
+    }; });
+
+    const backSurvey: IBackSurvey = {
+      survey_name: this.survey.surveyName,
+      question_list: question_list
+    };
+
+    return await surveyApi.updateSurvey({ surveyId, backSurvey })
       .then((res) => {
         this.setInitialSurvey();
       })

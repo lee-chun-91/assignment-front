@@ -32,13 +32,13 @@ export default class Question extends Vue {
 
   // region computed
   get questionName() {
-    const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
-    return $surveyStore.survey.question_list[foundIndex].question_name;
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
+    return $surveyStore.survey.questionList[foundIndex].questionName;
   }
 
   get answerType() {
-    const foundIndex = $surveyStore.survey.question_list.findIndex((i) => i.question_id === this.questionId);
-    return $surveyStore.survey.question_list[foundIndex].answer_type;
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
+    return $surveyStore.survey.questionList[foundIndex].answerType;
   }
   // endregion
 
@@ -49,7 +49,7 @@ export default class Question extends Vue {
     }
     const eventTarget = e.target as HTMLInputElement;
     const questionName = eventTarget.value;
-    $surveyStore.fetchUpdateQuestionName({ question_id: this.questionId, question_name: questionName });
+    $surveyStore.fetchUpdateQuestionName({ questionId: this.questionId, questionName });
   }
 
   updateAnswerType(questionId: string, e: Event) {
@@ -58,7 +58,7 @@ export default class Question extends Vue {
     }
     const eventTarget = e.target as HTMLSelectElement;
     const answerType = Number(eventTarget.value);
-    $surveyStore.fetchUpdateAnswerType({ question_id: this.questionId, answer_type: answerType });
+    $surveyStore.fetchUpdateAnswerType({ questionId: this.questionId, answerType });
   }
 
   deleteQuestion() {
