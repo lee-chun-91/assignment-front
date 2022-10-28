@@ -19,7 +19,7 @@ import {
 import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response/survey-title.vue';
 import QuestionList from '@/components/survey-response/question-list.vue';
-import { $surveyStore } from '@/store';
+import { $responseStore, $surveyStore } from '@/store';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageSurveyResponse extends Vue {
@@ -42,9 +42,20 @@ export default class PageSurveyResponse extends Vue {
     this.userName = value;
   }
 
-  userCheck() {
+  async userCheck() {
     // userCheck 로직 추가
-    this.checkedUser = true;
+    await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
+      .then((result) => {
+        if(result === 'new_user') {
+          this.checkedUser = true;
+        }
+        else if(result === 'already_response') {
+          this.$alert('이미 참여한 설문은 다시 참여할 수 없어요!', '안내', {
+            confirmButtonText: 'OK',
+          });
+        }
+      });
+
   }
   // endregion
 

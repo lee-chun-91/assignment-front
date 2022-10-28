@@ -13,6 +13,7 @@ export interface IBackAdminInfo {
   password: string,
 }
 
+
 @Module({ namespaced: true, name: 'admin' })
 export default class ModuleAdmin extends VuexModule {
   // 초기값
