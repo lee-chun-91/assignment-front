@@ -1,7 +1,7 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
-import { uniqueId } from 'lodash';
 import { QUESTION_TYPES } from '@/const/index';
 import { surveyApi } from '@/apis/surveyApi';
+import uuid from '@/util/uuid';
 
 export interface ISurveyList {
   total: number;
@@ -59,7 +59,7 @@ export default class ModuleSurvey extends VuexModule {
   survey: ISurvey = {
     surveyName: '',
     questionList: [
-      { questionId: uniqueId(),
+      { questionId: uuid(),
         questionName: '',
         answerType: QUESTION_TYPES.YES_NO,
         answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
@@ -73,7 +73,7 @@ export default class ModuleSurvey extends VuexModule {
     const initialSurvey: ISurvey = {
       surveyName: '',
       questionList: [
-        { questionId: uniqueId(),
+        { questionId: uuid(),
           questionName: '',
           answerType: QUESTION_TYPES.YES_NO,
           answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
@@ -213,7 +213,7 @@ export default class ModuleSurvey extends VuexModule {
   // 질문 추가
   @Action
   public fetchAddQuestion() {
-    const newId = uniqueId();
+    const newId = uuid();
     this.addQuestion(newQuestion(newId));
   }
 
@@ -269,8 +269,12 @@ export default class ModuleSurvey extends VuexModule {
       question_list: question_list
     };
 
+    console.log('survey', this.survey);
+    console.log('backSurvey', backSurvey);
+
     return await surveyApi.saveSurvey(backSurvey)
       .then((res) => {
+        console.log('save result', res);
         this.setInitialSurvey();
       })
       .catch((error) => console.log(error));
@@ -302,7 +306,7 @@ export default class ModuleSurvey extends VuexModule {
 
   // 설문 수정
   @Action
-  public async fetchUpdateSurvey({ surveyId, survey }: {surveyId: string, survey: ISurvey}) {
+  public async fetchUpdateSurvey(surveyId: string) {
     const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
       question_id : q.questionId,
       question_name: q.questionName,
@@ -317,6 +321,7 @@ export default class ModuleSurvey extends VuexModule {
 
     return await surveyApi.updateSurvey({ surveyId, backSurvey })
       .then((res) => {
+        console.log('update result', res);
         this.setInitialSurvey();
       })
       .catch((error) => console.log(error));
