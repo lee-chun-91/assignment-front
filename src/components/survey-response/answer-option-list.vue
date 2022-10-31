@@ -58,7 +58,8 @@ export default class AnswerOptionList extends Vue {
     console.log(selected.value);
     console.log(selected);
     console.log(this.questionId);
-    // $responseStore.fetchUpdateQuestionAnswer({ questionId: this.questionId, answer: selected.value });
+    $responseStore.fetchUpdateQuestionAnswer({ questionId: this.questionId, selectedAnswer: selected.value });
+    console.log('response', $responseStore.response);
   }
 
   // endregion

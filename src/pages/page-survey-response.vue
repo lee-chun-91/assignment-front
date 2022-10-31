@@ -8,6 +8,7 @@
     <div v-else>
       <survey-title></survey-title>
       <question-list></question-list>
+      <el-button class="btn-field__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
     </div>
   </div>
 </template>
@@ -20,6 +21,7 @@ import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response/survey-title.vue';
 import QuestionList from '@/components/survey-response/question-list.vue';
 import { $responseStore, $surveyStore } from '@/store';
+import { convertDate } from '@/util/convertDate';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageSurveyResponse extends Vue {
@@ -55,7 +57,21 @@ export default class PageSurveyResponse extends Vue {
           });
         }
       });
+  }
 
+  saveResponse() {
+    const convertedDate = convertDate(new Date());
+    $responseStore.fetchSaveResponse(convertedDate)
+      .then(() => this.openModal('응답이 제출되었습니다'))
+      .catch((error) => this.openModal('error'));
+  }
+
+  openModal(message: string) {
+    this.$alert(message, '안내', {
+      confirmButtonText: 'OK',
+      callback: action => {
+        this.$router.push('/');}
+    });
   }
   // endregion
 

@@ -8,8 +8,17 @@ export const responseApi = {
     return data;
   },
 
+  saveResponse: (backResponse: IBackResponse) => {
+    const data = instance.post('api/response/saveResponse', backResponse);
+    return data;
+  },
+
   // 특정 설문에 대한 응답 리스트 get
-  getResponseList: () => {return;},
+  getResponseList: (page: number) => {
+    const data = instance.get('api/response/getSurveyList',
+      { params: { page: page } });
+    return data;
+  },
 
   //
 };
