@@ -47,25 +47,25 @@ export default class PageSurveyLog extends Vue {
   }
 
   get responseList() {
-    return $responseStore.responseList.data;
+    return $responseStore.logList.data;
   }
   get isResponseListEmpty() {
-    return $responseStore.responseList.data.length === 0;
+    return $responseStore.logList.data.length === 0;
   }
 
   get total() {
-    return $responseStore.responseList.total;
+    return $responseStore.logList.total;
   }
 
   get perPage() {
-    return $responseStore.responseList.perPage;
+    return $responseStore.logList.perPage;
   }
   // endregion
 
   // region method
   async handleCurrentChange(page: number) {
     console.log(`current page: ${page}`);
-    await $responseStore.fetchGetResponseList({ page, surveyId: this.surveyId });
+    await $responseStore.fetchGetLogList({ page, surveyId: this.surveyId });
   }
   // endregion
 
@@ -74,7 +74,7 @@ export default class PageSurveyLog extends Vue {
 
   // region lifecycle
   async created() {
-    await $responseStore.fetchGetResponseList({ page: 1, surveyId: this.surveyId });
+    await $responseStore.fetchGetLogList({ page: 1, surveyId: this.surveyId });
   }
   // endregion
 }
