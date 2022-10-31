@@ -10,6 +10,7 @@
                ghost-class="ghost"
                @start="dragging = true"
                @end="dragging = false"
+               v-model="questionList"
     >
       <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
         <div class="question-list-item" v-for="{ questionId } in questionList" :key="questionId">
@@ -22,12 +23,11 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import draggable, { MoveEvent } from 'vuedraggable';
 import { $surveyStore } from '@/store';
 import Question from '@/components/survey-create/question.vue';
+import { IQuestion } from '@/store/modules/module-survey';
 
 @Component({ components: { draggable, Question } })
 export default class QuestionList extends Vue {
@@ -39,9 +39,14 @@ export default class QuestionList extends Vue {
   // region computed
   get questionList() {
     return $surveyStore.survey.questionList;
-    // return $surveyStore.survey.question_list.map((question) => {
-    //   return question;
   }
+
+  set questionList(questionList: IQuestion[]) {
+    $surveyStore.fetchUpdateQuestionOrder(questionList);
+  }
+  // set questionList(value: any) {
+  //   console.log(value);
+  // }
   // endregion
 
   // region method

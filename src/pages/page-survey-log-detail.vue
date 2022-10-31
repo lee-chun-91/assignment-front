@@ -12,7 +12,7 @@ import {
 import SurveyTitle from '@/components/survey-response/survey-title.vue';
 import QuestionList from '@/components/survey-response/question-list.vue';
 import AtomicInput from '@/components/sign-in/atomic-input.vue';
-import { $surveyStore } from '@/store';
+import { $responseStore, $surveyStore } from '@/store';
 
 @Component({ components: { QuestionList, SurveyTitle  } })
 export default class PageSurveyLogDetail extends Vue {
@@ -36,6 +36,10 @@ export default class PageSurveyLogDetail extends Vue {
   get surveyId() {
     return this.$route.params.surveyId;
   }
+
+  get userName() {
+    return this.$route.params.userName;
+  }
   // endregion
 
   // region method
@@ -46,8 +50,11 @@ export default class PageSurveyLogDetail extends Vue {
 
   // region lifecycle
   async created() {
+    await $responseStore.fetchGetLogDetail({ surveyId: this.surveyId, userName: this.userName });
     await $surveyStore.fetchGetSurvey(this.surveyId);
-    console.log('updateSurvey', $surveyStore.survey);
+    console.log('logDetail in page', $responseStore.logDetail);
+    console.log('survey data in page', $surveyStore.survey);
+
   }
   // endregion
 }

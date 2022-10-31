@@ -103,21 +103,21 @@ export default class ModuleSurvey extends VuexModule {
     );
   }
 
-  // 특정 질문의 질문내용 수정
+  // 질문 내용 수정
   @Mutation
   private updateQuestionName({ questionId, questionName }: Pick<IQuestion, 'questionId'|'questionName'>) {
     const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     this.survey.questionList[foundIndex] = { ...this.survey.questionList[foundIndex], questionName };
   }
 
-  // 특정 질문의 답변타입 수정
+  // 질문 답변 타입 수정
   @Mutation
   private updateAnswerType({ questionId, answerType }: Pick<IQuestion, 'questionId'|'answerType'>) {
     const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     this.survey.questionList[foundIndex].answerType = answerType;
   }
 
-  // 특정 질문의 답변옵션 추가
+  // 질문 답변 옵션 추가
   @Mutation
   private addAnswerOption(questionId: string) {
     const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
@@ -127,7 +127,7 @@ export default class ModuleSurvey extends VuexModule {
   }
 
 
-  // 특정 질문의 답변옵션 수정
+  // 질문 답변 옵션 수정
   @Mutation
   private updateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
     answerOptionIndex: number, answerOption: string}) {
@@ -135,14 +135,21 @@ export default class ModuleSurvey extends VuexModule {
     this.survey.questionList[foundIndex].answerOptionList[answerOptionIndex] = answerOption;
   }
 
-  // 특정 질문의 답변옵션 삭제
+  // 질문 답변 옵션 삭제
   @Mutation
   private deleteAnswerOption({ questionId, answerOptionIndex }: { questionId: string, answerOptionIndex: number }) {
     const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     this.survey.questionList[foundIndex].answerOptionList.splice(answerOptionIndex, 1);
   }
 
-  // 설문 리스트 get 후 state 에 저장
+  // 질문 순서 수정
+  @Mutation
+  private updateQuestionOrder(questionList: IQuestion[]) {
+    this.survey.questionList = questionList;
+  }
+
+
+  // 설문 리스트 get
   @Mutation
   private getSurveyList(backSurveyList: IBackSurveyList) {
     const data: ISurvey[] = backSurveyList.data.map((s) => {
@@ -165,11 +172,10 @@ export default class ModuleSurvey extends VuexModule {
       data
     };
 
-
     this.surveyList = surveyList;
   }
 
-  // 설문지 데이터 받아와서 state 에 저장
+  // 설문 get
   @Mutation
   private setSurvey(backSurvey: IBackSurvey) {
     const questionList = backSurvey.question_list.map((q) => {return {
@@ -192,6 +198,7 @@ export default class ModuleSurvey extends VuexModule {
 
 
   // ---------------------------ACTION START----------------------------
+
   //설문 제목 수정
   @Action
   public fetchUpdateSurveyName(surveyName: string) {
@@ -211,35 +218,42 @@ export default class ModuleSurvey extends VuexModule {
     this.deleteQuestion(questionId);
   }
 
-  // 특정 질문 내용 수정
+  // 질문 내용 수정
   @Action
   public fetchUpdateQuestionName({ questionId, questionName }: Pick<IQuestion, 'questionId'|'questionName'>) {
     this.updateQuestionName({ questionId, questionName });
   }
 
-  // 특정 질문 답변 타입 수정
+  // 질문 답변 타입 수정
   @Action
   public fetchUpdateAnswerType({ questionId , answerType }: Pick<IQuestion, 'questionId'|'answerType'>) {
     this.updateAnswerType({ questionId, answerType });
   }
 
-  // 특정 질문 답변 옵션 추가
+  // 질문 답변 옵션 추가
   @Action
   public fetchAddAnswerOption(questionId: string) {
     this.addAnswerOption(questionId);
   }
 
-  // 특정 질문 답변 옵션 수정
+  // 질문 답변 옵션 수정
   @Action
   public fetchUpdateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
     answerOptionIndex: number, answerOption: string}) {
     this.updateAnswerOption({ questionId, answerOptionIndex, answerOption });
   }
 
-  // 특정 질문 답변 옵션 삭제
+  // 질문 답변 옵션 삭제
   @Action
   public fetchDeleteAnswerOption({ questionId, answerOptionIndex }: {questionId: string, answerOptionIndex: number}) {
     this.deleteAnswerOption({ questionId, answerOptionIndex });
+  }
+
+  // 질문 순서 변경
+  @Action
+  public fetchUpdateQuestionOrder(questionList: IQuestion[]){
+    // console.log(value);
+    this.updateQuestionOrder(questionList);
   }
 
   // 설문 저장

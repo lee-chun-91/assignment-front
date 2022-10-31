@@ -55,6 +55,7 @@ export default class ModuleResponse extends VuexModule {
     perPage: 0,
     data: []
   };
+  logDetail: IResponse = initialResponse;
   response: IResponse = initialResponse;
 
 
@@ -135,6 +136,26 @@ export default class ModuleResponse extends VuexModule {
 
     this.logList = logList;
   }
+
+  @Mutation
+  private getLogDetail(data: IBackResponse) {
+    const questionAnswer: IQuestionAnswer[] = data.question_answer.map((i) => {
+      return {
+        questionId: i.question_id,
+        answer: i.answer,
+      };
+    });
+
+    const logDetail: IResponse = {
+      userName: data.user_name,
+      surveyId: data.survey_id,
+      createdAt: data.created_at,
+      questionAnswer,
+    };
+
+    this.logDetail = logDetail;
+  }
+
   // ---------------------------MUTATION END----------------------------
 
   // ---------------------------ACTION START----------------------------
@@ -160,12 +181,13 @@ export default class ModuleResponse extends VuexModule {
     this.setResponse({ userName, surveyId });
   }
 
-  // 질문에 대한 답변 update
+  // 응답 update
   @Action
   public fetchUpdateQuestionAnswer(data: { questionId:string, selectedAnswer:string }) {
     this.updateQuestionAnswer(data);
   }
 
+  // 응답 저장
   @Action
   public async fetchSaveResponse(convertedDate: string) {
     const question_answer = this.response.questionAnswer.map((i) => { return {
@@ -185,6 +207,7 @@ export default class ModuleResponse extends VuexModule {
       .catch((error) => console.log(error));
   }
 
+  // logLIst get
   @Action
   public async fetchGetLogList({ page, surveyId }: {page: number, surveyId: string}){
     await responseApi.getLogList(page, surveyId)
@@ -194,4 +217,15 @@ export default class ModuleResponse extends VuexModule {
       })
       .catch((error) => console.log(error));
   }
+
+  // logDetail get
+  @Action
+  public async fetchGetLogDetail({ surveyId, userName }: {surveyId: string, userName: string}){
+    await responseApi.getLogDetail(surveyId, userName)
+      .then((res) => {
+        this.getLogDetail(res.data);
+      })
+      .catch((error) => console.log(error));
+  }
+
 }

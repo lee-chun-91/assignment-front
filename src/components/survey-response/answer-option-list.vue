@@ -29,11 +29,6 @@ export default class AnswerOptionList extends Vue {
   @Prop( { type: Boolean }) isLog!: boolean;
   // endregion
 
-  // region local
-  // checked = '';
-  // checkList = [];
-  // endregion
-
   // region computed
   get surveyId() {
     return this.$route.params.surveyId;
@@ -59,14 +54,6 @@ export default class AnswerOptionList extends Vue {
   get isCheckbox() {
     return this.answerType === QUESTION_TYPES.MULTIPLE_CHOICE;
   }
-
-  get logDetailData() {
-    const isLogDetail = $responseStore.logList.data.findIndex((log) =>
-      (log.surveyId === this.surveyId) && (log.userName === this.userName)
-    );
-    return $responseStore.logList.data[isLogDetail];
-  }
-
   // endregion
 
   // region method
@@ -78,8 +65,10 @@ export default class AnswerOptionList extends Vue {
 
   isCheckedAnswer(item: string) {
     if (this.$route.name === 'surveyLogDetail') {
-      const foundAnswerIndex = this.logDetailData.questionAnswer.findIndex((i) => i.questionId === this.questionId);
-      return this.logDetailData.questionAnswer[foundAnswerIndex]['answer'].includes(item);
+      const foundAnswerIndex = $responseStore.logDetail.questionAnswer.findIndex((i) => i.questionId === this.questionId);
+      console.log('foundAnswerIndex', foundAnswerIndex);
+      console.log('about questtionId', this.questionId);
+      return $responseStore.logDetail.questionAnswer[foundAnswerIndex].answer.includes(item);
     }
     return;
   }
@@ -89,6 +78,10 @@ export default class AnswerOptionList extends Vue {
   // endregion
 
   // region lifecycle
+  created() {
+    console.log('logDetail in answerOptionList', $responseStore.logDetail);
+    console.log('survey data in answerOptionList', $surveyStore.survey);
+  }
   // endregion
 }
 </script>
