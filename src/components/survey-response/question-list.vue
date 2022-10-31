@@ -2,13 +2,13 @@
   <div class="question-list">
     <div class="question-list-item" v-for="{ questionId, questionName, answerOptionList } in questionList" :key="questionId">
       <div>{{questionName}}</div>
-      <answer-option-list :answerOptionList="answerOptionList" :questionId="questionId"></answer-option-list>
+      <answer-option-list :isLog="isLog" :answerOptionList="answerOptionList" :questionId="questionId"></answer-option-list>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
 import AnswerOptionList from '@/components/survey-response/answer-option-list.vue';
 
@@ -16,6 +16,9 @@ import AnswerOptionList from '@/components/survey-response/answer-option-list.vu
   components: { AnswerOptionList }
 })
 export default class QuestionList extends Vue {
+  // region prop
+  @Prop( { type: Boolean }) isLog!: boolean;
+  // endregion
   // region local
   // endregion
 

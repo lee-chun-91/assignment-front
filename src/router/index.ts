@@ -46,7 +46,7 @@ const routes: Array<RouteConfig> = [
         component: PageSurveyLog,
       },
       {
-        path: 'log/:surveyId/:respondentName',
+        path: 'log/:surveyId/:userName',
         name: 'surveyLogDetail',
         component: PageSurveyLogDetail,
       },

@@ -62,10 +62,8 @@ export default class PageSurveyUpdate extends Vue {
 
   // region lifecycle
   async created() {
-    // console.log('type of surveyId', typeof this.surveyId);
     await $surveyStore.fetchGetSurvey(this.surveyId);
     console.log('updateSurvey', $surveyStore.survey);
-
   }
   // endregion
 }

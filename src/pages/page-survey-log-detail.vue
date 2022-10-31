@@ -1,7 +1,7 @@
 <template>
   <div class="survey-log-detail">
     <survey-title></survey-title>
-    <question-list></question-list>
+    <question-list :isLog="true"></question-list>
   </div>
 </template>
 
@@ -12,6 +12,7 @@ import {
 import SurveyTitle from '@/components/survey-response/survey-title.vue';
 import QuestionList from '@/components/survey-response/question-list.vue';
 import AtomicInput from '@/components/sign-in/atomic-input.vue';
+import { $surveyStore } from '@/store';
 
 @Component({ components: { QuestionList, SurveyTitle  } })
 export default class PageSurveyLogDetail extends Vue {
@@ -19,9 +20,22 @@ export default class PageSurveyLogDetail extends Vue {
   // endregion
 
   // region local
+  logDetailData = {
+    surveyName: '',
+    userName: '',
+    questionAnswer: [{
+      questionId: '',
+      answerType: 0,
+      answerOption: [],
+      answer: [],
+    }]
+  }
   // endregion
 
   // region computed
+  get surveyId() {
+    return this.$route.params.surveyId;
+  }
   // endregion
 
   // region method
@@ -31,6 +45,10 @@ export default class PageSurveyLogDetail extends Vue {
   // endregion
 
   // region lifecycle
+  async created() {
+    await $surveyStore.fetchGetSurvey(this.surveyId);
+    console.log('updateSurvey', $surveyStore.survey);
+  }
   // endregion
 }
 </script>

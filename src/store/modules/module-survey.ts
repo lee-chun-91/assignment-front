@@ -145,18 +145,6 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 리스트 get 후 state 에 저장
   @Mutation
   private getSurveyList(backSurveyList: IBackSurveyList) {
-    // export interface ISurvey {
-    //   _id?: string;
-    //   surveyName: string;
-    //   questionList: IQuestion[];
-    // }
-    //
-    // export interface IBackSurvey {
-    //   _id?: string;
-    //   survey_name: string;
-    //   question_list: IBackQuestion[];
-    // }
-
     const data: ISurvey[] = backSurveyList.data.map((s) => {
       const questionList: IQuestion[] = s.question_list.map((q) => {return {
         questionId: q.question_id,

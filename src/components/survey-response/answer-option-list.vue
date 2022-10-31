@@ -3,13 +3,13 @@
     <div v-for="(item, index) in answerOptionList" :key="index">
       <div class="answer-option" v-if="isRadioButton">
         <label :for="index">
-          <input type="radio" :value="item" @change="checkAnswer($event)" :name="questionId"/>
+          <input type="radio" :disabled="isLog" :checked="isCheckedAnswer(item)" :value="item" @change="checkAnswer($event)" :name="questionId"/>
         </label>
         <div>{{item}}</div>
       </div>
       <div class="answer-option" v-else-if="isCheckbox">
         <label :for="index">
-          <input type="checkbox" :value="item" @change="checkAnswer($event)" :name="questionId"/>
+          <input type="checkbox" :disabled="isLog" :checked="isCheckedAnswer(item)" :value="item" @change="checkAnswer($event)" :name="questionId"/>
         </label>
         <div>{{item}}</div>
       </div>
@@ -25,7 +25,8 @@ import { $responseStore, $surveyStore } from '@/store';
 @Component({})
 export default class AnswerOptionList extends Vue {
   // region prop
-  @Prop( { type: String }) questionId!: string
+  @Prop( { type: String }) questionId!: string;
+  @Prop( { type: Boolean }) isLog!: boolean;
   // endregion
 
   // region local
@@ -34,6 +35,14 @@ export default class AnswerOptionList extends Vue {
   // endregion
 
   // region computed
+  get surveyId() {
+    return this.$route.params.surveyId;
+  }
+
+  get userName() {
+    return this.$route.params.userName;
+  }
+
   get answerType() {
     const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
     return $surveyStore.survey.questionList[foundIndex].answerType;
@@ -50,18 +59,30 @@ export default class AnswerOptionList extends Vue {
   get isCheckbox() {
     return this.answerType === QUESTION_TYPES.MULTIPLE_CHOICE;
   }
+
+  get logDetailData() {
+    const isLogDetail = $responseStore.logList.data.findIndex((log) =>
+      (log.surveyId === this.surveyId) && (log.userName === this.userName)
+    );
+    return $responseStore.logList.data[isLogDetail];
+  }
+
   // endregion
 
   // region method
   checkAnswer(e: MouseEvent) {
     const selected = e.target as HTMLInputElement;
-    console.log(selected.value);
-    console.log(selected);
-    console.log(this.questionId);
     $responseStore.fetchUpdateQuestionAnswer({ questionId: this.questionId, selectedAnswer: selected.value });
     console.log('response', $responseStore.response);
   }
 
+  isCheckedAnswer(item: string) {
+    if (this.$route.name === 'surveyLogDetail') {
+      const foundAnswerIndex = this.logDetailData.questionAnswer.findIndex((i) => i.questionId === this.questionId);
+      return this.logDetailData.questionAnswer[foundAnswerIndex]['answer'].includes(item);
+    }
+    return;
+  }
   // endregion
 
   // region emit
