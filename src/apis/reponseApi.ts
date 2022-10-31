@@ -19,4 +19,11 @@ export const responseApi = {
       { params: { page, survey_id: surveyId } });
     return data;
   },
+
+  // logDetail get
+  getLogDetail: (surveyId: string, userName: string) => {
+    const data = instance.get('api/response/getLog',
+      { params: { survey_id: surveyId, user_name: userName } });
+    return data;
+  }
 };

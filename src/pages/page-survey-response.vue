@@ -80,9 +80,8 @@ export default class PageSurveyResponse extends Vue {
 
   // region lifecycle
   async created() {
-    console.log(this.surveyId);
     await $surveyStore.fetchGetSurvey(this.surveyId);
-    console.log($surveyStore.survey);
+    await $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
   }
   // endregion
 }
