@@ -26,7 +26,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import draggable, { MoveEvent } from 'vuedraggable';
 import { $surveyStore } from '@/store';
-import Question from '@/components/survey-create/question.vue';
+import Question from '@/components/survey-create-and-update/question.vue';
 import { IQuestion } from '@/store/modules/module-survey';
 
 @Component({ components: { draggable, Question } })

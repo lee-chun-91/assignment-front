@@ -10,7 +10,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
-import AnswerOptionList from '@/components/survey-response/answer-option-list.vue';
+import AnswerOptionList from '@/components/survey-response-and-log/answer-option-list.vue';
 
 @Component({
   components: { AnswerOptionList }

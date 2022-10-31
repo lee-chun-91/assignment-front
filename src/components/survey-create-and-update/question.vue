@@ -15,7 +15,7 @@
 
 <script lang="ts">
 
-import AnswerList from '@/components/survey-create/answer-option-list.vue';
+import AnswerList from '@/components/survey-create-and-update/answer-option-list.vue';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
 
