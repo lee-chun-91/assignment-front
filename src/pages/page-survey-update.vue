@@ -43,7 +43,7 @@ export default class PageSurveyUpdate extends Vue {
   updateSurvey() {
     console.log('surveyId', this.surveyId);
     const survey = $surveyStore.survey;
-    $surveyStore.fetchUpdateSurvey({ surveyId: this.surveyId, survey })
+    $surveyStore.fetchUpdateSurvey(this.surveyId)
       .then(() => this.openModal('설문지가 수정되었습니다'))
       .catch((error) => this.openModal('error'));
   }
