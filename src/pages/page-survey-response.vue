@@ -18,8 +18,8 @@ import {
   Vue, Component, Prop, Emit,
 } from 'vue-property-decorator';
 import AtomicInput from '@/components/sign-in/atomic-input.vue';
-import SurveyTitle from '@/components/survey-response/survey-title.vue';
-import QuestionList from '@/components/survey-response/question-list.vue';
+import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
+import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $responseStore, $surveyStore } from '@/store';
 import { convertDate } from '@/util/convertDate';
 

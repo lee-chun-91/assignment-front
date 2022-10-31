@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import SurveyTitle from '@/components/survey-create/survey-title.vue';
-import QuestionList from '@/components/survey-create/question-list.vue';
+import SurveyTitle from '@/components/survey-create-and-update/survey-title.vue';
+import QuestionList from '@/components/survey-create-and-update/question-list.vue';
 import { $surveyStore } from '@/store';
 import { ISurvey } from '@/store/modules/module-survey';
 

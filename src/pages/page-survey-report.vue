@@ -14,6 +14,7 @@ import {
   Vue, Component, Prop, Emit,
 } from 'vue-property-decorator';
 import ReportQuestion from '@/components/survey-report/report-question.vue';
+import { $responseStore } from '@/store';
 
 @Component({
   components: { ReportQuestion }
@@ -26,6 +27,9 @@ export default class PageSurveyReport extends Vue {
   // endregion
 
   // region computed
+  get surveyId() {
+    return this.$route.params.surveyId;
+  }
   // endregion
 
   // region method
@@ -35,6 +39,10 @@ export default class PageSurveyReport extends Vue {
   // endregion
 
   // region lifecycle
+  created() {
+    $responseStore.fetchGetLogListAll(this.surveyId);
+    console.log($responseStore.logList);
+  }
   // endregion
 }
 </script>

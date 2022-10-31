@@ -13,6 +13,12 @@ export const responseApi = {
     return data;
   },
 
+  getLogListAll: (surveyId: string) => {
+    const data = instance.get('api/response/getLogListAll',
+      { params: { survey_id: surveyId } });
+    return data;
+  },
+
   // 특정 설문에 대한 응답 리스트 get
   getLogList: (page: number, surveyId: string) => {
     const data = instance.get('api/response/getLogList',

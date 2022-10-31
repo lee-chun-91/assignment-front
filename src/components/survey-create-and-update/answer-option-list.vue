@@ -55,7 +55,7 @@ export default class AnswerOptionList extends Vue {
   }
 
   // get isParticipation() {
-  //   return String(this.$route.params) === '/survey-create-create/:surveyId';
+  //   return String(this.$route.params) === '/survey-create-and-update-create/:surveyId';
   // }
   //
   // get isLog() {
