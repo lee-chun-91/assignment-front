@@ -14,9 +14,9 @@ export const responseApi = {
   },
 
   // 특정 설문에 대한 응답 리스트 get
-  getResponseList: (page: number) => {
-    const data = instance.get('api/response/getSurveyList',
-      { params: { page: page } });
+  getResponseList: (page: number, surveyId: string) => {
+    const data = instance.get('api/response/getResponseList',
+      { params: { page, survey_id: surveyId } });
     return data;
   },
 

@@ -3,9 +3,24 @@ import { responseApi } from '@/apis/reponseApi';
 import { $surveyStore } from '@/store';
 import { QUESTION_TYPES } from '@/const/index';
 
+
+export interface IResponseList {
+  total: number;
+  perPage: number;
+  data: IResponse[];
+}
+
+export interface IBackResponseList {
+  total: number;
+  per_page: number;
+  data: IBackResponse[];
+}
+
+
 export interface IResponse {
   userName: string;
   surveyId: string;
+  createdAt?: string;
   questionAnswer: IQuestionAnswer[];
 }
 
@@ -36,7 +51,11 @@ const initialResponse: IResponse = {
 @Module({ namespaced: true, name: 'response' })
 export default class ModuleResponse extends VuexModule {
   // 초기값
-  responseList: IResponse[] = [];
+  responseList: IResponseList = {
+    total: 0,
+    perPage: 0,
+    data: []
+  };
   response: IResponse = initialResponse;
 
 
@@ -93,6 +112,49 @@ export default class ModuleResponse extends VuexModule {
     }
   }
 
+
+  @Mutation
+  private getResponseList(backResponseList: IBackResponseList) {
+    // export interface IBackResponse {
+    //   user_name: string;
+    //   survey_id: string,
+    //   created_at: string;
+    //   question_answer: IBackQuestionAnswer[];
+    // }
+    //
+    // export interface IQuestionAnswer {
+    //   questionId : string;
+    //   answer: string[];
+    // }
+    //
+    // export interface IBackQuestionAnswer {
+    //   question_id : string;
+    //   answer: string[];
+    // }
+
+    const data: IResponse[] = backResponseList.data.map((responsse) => {
+      const questionAnswer: IQuestionAnswer[] = responsse.question_answer.map((i) => {
+        return {
+          questionId: i.question_id,
+          answer: i.answer,
+        };});
+      return {
+        userName: responsse.user_name,
+        surveyId: responsse.survey_id,
+        createdAt: responsse.created_at,
+        questionAnswer
+      };
+    });
+
+    const responseList: IResponseList = {
+      total: backResponseList.total,
+      perPage: backResponseList.per_page,
+      data,
+    };
+
+    this.responseList = responseList;
+  }
+
   // ---------------------------MUTATION END----------------------------
 
   // ---------------------------ACTION START----------------------------
@@ -115,6 +177,7 @@ export default class ModuleResponse extends VuexModule {
       })
       .catch((res) => console.log('userCheck catch', res));
   }
+
   //
   @Action
   public fetchSetResponseItem({ userName, surveyId }: Pick<IResponse, 'userName'|'surveyId'>) {
@@ -144,7 +207,15 @@ export default class ModuleResponse extends VuexModule {
     return await responseApi.saveResponse(backResponse)
       .then((res) => console.log(res))
       .catch((error) => console.log(error));
+  }
 
-
+  @Action
+  public async fetchGetResponseList({ page, surveyId }: {page: number, surveyId: string}){
+    await responseApi.getResponseList(page, surveyId)
+      .then((res) => {
+        console.log(res);
+        this.getResponseList(res.data);
+      })
+      .catch((error) => console.log(error));
   }
 }

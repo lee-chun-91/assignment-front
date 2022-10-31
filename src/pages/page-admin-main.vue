@@ -29,7 +29,7 @@
         </tbody>
       </table>
       <el-pagination layout="prev, pager, next"
-                     :page-size="10"
+                     :page-size="perPage"
                      :total="total"
                      @current-change="handleCurrentChange"></el-pagination>
     </div>
