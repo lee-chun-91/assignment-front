@@ -21,7 +21,7 @@ import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $responseStore, $surveyStore } from '@/store';
-import { convertDate } from '@/util/convertDate';
+import { UTILS } from '@/utils/index';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageSurveyResponse extends Vue {
@@ -60,7 +60,7 @@ export default class PageSurveyResponse extends Vue {
   }
 
   saveResponse() {
-    const convertedDate = convertDate(new Date());
+    const convertedDate = UTILS.convertDate(new Date());
     $responseStore.fetchSaveResponse(convertedDate)
       .then(() => this.openModal('응답이 제출되었습니다'))
       .catch((error) => this.openModal('error'));

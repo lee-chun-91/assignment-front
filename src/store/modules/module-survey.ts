@@ -1,7 +1,7 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import { QUESTION_TYPES } from '@/const/index';
 import { surveyApi } from '@/apis/surveyApi';
-import uuid from '@/util/uuid';
+import { UTILS } from '@/utils/index';
 
 export interface ISurveyList {
   total: number;
@@ -59,7 +59,7 @@ export default class ModuleSurvey extends VuexModule {
   survey: ISurvey = {
     surveyName: '',
     questionList: [
-      { questionId: uuid(),
+      { questionId: UTILS.uuid(),
         questionName: '',
         answerType: QUESTION_TYPES.YES_NO,
         answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
@@ -73,7 +73,7 @@ export default class ModuleSurvey extends VuexModule {
     const initialSurvey: ISurvey = {
       surveyName: '',
       questionList: [
-        { questionId: uuid(),
+        { questionId: UTILS.uuid(),
           questionName: '',
           answerType: QUESTION_TYPES.YES_NO,
           answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
@@ -208,7 +208,7 @@ export default class ModuleSurvey extends VuexModule {
   // 질문 추가
   @Action
   public fetchAddQuestion() {
-    const newId = uuid();
+    const newId = UTILS.uuid();
     this.addQuestion(newQuestion(newId));
   }
 
