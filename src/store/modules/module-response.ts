@@ -212,7 +212,7 @@ export default class ModuleResponse extends VuexModule {
   public async fetchGetLogListAll(surveyId: string) {
     await responseApi.getLogListAll(surveyId)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         this.getLogList(res.data);
       })
       .catch((error) => console.log(error));

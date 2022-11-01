@@ -1,0 +1,16 @@
+.question-report {
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+
+  &__body {
+    margin: auto;
+    max-width: 500px;
+  }
+
+
+}

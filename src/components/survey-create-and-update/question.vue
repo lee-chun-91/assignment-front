@@ -3,24 +3,24 @@
     <label for="질문내용"></label>
     <input type="text" id="질문내용" className="question__input"  placeholder="질문을 입력해주세요"
            name="questionName" :value="questionName" @input="updateQuestionName(questionId, $event)"/>
-    <select name="questionType" :value="answerType" @change="updateAnswerType(questionId, $event)">
+    <select name="answerType" @change="updateAnswerType(questionId, $event)">
       <option value="0">YES/NO</option>
       <option value="1">단일선택</option>
       <option value="2">다중선택</option>
     </select>
-    <answer-list :questionId="questionId"></answer-list>
+    <answer-option-list :questionId="questionId"></answer-option-list>
     <el-button type="danger" icon="el-icon-delete" circle @click="deleteQuestion"></el-button>
   </div>
 </template>
 
 <script lang="ts">
 
-import AnswerList from '@/components/survey-create-and-update/answer-option-list.vue';
+import AnswerOptionList from '@/components/survey-create-and-update/answer-option-list.vue';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
 
 @Component({
-  components: { AnswerList }
+  components: { AnswerOptionList }
 })
 export default class Question extends Vue {
   // region prop

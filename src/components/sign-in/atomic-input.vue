@@ -23,7 +23,7 @@ export default class AtomicInput extends Vue {
   @Emit()
   handleInput(event: InputEvent) {
     if (!event.target) {
-      return undefined;
+      return;
     }
     const eventTarget = event.target as HTMLInputElement;
     return eventTarget.value;
