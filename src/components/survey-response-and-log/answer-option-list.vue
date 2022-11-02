@@ -64,7 +64,7 @@ export default class AnswerOptionList extends Vue {
   }
 
   isCheckedAnswer(item: string) {
-    if (this.$route.name === 'surveyLogDetail') {
+    if (this.$route.name === '개별 로그') {
       const foundAnswerIndex = $responseStore.logDetail.questionAnswer.findIndex((i) => i.questionId === this.questionId);
       console.log('foundAnswerIndex', foundAnswerIndex);
       console.log('about questtionId', this.questionId);
