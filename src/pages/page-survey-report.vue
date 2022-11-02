@@ -1,13 +1,16 @@
 <template>
   <div class="survey-report">
-    <response-count title="총 참여자" :count="totalLog"></response-count>
-    <response-count title="오늘 참여자" :count="todayLog"></response-count>
-    <div v-if="isEmpty">
+    <div class="survey-report__count">
+      <report-count title="총 참여자" :count="totalLog"></report-count>
+      <report-count title="오늘 참여자" :count="todayLog"></report-count>
+    </div>
+    <div class="survey-report__result" v-if="isEmpty">
       <div>아직 응답이 없습니다.</div>
     </div>
-    <div v-else>
+    <div class="survey-report__result" v-else>
       <div v-for="reportData in totalData" :key="reportData.questionId">
-        <question-report :question-name="reportData.questionName"
+        <question-report
+                         :question-name="reportData.questionName"
                          :questionId="reportData.questionId"
                          :reportType="reportData.reportType"
                          :chartData="reportData.chartData"
@@ -23,10 +26,9 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { $responseStore, $surveyStore } from '@/store';
-import ResponseCount from '@/components/survey-report/response-count.vue';
+import ReportCount from '@/components/survey-report/report-count.vue';
 import QuestionReport from '@/components/survey-report/question-report.vue';
 import { UTILS } from '@/utils/index';
-import { isSameDate } from '@/utils/utils';
 
 export interface IQuestionData {
   questionName: string;
@@ -47,7 +49,7 @@ export interface IDatasets {
 }
 
 @Component({
-  components: { QuestionReport, ResponseCount }
+  components: { QuestionReport, ReportCount }
 })
 export default class PageSurveyReport extends Vue {
   // region prop

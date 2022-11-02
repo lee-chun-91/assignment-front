@@ -9,8 +9,8 @@
       </select>
     </div>
     <div class="question-report__body">
-      <div v-if="hasQuestionResponse">문항에 대한 응답이 없습니다.</div>
-      <div v-else>
+      <div class="question-report__noResponse" v-if="hasNoQuestionResponse">문항에 대한 응답이 없습니다.</div>
+      <div class="question-report__response" v-else>
         <div v-if="isPieChart">
           <Doughnut :chartData="this.chartData"></Doughnut>
         </div>
@@ -21,7 +21,7 @@
                datasetIdKey="label">
           </Bar>
         </div>
-        <div v-else-if="isTableChart">
+        <div class="question-report__table" v-else-if="isTableChart">
           <table class="table">
             <thead class="table__thead">
             <tr class="table__tr">
@@ -77,7 +77,7 @@ export default class QuestionReport extends Vue {
   // endregion
 
   // region computed
-  get hasQuestionResponse() {
+  get hasNoQuestionResponse() {
     return this.chartData.labels.length === 0;
   }
 
