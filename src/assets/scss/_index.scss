@@ -1,4 +1,4 @@
-// common
+// sign-in
 @import "variables";
 @import "./common.scss";
 
@@ -15,8 +15,8 @@
 @import "pages/page-survey-log.scss";
 @import "pages/page-survey-response.scss";
 
-// common component
-@import "components/common/atomic-input.scss";
+// sign-in component
+@import "components/sign-in/atomic-input.scss";
 
 // survey-create-and-update components
 @import "components/survey-create-and-update/question-list.scss";

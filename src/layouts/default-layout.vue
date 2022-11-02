@@ -10,7 +10,14 @@
       </div>
     </div>
     <div class="breadcrumb">
-      <div>admin > 기능 구현 필요</div>
+      <span v-for="(matched, idx) in routeMatchedList"
+            :key="idx">
+        <a
+          :href="matched.path">
+        {{ matched.name }}
+        </a>
+        <span v-if="hasNextroute(idx)"> > </span>
+        </span>
     </div>
     <div class="page-wrapper">
       <router-view></router-view>
@@ -25,15 +32,13 @@ import { $adminStore } from '@/store';
 
 @Component({})
 export default class DefaultLayout extends Vue {
-  // region prop
-  // endregion
-
-  // region local
-  // endregion
-
   // region computed
   get userName() {
     return $adminStore.userName;
+  }
+
+  get routeMatchedList() {
+    return this.$route.matched;
   }
   // endregion
 
@@ -41,12 +46,11 @@ export default class DefaultLayout extends Vue {
   logout() {
     $adminStore.fetchLogout();
   }
-  // endregion
 
-  // region emit
-  // endregion
-
-  // region lifecycle
+  hasNextroute(idx: number) {
+    const matchedListLength = this.routeMatchedList.length;
+    return idx !== matchedListLength - 1 && this.$route.name !== undefined;
+  }
   // endregion
 }
 </script>

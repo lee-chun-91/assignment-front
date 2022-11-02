@@ -11,12 +11,11 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import AtomicButton from '@/components/common/atomic-button.vue';
-import AtomicInput from '@/components/common/atomic-input.vue';
+import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import { $adminStore } from '@/store';
 
 @Component({
-  components: { AtomicButton, AtomicInput },
+  components: { AtomicInput },
 })
 export default class PageSignIn extends Vue {
   // region prop

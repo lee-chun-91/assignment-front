@@ -13,9 +13,6 @@ import { $responseStore, $surveyStore } from '@/store';
 
 @Component({ components: { QuestionList, SurveyTitle  } })
 export default class PageSurveyLogDetail extends Vue {
-  // region prop
-  // endregion
-
   // region local
   logDetailData = {
     surveyName: '',
@@ -39,19 +36,12 @@ export default class PageSurveyLogDetail extends Vue {
   }
   // endregion
 
-  // region method
-  // endregion
-
-  // region emit
-  // endregion
-
   // region lifecycle
   async created() {
     await $responseStore.fetchGetLogDetail({ surveyId: this.surveyId, userName: this.userName });
     await $surveyStore.fetchGetSurvey(this.surveyId);
-    console.log('logDetail in page', $responseStore.logDetail);
-    console.log('survey data in page', $surveyStore.survey);
-
+    console.log('this', this);
+    console.log('this.$route', this.$route);
   }
   // endregion
 }

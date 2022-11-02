@@ -45,6 +45,8 @@ export default class PageSurveyCreate extends Vue {
   // region lifecycle
   created() {
     $surveyStore.fetchSetInitialSurvey();
+    console.log('this', this);
+    console.log('this.$route', this.$route);
   }
   // endregion
 }
