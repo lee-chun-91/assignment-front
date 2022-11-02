@@ -10,12 +10,12 @@
     <div class="survey-report__result" v-else>
       <div v-for="reportData in totalData" :key="reportData.questionId">
         <question-report
-                         :question-name="reportData.questionName"
-                         :questionId="reportData.questionId"
-                         :reportType="reportData.reportType"
-                         :chartData="reportData.chartData"
-                         :datasets="reportData.chartData.datasets"
-                         @update-report-type="updateReportType"
+          :question-name="reportData.questionName"
+          :questionId="reportData.questionId"
+          :reportType="reportData.reportType"
+          :chartData="reportData.chartData"
+          :datasets="reportData.chartData.datasets"
+          @update-report-type="updateReportType"
         >
         </question-report>
       </div>
@@ -52,9 +52,6 @@ export interface IDatasets {
   components: { QuestionReport, ReportCount }
 })
 export default class PageSurveyReport extends Vue {
-  // region prop
-  // endregion
-
   // region local
   totalLog = 0
   todayLog = 0
@@ -82,9 +79,6 @@ export default class PageSurveyReport extends Vue {
   }
   // endregion
 
-  // region emit
-  // endregion
-
   // region lifecycle
   async created() {
     await $responseStore.fetchGetLogListAll(this.surveyId);
@@ -98,7 +92,6 @@ export default class PageSurveyReport extends Vue {
       let answerArray: string[] = [];
       const logList = $responseStore.logList.data;
 
-      console.log('loglist', logList);
       // logList 에서 질문에 대한 응답을 찾고, 그 값들을 answerArray 에 모은다
       logList.map((log) => {
         const foundIndex = log.questionAnswer.findIndex(item =>
@@ -114,7 +107,6 @@ export default class PageSurveyReport extends Vue {
 
       // 데이터별 빈도 산출
       const elementCount = UTILS.getElementCount(answerArray);
-      console.log('elementCount', elementCount);
 
       // initial chartData
       let chartData: IChartData = {
@@ -143,7 +135,6 @@ export default class PageSurveyReport extends Vue {
 
     // 2. totalLog 구하기
     this.totalLog = $responseStore.logList.data.length;
-    console.log($responseStore.logList);
 
     // 3. todayLog count 구하기
     const today = new Date();
@@ -151,8 +142,10 @@ export default class PageSurveyReport extends Vue {
       console.log(UTILS.isSameDate(today, new Date(`${i.createdAt}`)));
       return UTILS.isSameDate(today, new Date(`${i.createdAt}`));}).length;
 
-    console.log('this.totalData', this.totalData);
+    console.log('this', this);
+    console.log('this.$route', this.$route);
   }
+
 
   // endregion
 }

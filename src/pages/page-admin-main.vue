@@ -23,10 +23,10 @@
         >
           <td>{{ survey.surveyName }}</td>
           <td>{{ survey.questionList.length }}개</td>
-          <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey._id }}">수정하러 가기</router-link></td>
-          <td><router-link :to="{ name: 'surveyReport', params: { surveyId: survey._id }}">리포트 보기</router-link></td>
-          <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey._id }}">로그 보기</router-link></td>
-          <td><router-link :to="{ name: 'surveyResponse', params: { surveyId: survey._id }}">참여하러 가기</router-link></td>
+          <td><router-link :to="{ name: '설문지 수정', params: { surveyId: survey._id }}">수정하러 가기</router-link></td>
+          <td><router-link :to="{ name: '설문 리포트', params: { surveyId: survey._id }}">리포트 보기</router-link></td>
+          <td><router-link :to="{ name: '설문 로그', params: { surveyId: survey._id }}">로그 보기</router-link></td>
+          <td><router-link :to="{ name: '설문 응답', params: { surveyId: survey._id }}">참여하러 가기</router-link></td>
         </tr>
         </tbody>
       </table>
@@ -36,7 +36,6 @@
                      @current-change="handleCurrentChange"></el-pagination>
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
@@ -45,12 +44,6 @@ import { $surveyStore } from '@/store';
 
 @Component({})
 export default class PageAdminMain extends Vue {
-  // region prop
-  // endregion
-
-  // region local
-  // endregion
-
   // region computed
   get surveyList() {
     return $surveyStore.surveyList.data;
@@ -70,21 +63,17 @@ export default class PageAdminMain extends Vue {
   // endregion
 
   // region method
-  // async getSurveyList(page: number) {
-  //   await $surveyStore.
-  // }
   async handleCurrentChange(page: number) {
     console.log(`current page: ${page}`);
     await $surveyStore.fetchGetSurveyList(page);
   }
   // endregion
 
-  // region emit
-  // endregion
-
   // region lifecycle
   async created() {
     await $surveyStore.fetchGetSurveyList(1);
+    console.log('this', this);
+    console.log('this.$route', this.$route);
   }
   // endregion
 }

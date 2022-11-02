@@ -10,44 +10,44 @@ import PageSurveyResponse from '@/pages/page-survey-response.vue';
 import DefaultLayout from '@/layouts/default-layout.vue';
 import EmptyLayout from '@/layouts/empty-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
-import { $adminStore, $surveyStore } from '@/store';
+import { $adminStore } from '@/store';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
+
   {
     path: '/',
-    // name: 'defaultLayout',
+    name: '관리자 메인',
     component: DefaultLayout,
     children: [
       {
         path: '',
-        name: 'adminMain',
         component: PageAdminMain,
       },
       {
         path: 'create',
-        name: 'surveyCreate',
+        name: '설문지 생성',
         component: PageSurveyCreate,
       },
       {
         path: 'update/:surveyId',
-        name: 'surveyUpdate',
+        name: '설문지 수정',
         component: PageSurveyUpdate,
       },
       {
         path: 'report/:surveyId',
-        name: 'surveyReport',
+        name: '설문 리포트',
         component: PageSurveyReport,
       },
       {
         path: 'log/:surveyId',
-        name: 'surveyLog',
+        name: '설문 로그',
         component: PageSurveyLog,
       },
       {
         path: 'log/:surveyId/:userName',
-        name: 'surveyLogDetail',
+        name: '개별 로그',
         component: PageSurveyLogDetail,
       },
 
@@ -55,24 +55,16 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/',
-    // name: 'emptyLayout',
     component: EmptyLayout,
     children: [
       {
         path: 'signIn',
-        name: 'signIn',
+        name: '로그인',
         component: PageSignIn,
-        // beforeEnter(to, from, next) {
-        //   if(localStorage.getItem('accessToken')){
-        //     next({ name:'adminMain' });
-        //   }else{
-        //     return false;
-        //   }
-        // }
       },
       {
         path: 'response/:surveyId',
-        name: 'surveyResponse',
+        name: '설문 응답',
         component: PageSurveyResponse,
       },
     ]
@@ -80,7 +72,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   // base: process.env.BASE_URL,
   routes
 });
@@ -92,7 +84,7 @@ router.beforeEach(async (to, from, next) => {
 
   // 유저정보 없으면 회원가입 화면으로
   if( (!username) && (!token) && (to.name !== 'signIn')) {next({ name: 'signIn' });}
-  // 유저정보 있으면 setLoggedInfo
+  // 유저정보 있으면 유저 정보 vuex state 에 세팅
   else {
     $adminStore.fetchSetLoggedInfo();
     next();

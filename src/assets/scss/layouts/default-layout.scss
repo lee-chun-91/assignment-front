@@ -65,7 +65,10 @@
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
-  color: #5f6368;
+
+  a {
+    color: #5f6368;
+  }
 }
 
 .page-wrapper {

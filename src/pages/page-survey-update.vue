@@ -7,7 +7,7 @@
       <el-button class="button-group__button button-group__button--save" type="success" icon="el-icon-check" round @click="updateSurvey">설문지 수정하기</el-button>
     </div>
   </div>
-</template>
+ </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
@@ -53,6 +53,9 @@ export default class PageSurveyUpdate extends Vue {
   async created() {
     await $surveyStore.fetchGetSurvey(this.surveyId);
     console.log('updateSurvey', $surveyStore.survey);
+
+    console.log('this', this);
+    console.log('this.$route', this.$route);
   }
   // endregion
 }

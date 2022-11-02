@@ -28,19 +28,11 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
-import { $responseStore, $surveyStore } from '@/store';
+import { Vue, Component } from 'vue-property-decorator';
+import { $responseStore } from '@/store';
 
 @Component({})
 export default class PageSurveyLog extends Vue {
-  // region prop
-  // endregion
-
-  // region local
-  // endregion
-
   // region computed
   get surveyId() {
     return this.$route.params.surveyId;
@@ -69,12 +61,11 @@ export default class PageSurveyLog extends Vue {
   }
   // endregion
 
-  // region emit
-  // endregion
-
   // region lifecycle
   async created() {
     await $responseStore.fetchGetLogList({ page: 1, surveyId: this.surveyId });
+    console.log('this', this);
+    console.log('this.$route', this.$route);
   }
   // endregion
 }

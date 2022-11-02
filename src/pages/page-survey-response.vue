@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import AtomicInput from '@/components/common/atomic-input.vue';
+import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $responseStore, $surveyStore } from '@/store';
@@ -23,9 +23,6 @@ import { UTILS } from '@/utils/index';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageSurveyResponse extends Vue {
-  // region prop
-  // endregion
-
   // region local
   userName = '';
   checkedUser = false;
@@ -73,13 +70,13 @@ export default class PageSurveyResponse extends Vue {
   }
   // endregion
 
-  // region emit
-  // endregion
-
   // region lifecycle
   async created() {
     await $surveyStore.fetchGetSurvey(this.surveyId);
     await $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
+
+    console.log('this', this);
+    console.log('this.$route', this.$route);
   }
   // endregion
 }

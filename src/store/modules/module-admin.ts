@@ -44,8 +44,6 @@ export default class ModuleAdmin extends VuexModule {
       user_name: userInfo.userName,
       password: userInfo.password,
     };
-    // console.log('userInfo', userInfo);
-    // console.log('backUserInfo', backUserInfo);
     return new Promise((resolve, reject) => {
       userApi.adminLogin(backUserInfo)
         .then((res) => {
