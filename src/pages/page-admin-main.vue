@@ -1,8 +1,10 @@
 <template>
   <div class="admin-main">
-    <router-link to="/create"><button>설문지 추가</button></router-link>
-    <div class="admin-main-content" v-show="isSurveyListEmpty">생성된 설문이 없습니다.</div>
-    <div class="admin-main-content" v-show="!isSurveyListEmpty">
+    <div class="button">
+      <el-button plain class="button button--create"><router-link to="/create">설문지 추가</router-link></el-button>
+    </div>
+    <div class="admin-main__body" v-show="isSurveyListEmpty">생성된 설문이 없습니다.</div>
+    <div class="admin-main__body" v-show="!isSurveyListEmpty">
       <table class="table">
         <thead class="table__thead">
         <tr class="table__tr">
@@ -39,12 +41,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import AdminHeader from '@/layouts/admin-header.vue';
 import { $surveyStore } from '@/store';
 
-@Component({
-  components: { AdminHeader }
-})
+@Component({})
 export default class PageAdminMain extends Vue {
   // region prop
   // endregion

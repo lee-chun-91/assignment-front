@@ -1,7 +1,7 @@
 .default-layout {
+  width: 90vw;
   display: flex;
   flex-direction: column;
-  width: 90vw;
   align-items: center;
   margin: auto;
 
@@ -9,5 +9,43 @@
     width: 100%;
   }
 
+  a {
+    text-decoration: none;
+  }
 
+}
+
+.header {
+  background-color: white;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  color: #5f6368;
+
+  &__title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    font-weight: 550;
+    font-size: 24px;
+
+    a {
+      color: #5f6368;
+    }
+  }
+
+  &__logout {
+  }
+}
+
+.breadcrumb {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px;
+  color: #5f6368;
 }

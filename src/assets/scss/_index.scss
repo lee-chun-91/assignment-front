@@ -3,11 +3,10 @@
 /// layout
 @import "layouts/default-layout.scss";
 @import "layouts/empty-layout.scss";
-@import "layouts/admin-header.scss";
 
 /// pages
 @import "pages/page-survey-create.scss";
-
+@import "pages/page-admin-main.scss";
 
 // components
 @import "components/survey-create/question-container.scss";
@@ -21,3 +20,4 @@
 
 // survey-report component
 @import "components/survey-report/question-report.scss";
+
