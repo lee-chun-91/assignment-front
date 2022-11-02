@@ -1,0 +1,27 @@
+.survey-title {
+  width: auto;
+}
+
+.survey-title__input {
+  border: none;
+  outline: none;
+  margin-left: 20px;
+  width: 100%;
+
+  &:hover {
+    border-bottom: 1px solid $border_gray;
+  }
+
+  &:focus {
+    transition: 0.1s ease;
+    border-bottom: 2px solid $purple;
+  }
+
+
+  font-size: 32px;
+  margin-top: 24px;
+
+  &::placeholder {
+    color: black;
+  }
+}

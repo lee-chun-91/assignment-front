@@ -1,15 +1,13 @@
 <template>
   <div class="survey-title">
     <label for="설문지 제목"></label>
-    <input type="text" id="설문지 제목" className="survey-title__input" placeholder="제목 없는 설문지"
+    <input type="text" id="설문지 제목" class="survey-title__input" placeholder="제목 없는 설문지"
            name="title" :value="surveyName" @input="updateSurveyName"/>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
 
 @Component({})

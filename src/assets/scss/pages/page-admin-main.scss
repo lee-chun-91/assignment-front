@@ -20,34 +20,4 @@
   align-items: center;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  color: #5f6368;
 
-  a {
-    color: #5f6368;
-  }
-
-  &__thead {
-    height: 40px;
-    text-align: center;
-    background-color: dodgerblue;
-    color: #fff;
-  }
-
-  &__tbody {
-    text-align: center;
-
-    tr:last-child {
-      border: none;
-    }
-  }
-
-  &__tr {
-    height: 30px;
-    border-bottom: 1px solid #eee;
-  }
-
-
-}

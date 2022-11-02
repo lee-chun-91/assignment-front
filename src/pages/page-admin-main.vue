@@ -1,7 +1,7 @@
 <template>
   <div class="admin-main">
     <div class="button">
-      <el-button plain class="button button--create"><router-link to="/create">설문지 추가</router-link></el-button>
+      <router-link to="/create"><el-button plain class="button button--create">설문지 추가</el-button></router-link>
     </div>
     <div class="admin-main__body" v-show="isSurveyListEmpty">생성된 설문이 없습니다.</div>
     <div class="admin-main__body" v-show="!isSurveyListEmpty">
@@ -23,10 +23,10 @@
         >
           <td>{{ survey.surveyName }}</td>
           <td>{{ survey.questionList.length }}개</td>
-          <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey._id }}">설문지 수정</router-link></td>
+          <td><router-link :to="{ name: 'surveyUpdate', params: { surveyId: survey._id }}">수정하러 가기</router-link></td>
           <td><router-link :to="{ name: 'surveyReport', params: { surveyId: survey._id }}">리포트 보기</router-link></td>
-          <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey._id }}">설문지 로그</router-link></td>
-          <td><router-link :to="{ name: 'surveyResponse', params: { surveyId: survey._id }}">설문지 배포</router-link></td>
+          <td><router-link :to="{ name: 'surveyLog', params: { surveyId: survey._id }}">로그 보기</router-link></td>
+          <td><router-link :to="{ name: 'surveyResponse', params: { surveyId: survey._id }}">참여하러 가기</router-link></td>
         </tr>
         </tbody>
       </table>

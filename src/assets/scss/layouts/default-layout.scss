@@ -1,5 +1,9 @@
 .default-layout {
-  width: 90vw;
+  width: 100%;
+  height: 95vh;
+  overflow: hidden;
+
+  outline: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,6 +15,9 @@
 
   a {
     text-decoration: none;
+  }
+  a:hover {
+    color: $linkColor;
   }
 
 }
@@ -30,6 +37,10 @@
   }
 
   &__logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     font-weight: 550;
     font-size: 24px;
 
@@ -39,6 +50,13 @@
   }
 
   &__logout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__user {
+    padding-right: 10px;
   }
 }
 
@@ -46,6 +64,9 @@
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
-  margin-bottom: 15px;
   color: #5f6368;
+}
+
+.page-wrapper {
+  overflow-y: auto;
 }

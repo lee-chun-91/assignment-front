@@ -2,9 +2,9 @@
   <div class="survey-create">
     <survey-title></survey-title>
     <question-list></question-list>
-    <div class="btn-field">
-      <el-button class="btn-field__button--add" type="primary" round @click="addQuestion">+ 질문 추가</el-button>
-      <el-button class="btn-field__button--save" type="success" icon="el-icon-check" round @click="saveSurvey">설문지 저장하기</el-button>
+    <div class="button-field">
+      <el-button class="button-field__button--add" type="primary" round @click="addQuestion">+ 질문 추가</el-button>
+      <el-button class="button-field__button--save" type="success" icon="el-icon-check" round @click="saveSurvey">설문지 저장하기</el-button>
     </div>
   </div>
 </template>
@@ -39,13 +39,13 @@ export default class PageSurveyCreate extends Vue {
   saveSurvey() {
     $surveyStore.fetchSaveSurvey()
       .then(() => this.openModal('설문지가 저장되었습니다'))
-      .catch((error) => this.openModal('error'));
+      .catch((error) => this.openModal(`${error}`));
   }
 
   openModal(message: string) {
     this.$alert(message, '안내', {
       confirmButtonText: 'OK',
-      callback: action => {
+      callback: () => {
         this.$router.push('/');}
     });
   }

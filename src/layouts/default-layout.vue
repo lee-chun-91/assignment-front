@@ -4,7 +4,7 @@
       <div class="header__title">
         <div class="header__logo"><router-link :to="{ path: '/'}">설문지 관리 시스템</router-link></div>
         <div class="header__logout">
-          {{ userName }}님 안녕하세요
+          <p class="header__user">{{ userName }}님 안녕하세요</p>
           <el-button size="mini" @click="logout">로그아웃</el-button>
         </div>
       </div>
@@ -12,8 +12,9 @@
     <div class="breadcrumb">
       <div>admin > 기능 구현 필요</div>
     </div>
-
-    <router-view></router-view>
+    <div class="page-wrapper">
+      <router-view></router-view>
+    </div>
   </div>
 
 </template>
