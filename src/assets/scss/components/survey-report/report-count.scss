@@ -1,0 +1,33 @@
+.report-count {
+  margin-top: 50px;
+  margin-right: 30px;
+  padding: 20px;
+
+  background-color: $white;
+  border-radius: 15px;
+
+  box-sizing: border-box;
+  width: 200px;
+  height: 200px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.report-count__title {
+  font-size: 28px;
+  font-weight: 550;
+
+  display: flex;
+  justify-content: center;
+}
+
+.report-count__count {
+  font-size: 24px;
+  font-weight: 500;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

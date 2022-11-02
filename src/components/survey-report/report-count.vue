@@ -1,7 +1,7 @@
 <template>
-  <div class="response-count">
-    <div>{{title}}</div>
-    <div>{{count}} 명</div>
+  <div class="report-count">
+    <div class="report-count__title">{{title}}</div>
+    <div class="report-count__count">{{count}} 명</div>
     </div>
 </template>
 
