@@ -141,12 +141,13 @@ export default class PageSurveyReport extends Vue {
       this.totalData.push(questionData);
     });
 
-    // 2. totalLog, todayLog count 구하기
+    // 2. totalLog 구하기
     this.totalLog = $responseStore.logList.data.length;
     console.log($responseStore.logList);
 
+    // 3. todayLog count 구하기
     const today = new Date();
-    this.todayLog = $responseStore.logList.data.map((i) => {
+    this.todayLog = $responseStore.logList.data.filter((i) => {
       console.log(UTILS.isSameDate(today, new Date(`${i.createdAt}`)));
       return UTILS.isSameDate(today, new Date(`${i.createdAt}`));}).length;
 
