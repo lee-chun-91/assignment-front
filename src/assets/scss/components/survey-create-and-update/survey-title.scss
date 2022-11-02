@@ -1,0 +1,30 @@
+.survey-title {
+  width: auto;
+  margin-top: 30px;
+  border-top: 5px solid $purple;
+  border-radius: 5px;
+
+}
+
+.survey-title__input {
+  min-width: 500px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  padding: 10px 24px;
+  font-size: 32px;
+  border-bottom: 1px solid $white;
+
+  &:hover {
+    border-bottom: 1px solid $border_gray;
+  }
+
+  &:focus {
+    transition: 0.1s ease;
+    border-bottom: 2px solid $purple;
+  }
+
+  &::placeholder {
+    color: black;
+  }
+}

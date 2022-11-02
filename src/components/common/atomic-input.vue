@@ -1,7 +1,7 @@
 <template>
   <div class="atomic-input">
     <label :for="title"></label>
-    <input type="text" :id="title" :placeholder="placeholder" :value="value"
+    <input class="atomic-input__input" type="text" :id="title" :placeholder="placeholder" :value="value"
            @input="handleInput"/>
   </div>
 </template>

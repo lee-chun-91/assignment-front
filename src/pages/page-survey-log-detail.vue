@@ -6,12 +6,9 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
-import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import { $responseStore, $surveyStore } from '@/store';
 
 @Component({ components: { QuestionList, SurveyTitle  } })

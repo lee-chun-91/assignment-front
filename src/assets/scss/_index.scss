@@ -1,23 +1,34 @@
-
+// common
+@import "variables";
+@import "./common.scss";
 
 /// layout
 @import "layouts/default-layout.scss";
 @import "layouts/empty-layout.scss";
-@import "layouts/admin-header.scss";
 
 /// pages
+@import "pages/page-sign-in.scss";
+@import "pages/page-admin-main.scss";
 @import "pages/page-survey-create.scss";
+@import "pages/page-survey-update.scss";
+@import "pages/page-survey-report.scss";
+@import "pages/page-survey-log.scss";
+@import "pages/page-survey-response.scss";
 
+// common component
+@import "components/common/atomic-input.scss";
 
-// components
-@import "components/survey-create/question-container.scss";
-@import "components/survey-create/question-list.scss";
+// survey-create-and-update components
+@import "components/survey-create-and-update/question-list.scss";
+@import "components/survey-create-and-update/survey-title.scss";
+@import "components/survey-create-and-update/answer-option-list.scss";
+
+// survey-report component
+@import "components/survey-report/question-report.scss";
+
 
 // survey-response-and-log components
 @import "components/survey-response/survey-title.scss";
 @import "components/survey-response/question-list.scss";
 @import "components/survey-response/answer-option-list.scss";
 
-
-// survey-report component
-@import "components/survey-report/question-report.scss";

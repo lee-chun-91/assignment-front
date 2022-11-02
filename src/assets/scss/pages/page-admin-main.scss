@@ -1,0 +1,23 @@
+
+.admin-main__body {
+  width: 100%;
+}
+
+.button {
+  margin: 20px 0 20px;
+}
+
+.button--create {
+  a {
+    color: #5f6368;
+  }
+}
+
+.admin-main__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
