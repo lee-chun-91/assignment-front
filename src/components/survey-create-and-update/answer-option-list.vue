@@ -1,22 +1,21 @@
 <template>
-  <div class="answer-option-list">
-    <div class="answer-option" v-for="(item, index) in answerOptionList" :key="index">
-      <div v-if="isRadioButton">
+  <div class="answer-option__list">
+    <div class="answer-option__wrapper" v-for="(item, index) in answerOptionList" :key="index">
+      <div class="answer-option__item" v-if="isRadioButton">
         <label :for="index">
-          <input type="radio" :value="item" :name="questionId"/>
-          <input type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
-          <el-button square size="mini" @click="deleteAnswerOption(questionId, index)">삭제</el-button>
+          <input type="radio" disabled="true"/>
+          <input class="question__input" type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
+          <el-button size="mini" circle @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
-      <div v-else-if="isCheckbox">
+      <div class="answer-option__item" v-else-if="isCheckbox">
         <label :for="index">
-          <input type="checkbox" :value="item" :name="questionId"/>
-          <input type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
-          <el-button square size="mini" @click="deleteAnswerOption(questionId, index)">삭제</el-button>
+          <input type="checkbox" disabled="true"/>
+          <input class="question__input" type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
+          <el-button size="mini" circle @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
     </div>
-    <el-button square size="mini" @click="addAnswerOption">+ 답변 옵션 추가</el-button>
   </div>
 </template>
 
@@ -32,8 +31,6 @@ export default class AnswerOptionList extends Vue {
   // endregion
 
   // region local
-  // checked = '';
-  // checkList = [];
   // endregion
 
   // region computed
@@ -53,24 +50,11 @@ export default class AnswerOptionList extends Vue {
   get isCheckbox() {
     return this.answerType === QUESTION_TYPES.MULTIPLE_CHOICE;
   }
-
-  // get isParticipation() {
-  //   return String(this.$route.params) === '/survey-create-and-update-and-update-create/:surveyId';
-  // }
-  //
-  // get isLog() {
-  //   return String(this.$route.params) === 'log/:surveyId/:respondentName';
-  // }
-
-  // set isChecked() {
-  //   if (this.isParticipation || this.isLog)
-  // }
-
   // endregion
 
   // region method
-  addAnswerOption() {
-    $surveyStore.fetchAddAnswerOption(this.questionId);
+  notChecked() {
+    return false;
   }
 
   updateAnswerOption(questionId: string, answerOptionIndex: number, e: InputEvent) {

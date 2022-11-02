@@ -1,5 +1,5 @@
 // common
-@import "./variable.scss";
+@import "variables";
 @import "./common.scss";
 
 /// layout
@@ -19,7 +19,6 @@
 @import "components/common/atomic-input.scss";
 
 // survey-create-and-update components
-@import "components/survey-create-and-update/question";
 @import "components/survey-create-and-update/question-list.scss";
 @import "components/survey-create-and-update/survey-title.scss";
 @import "components/survey-create-and-update/answer-option-list.scss";

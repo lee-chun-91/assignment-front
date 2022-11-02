@@ -11,6 +11,62 @@
   background: #c8ebfb;
 }
 
-.question-list-item i {
-  cursor: pointer;
+.question-list {
+  width: auto;
+}
+
+.question {
+  width: auto;
+  min-width: 500px;
+
+  padding-top: 12px;
+  margin: 20px auto 0;
+  background-color: $white;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.el-icon-rank {
+  cursor: grab;
+}
+
+
+.question__title {
+  margin: 10px auto;
+  padding-left: 24px;
+}
+
+.question__input {
+  min-width: 330px;
+  border: none;
+  outline: none;
+  padding: 10px 5px;
+  font-size: 16px;
+  border-bottom: 1px solid $white;
+
+  &:hover {
+    border-bottom: 1px solid $border_gray;
+  }
+
+  &:focus {
+    transition: 0.1s ease;
+    border-bottom: 2px solid $purple;
+  }
+
+  &::placeholder {
+    color: black;
+  }
+}
+
+.question__footer {
+  width: 90%;
+  margin: 15px auto;
+  padding: 10px 10px 0 0;
+  border-top: 1px solid $border_gray;
+
+  display: flex;
+  justify-content: right;
 }

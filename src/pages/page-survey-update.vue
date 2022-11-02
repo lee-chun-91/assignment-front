@@ -2,9 +2,9 @@
   <div class="survey-update">
     <survey-title></survey-title>
     <question-list></question-list>
-    <div class="btn-field">
-      <el-button class="btn-field__button--add" type="primary" round @click="addQuestion">+ 질문 추가</el-button>
-      <el-button class="btn-field__button--save" type="success" icon="el-icon-check" round @click="updateSurvey">설문지 수정하기</el-button>
+    <div class="button-group">
+      <el-button class="button-group__button button-group__button--add" type="primary" round @click="addQuestion">+ 질문 추가</el-button>
+      <el-button class="button-group__button button-group__button--save" type="success" icon="el-icon-check" round @click="updateSurvey">설문지 수정하기</el-button>
     </div>
   </div>
 </template>
@@ -14,7 +14,6 @@ import { Vue, Component } from 'vue-property-decorator';
 import SurveyTitle from '@/components/survey-create-and-update/survey-title.vue';
 import QuestionList from '@/components/survey-create-and-update/question-list.vue';
 import { $surveyStore } from '@/store';
-import { ISurvey } from '@/store/modules/module-survey';
 
 @Component({
   components: {
@@ -23,12 +22,6 @@ import { ISurvey } from '@/store/modules/module-survey';
   }
 })
 export default class PageSurveyUpdate extends Vue {
-  // region prop
-  // endregion
-
-  // region local
-  // endregion
-
   // region computed
   get surveyId() {
     return this.$route.params.surveyId;
@@ -42,22 +35,18 @@ export default class PageSurveyUpdate extends Vue {
 
   updateSurvey() {
     console.log('surveyId', this.surveyId);
-    const survey = $surveyStore.survey;
     $surveyStore.fetchUpdateSurvey(this.surveyId)
       .then(() => this.openModal('설문지가 수정되었습니다'))
-      .catch((error) => this.openModal('error'));
+      .catch((error) => this.openModal(`${error}`));
   }
 
   openModal(message: string) {
     this.$alert(message, '안내', {
       confirmButtonText: 'OK',
-      callback: action => {
+      callback: () => {
         this.$router.push('/');}
     });
   }
-  // endregion
-
-  // region emit
   // endregion
 
   // region lifecycle
