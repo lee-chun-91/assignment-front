@@ -1,7 +1,7 @@
 <template>
   <div class="survey-log">
-    <div class="admin-main-content" v-show="isResponseListEmpty">제출된 응답이 없습니다.</div>
-    <div class="admin-main-content" v-show="!isResponseListEmpty">
+    <div class="survey-log__body" v-show="isResponseListEmpty">제출된 응답이 없습니다.</div>
+    <div class="survey-log__body" v-show="!isResponseListEmpty">
       <table class="table">
         <thead class="table__thead">
         <tr class="table__tr">
@@ -14,7 +14,7 @@
             :key="index"
             v-for="(response, index) in responseList"
         >
-          <td><router-link :to="{ name: 'surveyLogDetail', params: { surveyId: response.surveyId, userName: response.userName }}">{{response.userName}}</router-link></td>
+          <td><router-link :to="{ name: '개별 로그', params: { surveyId: response.surveyId, userName: response.userName }}">{{response.userName}}</router-link></td>
           <td>{{ response.createdAt }}</td>
         </tr>
         </tbody>
