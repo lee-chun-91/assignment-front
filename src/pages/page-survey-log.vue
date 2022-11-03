@@ -5,8 +5,8 @@
       <table class="table">
         <thead class="table__thead">
         <tr class="table__tr">
-          <th>참여자</th>
-          <th>참여 시각</th>
+          <th>참여자 (응답내용 확인하기)</th>
+          <th>참여 시간</th>
         </tr>
         </thead>
         <tbody class="table__tbody">
