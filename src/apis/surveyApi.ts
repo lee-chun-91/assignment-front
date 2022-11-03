@@ -1,14 +1,7 @@
 import { instance } from './config';
-import { IBackSurvey, ISurvey } from '@/store/modules/module-survey';
+import { IBackSurvey } from '@/store/modules/module-survey';
 
 export const surveyApi = {
-  // 설문지 get
-  getSurvey: (surveyId: string) => {
-    const data = instance.get('api/survey/getSurvey',
-      { params: { survey_id: surveyId } });
-    return data;
-  },
-
   // 설문지 저장
   saveSurvey: (survey: IBackSurvey) => {
     const data = instance.post('api/survey/saveSurvey', survey);
@@ -21,10 +14,14 @@ export const surveyApi = {
     return data;
   },
 
-  // 설문지 상태 변경 (토글 버튼 연동)
-  changeSurveyStatus: () => {return;},
+  // 설문지 get
+  getSurvey: (surveyId: string) => {
+    const data = instance.get('api/survey/getSurvey',
+      { params: { survey_id: surveyId } });
+    return data;
+  },
 
-  //
+  //설문 리스트 get
   getSurveyList: (page: number) => {
     const data = instance.get('api/survey/getSurveyList',
       { params: { page: page } });
