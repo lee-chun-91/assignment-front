@@ -5,14 +5,14 @@
         <label :for="index">
           <input type="radio" disabled="true"/>
           <input class="question__input" type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
-          <el-button size="mini" circle @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
+          <el-button size="mini" circle :style="isShown" @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
       <div class="answer-option__item" v-else-if="isCheckbox">
         <label :for="index">
           <input type="checkbox" disabled="true"/>
           <input class="question__input" type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
-          <el-button size="mini" circle @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
+          <el-button size="mini" circle :style="isShown" @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
     </div>
@@ -49,6 +49,12 @@ export default class AnswerOptionList extends Vue {
 
   get isCheckbox() {
     return this.answerType === QUESTION_TYPES.MULTIPLE_CHOICE;
+  }
+
+  get isShown() {
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
+    return ($surveyStore.survey.questionList[foundIndex].answerOptionList.length > 2) ?
+      { 'visibility': 'visible' } : { 'visibility': 'hidden' };
   }
   // endregion
 
