@@ -47,26 +47,32 @@ export default class PageSurveyResponse extends Vue {
           this.checkedUser = true;
         }
         else if(result === 'already_response') {
-          this.$alert('이미 참여한 설문은 다시 참여할 수 없어요! 다른 설문에 참여해주세요.', '안내', {
-            confirmButtonText: 'OK',
-          });
+          this.openModal('이미 참여한 설문은 다시 참여할 수 없어요! 다른 설문에 참여해주세요.', '안내');
         }
-      });
+      })
+      .catch((error) => this.openModal(`${error}`, '오류'));
   }
 
   saveResponse() {
     const convertedDate = UTILS.convertDate(new Date());
     $responseStore.fetchSaveResponse(convertedDate)
-      .then(() => this.openModal('응답이 제출되었습니다'))
-      .catch((error) => this.openModal(`${error}`));
+      .then(() => this.openModal('응답이 제출되었습니다', '안내'))
+      .catch((error) => this.openModal(`${error}`, '오류'));
   }
 
-  openModal(message: string) {
-    this.$alert(message, '안내', {
-      confirmButtonText: 'OK',
-      callback: () => {
-        this.$router.push('/');}
-    });
+  openModal(message: string, title: string) {
+    if (title === '안내') {
+      this.$alert(message, title, {
+        confirmButtonText: 'OK',
+        callback: () => {
+          this.$router.push('/');}
+      });
+    }
+    else if (title === '오류') {
+      this.$alert(message, title, {
+        confirmButtonText: 'OK',
+      });
+    }
   }
   // endregion
 
