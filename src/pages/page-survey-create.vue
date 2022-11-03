@@ -29,16 +29,14 @@ export default class PageSurveyCreate extends Vue {
 
   saveSurvey() {
     $surveyStore.fetchSaveSurvey()
-      .then(() => this.openModal('설문지가 저장되었습니다'))
-      .catch((error) => this.openModal(`${error}`));
-  }
-
-  openModal(message: string) {
-    this.$alert(message, '안내', {
-      confirmButtonText: 'OK',
-      callback: () => {
-        this.$router.push('/');}
-    });
+      .then(() => this.$alert('설문지가 저장되었습니다', '안내', {
+        confirmButtonText: 'OK',
+        callback: () => {
+          this.$router.push('/');}
+      }))
+      .catch((error) => this.$alert(error, '오류', {
+        confirmButtonText: 'OK',
+      }));
   }
   // endregion
 

@@ -30,16 +30,14 @@ export default class PageSurveyUpdate extends Vue {
 
   updateSurvey() {
     $surveyStore.fetchUpdateSurvey(this.surveyId)
-      .then(() => this.openModal('설문지가 수정되었습니다'))
-      .catch((error) => this.openModal(`${error}`));
-  }
-
-  openModal(message: string) {
-    this.$alert(message, '안내', {
-      confirmButtonText: 'OK',
-      callback: () => {
-        this.$router.push('/');}
-    });
+      .then(() => this.$alert('설문지가 수정되었습니다', '안내', {
+        confirmButtonText: 'OK',
+        callback: () => {
+          this.$router.push('/');}
+      }))
+      .catch((error) => this.$alert(error, '오류', {
+        confirmButtonText: 'OK',
+      }));
   }
   // endregion
 

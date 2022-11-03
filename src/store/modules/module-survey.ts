@@ -43,7 +43,7 @@ export interface IBackQuestion {
 
 const newQuestion = (newId: string) => ({
   questionId: newId,
-  questionName: '',
+  questionName: '제목 없는 질문',
   answerType: QUESTION_TYPES.YES_NO,
   answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
 });
@@ -57,10 +57,10 @@ export default class ModuleSurvey extends VuexModule {
     data: []
   }
   survey: ISurvey = {
-    surveyName: '',
+    surveyName: '제목 없는 설문지',
     questionList: [
       { questionId: UTILS.uuid(),
-        questionName: '',
+        questionName: '제목 없는 질문',
         answerType: QUESTION_TYPES.YES_NO,
         answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
       },
@@ -71,10 +71,10 @@ export default class ModuleSurvey extends VuexModule {
   @Mutation
   private setInitialSurvey() {
     const initialSurvey: ISurvey = {
-      surveyName: '',
+      surveyName: '제목 없는 설문지',
       questionList: [
         { questionId: UTILS.uuid(),
-          questionName: '',
+          questionName: '제목 없는 질문',
           answerType: QUESTION_TYPES.YES_NO,
           answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
         },
@@ -257,8 +257,19 @@ export default class ModuleSurvey extends VuexModule {
   }
 
   // 설문 저장
-  @Action
+  @Action({ rawError: true })
   public async fetchSaveSurvey() {
+    // form validation
+    const emptyQuestionNameList = this.survey.questionList.filter((q) => q.questionName === '');
+
+    if (this.survey.surveyName === '') {
+      return Promise.reject('설문 제목이 비어있습니다. 설문 제목을 입력해주세요');
+    }
+    else if (emptyQuestionNameList.length !== 0) {
+      return Promise.reject('비어있는 질문이 있습니다. 모든 질문에 내용을 입력해주세요.');
+    }
+
+    // form validation 통과 시
     const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
       question_id : q.questionId,
       question_name: q.questionName,
@@ -271,12 +282,8 @@ export default class ModuleSurvey extends VuexModule {
       question_list: question_list
     };
 
-    console.log('survey', this.survey);
-    console.log('backSurvey', backSurvey);
-
     return await surveyApi.saveSurvey(backSurvey)
       .then((res) => {
-        console.log('save result', res);
         this.setInitialSurvey();
       })
       .catch((error) => console.log(error));
@@ -307,8 +314,18 @@ export default class ModuleSurvey extends VuexModule {
   }
 
   // 설문 수정
-  @Action
+  @Action({ rawError: true })
   public async fetchUpdateSurvey(surveyId: string) {
+    // form validation
+    const emptyQuestionNameList = this.survey.questionList.filter((q) => q.questionName === '');
+
+    if (this.survey.surveyName === '') {
+      return Promise.reject('설문 제목이 비어있습니다. 설문 제목을 입력해주세요');
+    }
+    else if (emptyQuestionNameList.length !== 0) {
+      return Promise.reject('비어있는 질문이 있습니다. 모든 질문에 내용을 입력해주세요.');
+    }
+
     const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
       question_id : q.questionId,
       question_name: q.questionName,
