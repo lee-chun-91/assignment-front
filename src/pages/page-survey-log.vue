@@ -1,6 +1,10 @@
 <template>
   <div class="survey-log">
-    <div class="survey-log__body" v-show="isResponseListEmpty">제출된 응답이 없습니다.</div>
+    <div class="survey-log__body" v-show="isResponseListEmpty">
+      <div class="survey-log--noContent">
+        <p>제출된 응답이 없습니다.</p>
+      </div>
+    </div>
     <div class="survey-log__body" v-show="!isResponseListEmpty">
       <table class="table">
         <thead class="table__thead">
