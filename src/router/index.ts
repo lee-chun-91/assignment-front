@@ -25,6 +25,7 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: '',
+        name: '관리자 메인',
         component: PageAdminMain,
       },
       {

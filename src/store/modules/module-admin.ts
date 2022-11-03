@@ -38,22 +38,25 @@ export default class ModuleAdmin extends VuexModule {
     this.isLogin = true;
   }
 
-  @Action
+  // ---------------------------MUTATION END----------------------------
+
+
+
+  // ---------------------------ACTION START----------------------------
+
+  @Action ({ rawError: true })
   public async fetchLogin(userInfo: IAdminInfo) {
     const backUserInfo: IBackAdminInfo = {
       user_name: userInfo.userName,
       password: userInfo.password,
     };
-    return new Promise((resolve, reject) => {
-      userApi.adminLogin(backUserInfo)
-        .then((res) => {
-          localStorage.setItem('accessToken', res.data);
-          localStorage.setItem('userName', userInfo.userName);
-          router.push( { name: '관리자 메인' });
-        })
-        .catch((error) => {
-          reject(error.response.data); });
-    });
+    return await userApi.adminLogin(backUserInfo)
+      .then((res) => {
+        localStorage.setItem('accessToken', res.data);
+        localStorage.setItem('userName', userInfo.userName);
+        router.push( { name: '관리자 메인' });
+      })
+      .catch((error) => {return Promise.reject(error.response.data);});
   }
 
   @Action
