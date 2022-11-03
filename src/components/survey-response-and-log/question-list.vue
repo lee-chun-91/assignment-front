@@ -1,7 +1,7 @@
 <template>
   <div class="question-list">
-    <div class="question-list-item" v-for="{ questionId, questionName, answerOptionList } in questionList" :key="questionId">
-      <div>{{questionName}}</div>
+    <div class="question" v-for="{ questionId, questionName, answerOptionList } in questionList" :key="questionId">
+      <div class="question__title">{{questionName}}</div>
       <answer-option-list :isLog="isLog" :answerOptionList="answerOptionList" :questionId="questionId"></answer-option-list>
     </div>
   </div>

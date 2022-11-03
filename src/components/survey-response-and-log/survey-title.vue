@@ -1,6 +1,6 @@
 <template>
   <div class="survey-title">
-    <h1>{{surveyName}}</h1>
+    <h1 class="survey-title__content">{{surveyName}}</h1>
   </div>
 </template>
 
