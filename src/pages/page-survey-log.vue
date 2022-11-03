@@ -20,9 +20,10 @@
         </tbody>
       </table>
       <el-pagination layout="prev, pager, next"
-                     :page-size="10"
+                     :page-size="perPage"
                      :total="total"
-                     @current-change="handleCurrentChange"></el-pagination>
+                     @current-change="handleCurrentChange">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -45,12 +46,12 @@ export default class PageSurveyLog extends Vue {
     return $responseStore.logList.data.length === 0;
   }
 
-  get total() {
-    return $responseStore.logList.total;
-  }
-
   get perPage() {
     return $responseStore.logList.perPage;
+  }
+
+  get total() {
+    return $responseStore.logList.total;
   }
   // endregion
 
@@ -64,8 +65,6 @@ export default class PageSurveyLog extends Vue {
   // region lifecycle
   async created() {
     await $responseStore.fetchGetLogList({ page: 1, surveyId: this.surveyId });
-    console.log('this', this);
-    console.log('this.$route', this.$route);
   }
   // endregion
 }

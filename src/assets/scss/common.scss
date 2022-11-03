@@ -8,6 +8,26 @@ a {
   color: #5f6368;
 }
 
+
+input {
+  border: none;
+  outline: none;
+
+  &:hover {
+    border-bottom: 1px solid $border_gray;
+  }
+
+  &:focus {
+    transition: 0.1s ease;
+    border-bottom: 2px solid $purple;
+  }
+
+  &::placeholder {
+    color: $border_gray;
+  }
+}
+
+
 .table {
   width: 100%;
   max-width: 1240px;

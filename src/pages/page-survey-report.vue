@@ -15,8 +15,7 @@
           :reportType="reportData.reportType"
           :chartData="reportData.chartData"
           :datasets="reportData.chartData.datasets"
-          @update-report-type="updateReportType"
-        >
+          @update-report-type="updateReportType">
         </question-report>
       </div>
     </div>
@@ -141,12 +140,7 @@ export default class PageSurveyReport extends Vue {
     this.todayLog = $responseStore.logList.data.filter((i) => {
       console.log(UTILS.isSameDate(today, new Date(`${i.createdAt}`)));
       return UTILS.isSameDate(today, new Date(`${i.createdAt}`));}).length;
-
-    console.log('this', this);
-    console.log('this.$route', this.$route);
   }
-
-
   // endregion
 }
 </script>

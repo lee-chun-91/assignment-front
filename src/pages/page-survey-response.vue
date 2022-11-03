@@ -6,7 +6,7 @@
       <el-button class="gird__button--submit" type="success" name="설문 시작" @click="userCheck" round>설문 시작</el-button>
     </div>
     <div class="survey-response__container--response" v-else>
-      <survey-title></survey-title>
+      <survey-title :user-name="this.userName"></survey-title>
       <question-list></question-list>
       <el-button class="btn-field__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
     </div>
@@ -74,9 +74,6 @@ export default class PageSurveyResponse extends Vue {
   async created() {
     await $surveyStore.fetchGetSurvey(this.surveyId);
     await $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
-
-    console.log('this', this);
-    console.log('this.$route', this.$route);
   }
   // endregion
 }

@@ -34,9 +34,9 @@ export default class AnswerOptionList extends Vue {
     return this.$route.params.surveyId;
   }
 
-  get userName() {
-    return this.$route.params.userName;
-  }
+  // get userName() {
+  //   return this.$route.params.userName;
+  // }
 
   get answerType() {
     const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);

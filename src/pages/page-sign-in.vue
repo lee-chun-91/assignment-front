@@ -18,15 +18,9 @@ import { $adminStore } from '@/store';
   components: { AtomicInput },
 })
 export default class PageSignIn extends Vue {
-  // region prop
-  // endregion
-
   // region local
   userName = '';
   password = '';
-  // endregion
-
-  // region computed
   // endregion
 
   // region method
@@ -46,12 +40,6 @@ export default class PageSignIn extends Vue {
         });
       });
   }
-  // endregion
-
-  // region emit
-  // endregion
-
-  // region lifecycle
   // endregion
 }
 </script>
