@@ -16,7 +16,7 @@
           :href="matched.path">
         {{ matched.name }}
         </a>
-        <span v-if="hasNextroute(idx)"> > </span>
+        <span v-if="hasNextRoute(idx)"> > </span>
         </span>
     </div>
     <div class="page-wrapper">
@@ -47,7 +47,7 @@ export default class DefaultLayout extends Vue {
     $adminStore.fetchLogout();
   }
 
-  hasNextroute(idx: number) {
+  hasNextRoute(idx: number) {
     const matchedListLength = this.routeMatchedList.length;
     return idx !== matchedListLength - 1 && this.$route.name !== undefined;
   }
