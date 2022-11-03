@@ -59,19 +59,6 @@ export default class QuestionList extends Vue {
   set questionList(questionList: IQuestion[]) {
     $surveyStore.fetchUpdateQuestionOrder(questionList);
   }
-
-  // get questionName() {
-  //   const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
-  //   return $surveyStore.survey.questionList[foundIndex].questionName;
-  // }
-  //
-  // get answerType() {
-  //   const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
-  //   return $surveyStore.survey.questionList[foundIndex].answerType;
-  // }
-  // set questionList(value: any) {
-  //   console.log(value);
-  // }
   // endregion
 
   // region method
@@ -100,13 +87,6 @@ export default class QuestionList extends Vue {
   deleteQuestion(questionId: string) {
     $surveyStore.fetchDeleteQuestion(questionId);
   }
-
-  // endregion
-
-  // region emit
-  // endregion
-
-  // region lifecycle
   // endregion
 }
 </script>

@@ -4,14 +4,14 @@
       <div class="answer-option__item" v-if="isRadioButton">
         <label :for="index">
           <input type="radio" disabled="true"/>
-          <input class="question__input" type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
+          <input class="answer-option__input" type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button size="mini" circle :style="isShown" @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
       <div class="answer-option__item" v-else-if="isCheckbox">
         <label :for="index">
           <input type="checkbox" disabled="true"/>
-          <input class="question__input" type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
+          <input class="answer-option__input" type="text" :id="index" name="answerOption" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button size="mini" circle :style="isShown" @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
