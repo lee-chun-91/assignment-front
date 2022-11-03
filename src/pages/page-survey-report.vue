@@ -5,7 +5,9 @@
       <report-count title="오늘 참여자" :count="todayLog"></report-count>
     </div>
     <div class="survey-report__result" v-if="isEmpty">
-      <div>아직 응답이 없습니다.</div>
+      <div class="survey-report--noContent">
+        <p>제출된 응답이 없습니다.</p>
+      </div>
     </div>
     <div class="survey-report__result" v-else>
       <div v-for="reportData in totalData" :key="reportData.questionId">

@@ -1,6 +1,5 @@
 .survey-report {
   background-color: $backgroundColor;
-  height: auto;
 }
 
 .survey-report__count{
@@ -14,4 +13,13 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.survey-report--noContent {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
 }
