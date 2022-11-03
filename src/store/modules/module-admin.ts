@@ -49,8 +49,7 @@ export default class ModuleAdmin extends VuexModule {
         .then((res) => {
           localStorage.setItem('accessToken', res.data);
           localStorage.setItem('userName', userInfo.userName);
-          this.login(userInfo.userName);
-          router.push( { name: 'adminMain' });
+          router.push( { name: '관리자 메인' });
         })
         .catch((error) => {
           reject(error.response.data); });
@@ -62,7 +61,7 @@ export default class ModuleAdmin extends VuexModule {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userName');
     this.logout();
-    router.push( { name: 'signIn' });
+    router.push( { name: '로그인' });
   }
 
   @Action

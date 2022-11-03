@@ -16,6 +16,7 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
 
+  // 버그 확인
   {
     path: '/',
     name: '관리자 메인',
@@ -23,6 +24,7 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: '',
+        name: '관리자 메인',
         component: PageAdminMain,
       },
       {
@@ -83,7 +85,7 @@ router.beforeEach(async (to, from, next) => {
   const token = localStorage.getItem('accessToken');
 
   // 유저정보 없으면 회원가입 화면으로
-  if( (!username) && (!token) && (to.name !== 'signIn')) {next({ name: 'signIn' });}
+  if( (!username) && (!token) && (to.name !== '로그인')) {next({ name: '로그인' });}
   // 유저정보 있으면 유저 정보 vuex state 에 세팅
   else {
     $adminStore.fetchSetLoggedInfo();
