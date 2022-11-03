@@ -1,6 +1,6 @@
 <template>
   <div class="survey-log-detail">
-    <survey-title></survey-title>
+    <survey-title :user-name="userName"></survey-title>
     <question-list :isLog="true"></question-list>
   </div>
 </template>
@@ -13,19 +13,6 @@ import { $responseStore, $surveyStore } from '@/store';
 
 @Component({ components: { QuestionList, SurveyTitle  } })
 export default class PageSurveyLogDetail extends Vue {
-  // region local
-  logDetailData = {
-    surveyName: '',
-    userName: '',
-    questionAnswer: [{
-      questionId: '',
-      answerType: 0,
-      answerOption: [],
-      answer: [],
-    }]
-  }
-  // endregion
-
   // region computed
   get surveyId() {
     return this.$route.params.surveyId;
@@ -40,8 +27,6 @@ export default class PageSurveyLogDetail extends Vue {
   async created() {
     await $responseStore.fetchGetLogDetail({ surveyId: this.surveyId, userName: this.userName });
     await $surveyStore.fetchGetSurvey(this.surveyId);
-    console.log('this', this);
-    console.log('this.$route', this.$route);
   }
   // endregion
 }

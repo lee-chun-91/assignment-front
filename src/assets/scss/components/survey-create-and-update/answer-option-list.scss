@@ -8,17 +8,23 @@
 }
 
 .answer-option__wrapper {
+  width: 100%;
   display: flex;
-  align-items: center;
+  //align-items: center;
 }
 
 .answer-option__item {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-items: center;
   padding-left: 24px;
   padding-right: 24px;
+}
+
+.answer-option__input {
+  min-width: 330px;
+  padding: 10px 5px;
+  font-size: 16px;
+  border-bottom: 1px solid $white;
 }
 

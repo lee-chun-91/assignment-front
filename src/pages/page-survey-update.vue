@@ -15,12 +15,7 @@ import SurveyTitle from '@/components/survey-create-and-update/survey-title.vue'
 import QuestionList from '@/components/survey-create-and-update/question-list.vue';
 import { $surveyStore } from '@/store';
 
-@Component({
-  components: {
-    SurveyTitle,
-    QuestionList,
-  }
-})
+@Component({ components: { SurveyTitle, QuestionList } })
 export default class PageSurveyUpdate extends Vue {
   // region computed
   get surveyId() {
@@ -34,7 +29,6 @@ export default class PageSurveyUpdate extends Vue {
   }
 
   updateSurvey() {
-    console.log('surveyId', this.surveyId);
     $surveyStore.fetchUpdateSurvey(this.surveyId)
       .then(() => this.openModal('설문지가 수정되었습니다'))
       .catch((error) => this.openModal(`${error}`));
@@ -52,10 +46,6 @@ export default class PageSurveyUpdate extends Vue {
   // region lifecycle
   async created() {
     await $surveyStore.fetchGetSurvey(this.surveyId);
-    console.log('updateSurvey', $surveyStore.survey);
-
-    console.log('this', this);
-    console.log('this.$route', this.$route);
   }
   // endregion
 }
