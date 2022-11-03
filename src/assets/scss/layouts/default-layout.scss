@@ -1,10 +1,9 @@
 .default-layout {
   width: 100%;
   max-width: 1240px;
-  height: 95vh;
+  height: 98vh;
   overflow: hidden;
 
-  outline: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,15 +12,12 @@
   > * {
     width: 100%;
   }
-
-  a {
-    text-decoration: none;
-  }
-  a:hover {
-    color: $linkColor;
-  }
-
 }
+
+.page-wrapper {
+  overflow-y: auto;
+}
+
 
 .header {
   background-color: white;
@@ -44,10 +40,6 @@
     align-items: center;
     font-weight: 550;
     font-size: 24px;
-
-    a {
-      color: #5f6368;
-    }
   }
 
   &__logout {
@@ -65,12 +57,5 @@
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
-
-  a {
-    color: #5f6368;
-  }
 }
 
-.page-wrapper {
-  overflow-y: auto;
-}

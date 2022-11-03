@@ -1,17 +1,17 @@
 <template>
   <div class="answer-option-list">
-    <div v-for="(item, index) in answerOptionList" :key="index">
+    <div class="answer-option__wrapper" v-for="(item, index) in answerOptionList" :key="index">
       <div class="answer-option" v-if="isRadioButton">
         <label :for="index">
           <input type="radio" :disabled="isLog" :checked="isCheckedAnswer(item)" :value="item" @change="checkAnswer($event)" :name="questionId"/>
         </label>
-        <div>{{item}}</div>
+        <div class="answer-option__content">{{item}}</div>
       </div>
       <div class="answer-option" v-else-if="isCheckbox">
         <label :for="index">
           <input type="checkbox" :disabled="isLog" :checked="isCheckedAnswer(item)" :value="item" @change="checkAnswer($event)" :name="questionId"/>
         </label>
-        <div>{{item}}</div>
+        <div class="answer-option__content">{{item}}</div>
       </div>
     </div>
   </div>

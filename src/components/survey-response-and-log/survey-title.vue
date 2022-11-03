@@ -29,9 +29,6 @@ export default class SurveyTitle extends Vue {
   // endregion
 
   // region lifecycle
-  created() {
-    console.log(this.userName);
-  }
   // endregion
 }
 </script>

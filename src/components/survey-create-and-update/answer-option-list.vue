@@ -1,14 +1,14 @@
 <template>
-  <div class="answer-option__list">
+  <div class="answer-option-list">
     <div class="answer-option__wrapper" v-for="(item, index) in answerOptionList" :key="index">
-      <div class="answer-option__item" v-if="isRadioButton">
+      <div class="answer-option" v-if="isRadioButton">
         <label :for="index">
           <input type="radio" disabled="true"/>
           <input class="answer-option__input" type="text" :id="index" :placeholder="item" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button size="mini" circle :style="isShown" @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
-      <div class="answer-option__item" v-else-if="isCheckbox">
+      <div class="answer-option" v-else-if="isCheckbox">
         <label :for="index">
           <input type="checkbox" disabled="true"/>
           <input class="answer-option__input" type="text" :id="index" :placeholder="item" @input="updateAnswerOption(questionId, index, $event)" />
