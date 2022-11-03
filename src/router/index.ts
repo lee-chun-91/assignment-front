@@ -20,12 +20,11 @@ const routes: Array<RouteConfig> = [
   // 버그 확인
   {
     path: '/',
-    name: '관리자 메인',
     component: DefaultLayout,
     children: [
       {
         path: '',
-        name: '관리자 메인',
+        name: '설문 목록',
         component: PageAdminMain,
       },
       {
