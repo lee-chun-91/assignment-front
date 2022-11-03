@@ -63,9 +63,9 @@
   - 공통으로 쓰는 함수이면서 component 가 아닌 요소들을 두어 관리했습니다.
 
 
+![image](https://user-images.githubusercontent.com/113881834/199671400-91461b7b-dc61-45db-97d6-feffb7d5f924.png)
 
-
-## ☝🏻기술 아키텍쳐
+![image](https://user-images.githubusercontent.com/113881834/199671471-aa68e5be-7c62-4623-b5d4-51ae4f7701c7.png)
 
 
 
