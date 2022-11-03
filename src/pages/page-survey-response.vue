@@ -1,14 +1,16 @@
 <template>
   <div class="survey-response">
-    <div class="survey-response__container--userCheck" v-if="!checkedUser">
-      <h1 class="survey-response__title">설문지 응답</h1>
-      <AtomicInput class="grid__input" title="username" placeholder="참여자 이름을 입력해주세요." :value="userName" @handle-input="updateUsername"></AtomicInput>
-      <el-button class="gird__button--submit" type="success" name="설문 시작" @click="userCheck" round>설문 시작</el-button>
+    <div class="container container--userCheck" v-if="!checkedUser">
+      <h1 class="container__title">설문지 응답</h1>
+      <AtomicInput class="container__input" title="username" placeholder="참여자 이름을 입력해주세요." :value="userName" @handle-input="updateUsername"></AtomicInput>
+      <el-button class="container__button--userCheck" type="success" name="설문 시작" @click="userCheck">설문 시작</el-button>
     </div>
-    <div class="survey-response__container--response" v-else>
-      <survey-title :user-name="this.userName"></survey-title>
-      <question-list></question-list>
-      <el-button class="btn-field__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
+    <div class="container container--response" v-else>
+      <div class="container--response__wrapper">
+        <survey-title :user-name="this.userName"></survey-title>
+        <question-list></question-list>
+        <el-button class="container__button container__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
+      </div>
     </div>
   </div>
 </template>
