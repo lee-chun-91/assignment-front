@@ -10,12 +10,10 @@
       </div>
     </div>
     <div class="breadcrumb">
+      <router-link :to="{ path: '/' }">메인</router-link>
       <span v-for="(matched, idx) in routeMatchedList"
             :key="idx">
-        <a
-          :href="matched.path">
-        {{ matched.name }}
-        </a>
+        <router-link :to="{ path: `${matched.path}` }">{{matched.name}}</router-link>
         <span v-if="hasNextRoute(idx)"> > </span>
         </span>
     </div>
@@ -52,5 +50,9 @@ export default class DefaultLayout extends Vue {
     return idx !== matchedListLength - 1 && this.$route.name !== undefined;
   }
   // endregion
+
+  created() {
+    console.log(this.routeMatchedList);
+  }
 }
 </script>
