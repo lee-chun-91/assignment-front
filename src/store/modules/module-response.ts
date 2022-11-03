@@ -62,6 +62,17 @@ export default class ModuleResponse extends VuexModule {
   // ---------------------------MUTATION START----------------------------
 
   @Mutation
+  private setInitialResponse() {
+    const initialResponse: IResponse = {
+      userName: '',
+      surveyId: '',
+      questionAnswer: [],
+    };
+
+    this.response = initialResponse;
+  }
+
+  @Mutation
   private setResponse({ userName, surveyId }: Omit<IResponse, 'questionAnswer'>) {
     this.response.userName = userName;
     this.response.surveyId = surveyId;
@@ -218,7 +229,7 @@ export default class ModuleResponse extends VuexModule {
     };
 
     return await responseApi.saveResponse(backResponse)
-      .then((res) => console.log(res))
+      .then((res) => this.setInitialResponse())
       .catch((error) => console.log(error));
   }
 
