@@ -66,18 +66,22 @@ export default class AnswerOptionList extends Vue {
   isCheckedAnswer(item: string) {
     if (this.$route.name === '개별 로그') {
       const foundAnswerIndex = $responseStore.logDetail.questionAnswer.findIndex((i) => i.questionId === this.questionId);
-      // console.log('foundAnswerIndex', foundAnswerIndex);
-      // console.log('about questionId', this.questionId);
-      if (foundAnswerIndex === -1) return false;
-      else {
-        return $responseStore.logDetail.questionAnswer[foundAnswerIndex].answer.includes(item);
-      }
+      console.log('foundAnswerIndex', foundAnswerIndex);
+      console.log('about questtionId', this.questionId);
+      return $responseStore.logDetail.questionAnswer[foundAnswerIndex].answer.includes(item);
     }
     return;
   }
   // endregion
 
+  // region emit
+  // endregion
+
   // region lifecycle
+  created() {
+    console.log('logDetail in answerOptionList', $responseStore.logDetail);
+    console.log('survey data in answerOptionList', $surveyStore.survey);
+  }
   // endregion
 }
 </script>

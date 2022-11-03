@@ -11,6 +11,7 @@ import DefaultLayout from '@/layouts/default-layout.vue';
 import EmptyLayout from '@/layouts/empty-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
 import { $adminStore } from '@/store';
+import PageNotFound from '@/pages/page-not-found.vue';
 
 Vue.use(VueRouter);
 
@@ -24,7 +25,6 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: '',
-        name: '관리자 메인',
         component: PageAdminMain,
       },
       {
@@ -70,6 +70,10 @@ const routes: Array<RouteConfig> = [
         component: PageSurveyResponse,
       },
     ]
+  },
+  {
+    path: '*',
+    component: PageNotFound
   }
 ];
 
