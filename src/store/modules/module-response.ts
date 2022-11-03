@@ -159,8 +159,12 @@ export default class ModuleResponse extends VuexModule {
   // ---------------------------MUTATION END----------------------------
 
   // ---------------------------ACTION START----------------------------
-  @Action
+  @Action({ rawError: true })
   public async fetchUserCheck({ userName, surveyId }: Pick<IResponse, 'userName'|'surveyId'>) {
+    if (userName === '') {
+      return Promise.reject('참여자 이름을 입력해주세요.');
+    }
+
     const params: Pick<IBackResponse, 'user_name'|'survey_id'> = {
       user_name: userName,
       survey_id: surveyId,
@@ -171,6 +175,8 @@ export default class ModuleResponse extends VuexModule {
         if (result === 'new_user') {
           this.setResponse({ userName, surveyId });
         }
+
+        // user 응답 여부 결과 return
         return result;
       })
       .catch((res) => console.log('userCheck catch', res));
@@ -188,8 +194,17 @@ export default class ModuleResponse extends VuexModule {
   }
 
   // 응답 저장
-  @Action
+  @Action({ rawError: true })
   public async fetchSaveResponse(convertedDate: string) {
+    // 질문 응답 여부 validation
+    const isUncheckedAnswer = this.response.questionAnswer.length !== $surveyStore.survey.questionList.length;
+
+    console.log(isUncheckedAnswer);
+
+    if (isUncheckedAnswer) {
+      return Promise.reject('응답하지 않은 질문이 있습니다. 질문에 응답값을 체크해주세요.');
+    }
+
     const question_answer = this.response.questionAnswer.map((i) => { return {
       question_id: i.questionId,
       answer: i.answer,
