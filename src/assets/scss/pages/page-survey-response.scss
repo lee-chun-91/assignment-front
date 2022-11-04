@@ -1,10 +1,6 @@
 .survey-response {
-  width: 100%;
   height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  overflow-y: auto;
 }
 
 
@@ -21,23 +17,23 @@
 
 .container--response {
   width: 100%;
-  height: 100%;
+  //height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: $backgroundColor;
-  min-height: 1020px;
-  overflow-y: auto;
 }
 
 .container--response__wrapper {
   margin: 50px 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  //background-color: $backgroundColor;
 }
 
-.container__button container__button--save {
+.container__button {
   margin: 30px 0;
 }
