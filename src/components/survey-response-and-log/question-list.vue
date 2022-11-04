@@ -19,7 +19,7 @@ import { QUESTION_TYPES } from '@/const/index';
 })
 export default class QuestionList extends Vue {
   // region prop
-  @Prop( { type: Boolean }) isLog!: boolean;
+  @Prop( { type: Boolean }) isLog?: boolean;
   // endregion
   // region local
   // endregion

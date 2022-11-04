@@ -72,8 +72,6 @@ export default class PageAdminMain extends Vue {
   // region lifecycle
   async created() {
     await $surveyStore.fetchGetSurveyList(1);
-    console.log('this', this);
-    console.log('this.$route', this.$route);
   }
   // endregion
 }

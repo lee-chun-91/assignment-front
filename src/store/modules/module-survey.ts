@@ -252,7 +252,6 @@ export default class ModuleSurvey extends VuexModule {
   // 질문 순서 변경
   @Action
   public fetchUpdateQuestionOrder(questionList: IQuestion[]){
-    // console.log(value);
     this.updateQuestionOrder(questionList);
   }
 
@@ -299,7 +298,6 @@ export default class ModuleSurvey extends VuexModule {
   public async fetchGetSurveyList(page: number) {
     await surveyApi.getSurveyList(page)
       .then((res) => {
-        console.log(res.data);
         this.getSurveyList(res.data);
       })
       .catch((error) => console.log(error));
@@ -340,7 +338,6 @@ export default class ModuleSurvey extends VuexModule {
 
     return await surveyApi.updateSurvey({ surveyId, backSurvey })
       .then((res) => {
-        console.log('update result', res);
         this.setInitialSurvey();
       })
       .catch((error) => console.log(error));

@@ -82,18 +82,19 @@ export default class PageSurveyReport extends Vue {
 
   // region lifecycle
   async created() {
+    // 1. logList, survey data get
     await $responseStore.fetchGetLogListAll(this.surveyId);
     await $surveyStore.fetchGetSurvey(this.surveyId);
 
-    // 1. report Data 만들기
-    // survey 의 질문별로 응답값을 모으고, 값별 빈도를 산출해야 한다.
+    // 2. reportData 만들기
+    // 2.1. survey 의 질문별 응답값과 응답값별 빈도를 산출하기 위해 반복문을 돌린다
     $surveyStore.survey.questionList.map((q) => {
       const qName = q.questionName;
       const qId = q.questionId;
       let answerArray: string[] = [];
       const logList = $responseStore.logList.data;
 
-      // logList 에서 질문에 대한 응답을 찾고, 그 값들을 answerArray 에 모은다
+      // 2.2. logList 에서 질문에 대한 응답을 찾고, 그 값들을 answerArray 에 모은다
       logList.map((log) => {
         const foundIndex = log.questionAnswer.findIndex(item =>
           item.questionId === qId);
@@ -106,23 +107,23 @@ export default class PageSurveyReport extends Vue {
         }
       });
 
-      // 데이터별 빈도 산출
+      // 2.3. 데이터별 빈도를 산출한다.
       const elementCount = UTILS.getElementCount(answerArray);
 
-      // initial chartData
+      // 2.4. initial chartData를 선언하고,
       let chartData: IChartData = {
         labels: [],
         datasets: [{ label: '', backgroundColor: [], data: [] }]
       };
 
-      // chartData 에 값 넣기
+      // 2.5. chartData 에 값을 넣는다.
       for (let [answer, count] of Object.entries(elementCount)) {
         chartData.labels.push(answer);
         chartData.datasets[0].backgroundColor.push(UTILS.getRandomColor());
         chartData.datasets[0].data.push(count);
       }
 
-      // questionData 값 만들기
+      // 2.6. questionData 값을 만든다.
       let questionData: IQuestionData = {
         questionName: qName,
         questionId: qId,
@@ -130,7 +131,7 @@ export default class PageSurveyReport extends Vue {
         chartData,
       };
 
-      // 만든 questionData 를 state 에 push
+      // 2.7. 만든 questionData 를 totalData 에 push 한다.
       this.totalData.push(questionData);
     });
 
@@ -140,7 +141,6 @@ export default class PageSurveyReport extends Vue {
     // 3. todayLog count 구하기
     const today = new Date();
     this.todayLog = $responseStore.logList.data.filter((i) => {
-      console.log(UTILS.isSameDate(today, new Date(`${i.createdAt}`)));
       return UTILS.isSameDate(today, new Date(`${i.createdAt}`));}).length;
   }
   // endregion

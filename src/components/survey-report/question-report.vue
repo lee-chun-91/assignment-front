@@ -115,11 +115,5 @@ export default class QuestionReport extends Vue {
     return { questionId: this.questionId, value };
   }
   // endregion
-
-  // region lifecycle
-  created() {
-    console.log('data', this.datasets[0]);
-  }
-  // endregion
 }
 </script>

@@ -16,10 +16,7 @@ a:hover {
 input {
   border: none;
   outline: none;
-
-  &:hover {
-    border-bottom: 1px solid $border_gray;
-  }
+  border-bottom: 1px solid $border_gray;
 
   &:focus {
     transition: 0.1s ease;

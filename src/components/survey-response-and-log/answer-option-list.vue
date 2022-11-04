@@ -25,8 +25,8 @@ import { $responseStore, $surveyStore } from '@/store';
 @Component({})
 export default class AnswerOptionList extends Vue {
   // region prop
-  @Prop( { type: String }) questionId!: string;
-  @Prop( { type: Boolean }) isLog!: boolean;
+  @Prop( { type: String, required: true }) questionId!: string;
+  @Prop( { type: Boolean }) isLog?: boolean;
   // endregion
 
   // region computed
@@ -59,21 +59,22 @@ export default class AnswerOptionList extends Vue {
     console.log('response', $responseStore.response);
   }
 
-  isCheckedAnswer(item: string) {
+  isCheckedAnswer(answerOption: string) {
+    // 개별 로그 페이지일 때만 로직 진행
     if (this.$route.name === '개별 로그') {
+      // 1. 질문 id 값 같은 아이템 찾기
       const foundAnswerIndex = $responseStore.logDetail.questionAnswer.findIndex((i) => i.questionId === this.questionId);
-      // console.log('foundAnswerIndex', foundAnswerIndex);
-      // console.log('about questionId', this.questionId);
+
+      // 2.1. 질문 id 값 같은 아이템이 없다면(유저가 해당 질문에 대해 응답한 적이 없다면) false return
       if (foundAnswerIndex === -1) return false;
+
+      // 2.2. 질문 id 값 같은 아이템 있다면, 그 질문에 대한 응답 Array 에 answerOption 이 포함되어 있는지 체크하여 return
       else {
-        return $responseStore.logDetail.questionAnswer[foundAnswerIndex].answer.includes(item);
+        return $responseStore.logDetail.questionAnswer[foundAnswerIndex].answer.includes(answerOption);
       }
     }
     return;
   }
-  // endregion
-
-  // region lifecycle
   // endregion
 }
 </script>
