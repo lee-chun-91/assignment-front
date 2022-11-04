@@ -54,7 +54,7 @@ export default class ModuleAdmin extends VuexModule {
       .then((res) => {
         localStorage.setItem('accessToken', res.data);
         localStorage.setItem('userName', userInfo.userName);
-        router.push( { name: '관리자 메인' });
+        router.push( { name: '설문 목록' });
       })
       .catch((error) => {return Promise.reject(error.response.data);});
   }
