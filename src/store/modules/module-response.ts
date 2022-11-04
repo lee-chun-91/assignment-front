@@ -82,42 +82,34 @@ export default class ModuleResponse extends VuexModule {
   private updateQuestionAnswer(data: {questionId: string, selectedAnswer: string}) {
     // 1.해당 질문을 설문지 state 에서 찾기
     const questionIndexInSurvey = $surveyStore.survey.questionList.findIndex((q) => q.questionId === data.questionId);
-    // console.log('questionIndexInSurvey', questionIndexInSurvey);
 
     // 2. 해당 질문에 대한 answer type 확인
     const answerType = $surveyStore.survey.questionList[questionIndexInSurvey].answerType;
-    // console.log('answerType', answerType);
 
     // 3. response questionAnswer 에 해당 질문에 대한 답변 있는지 찾기
     const questionAnswerIndex = this.response.questionAnswer.findIndex((i) => i.questionId === data.questionId);
-    // console.log('questionAnswerIndex', questionAnswerIndex);
 
     //4.1. 답변이 이미 저장되어 있고 답변타입이 단일이면, response 에 저장되어 있는 questionAnswer 값을 바꾼다
     if (questionAnswerIndex >= 0) {
       // selectedAnswer 가 answer 배열에 저장되어 있는지 체크
       const answerIndex = this.response.questionAnswer[questionAnswerIndex]['answer'].findIndex((a) => a === data.selectedAnswer);
-      // console.log('answerIndex', answerIndex);
 
       if (answerType === QUESTION_TYPES.YES_NO || answerType === QUESTION_TYPES.ONE_CHOICE) {
-        // console.log('one 재할당');
         this.response.questionAnswer[questionAnswerIndex] = { questionId: data.questionId, answer: [data.selectedAnswer] };
       }
       // 4.2.1. 답변 타입이 multiple, questionAnswer 의 answer 배열에 checkedAnswer 값이 저장되어 있으면 그 값을 뺀다
       else if (answerType === QUESTION_TYPES.MULTIPLE_CHOICE) {
         if (answerIndex >= 0) {
-          // console.log('multiple splice');
           this.response.questionAnswer[questionAnswerIndex]['answer'].splice(answerIndex, 1);
         }
         // 4.2.2. 답변 타입이 multiple, questionAnswer 의 answer 배열에 checkedAnswer 값이 없으면 그 값을 넣는다.
         else if (answerIndex === -1) {
-          // console.log('multiple push!');
           this.response.questionAnswer[questionAnswerIndex]['answer'].push(data.selectedAnswer);
         }
       }
     }
     // 4.2. 답변이 저장되어 있지 않았다면, response questionAnswer 에 data 를 넣는다.
     else if (questionAnswerIndex === -1) {
-      // console.log('one push');
       this.response.questionAnswer.push({ questionId: data.questionId, answer: [data.selectedAnswer] });
     }
   }
@@ -210,8 +202,6 @@ export default class ModuleResponse extends VuexModule {
     // 질문 응답 여부 validation
     const isUncheckedAnswer = this.response.questionAnswer.length !== $surveyStore.survey.questionList.length;
 
-    console.log(isUncheckedAnswer);
-
     if (isUncheckedAnswer) {
       return Promise.reject('응답하지 않은 질문이 있습니다. 질문에 응답값을 체크해주세요.');
     }
@@ -238,7 +228,6 @@ export default class ModuleResponse extends VuexModule {
   public async fetchGetLogListAll(surveyId: string) {
     await responseApi.getLogListAll(surveyId)
       .then((res) => {
-        // console.log(res);
         this.getLogList(res.data);
       })
       .catch((error) => console.log(error));
@@ -250,7 +239,6 @@ export default class ModuleResponse extends VuexModule {
   public async fetchGetLogList({ page, surveyId }: {page: number, surveyId: string}){
     await responseApi.getLogList(page, surveyId)
       .then((res) => {
-        console.log(res);
         this.getLogList(res.data);
       })
       .catch((error) => console.log(error));

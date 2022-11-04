@@ -50,9 +50,5 @@ export default class DefaultLayout extends Vue {
     return idx !== matchedListLength - 1 && this.$route.name !== undefined;
   }
   // endregion
-
-  created() {
-    console.log(this.routeMatchedList);
-  }
 }
 </script>
