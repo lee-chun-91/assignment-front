@@ -25,6 +25,9 @@ instance.interceptors.request.use(
   }
 );
 
+// 403 에러 뜨면 무조건 로그인 페이지로 이동 처리 로직 추가
+
+
 // instance.interceptors.response.use(
 // (response: AxiosResponse) => {
 // console.log('response', response);
