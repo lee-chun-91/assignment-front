@@ -12,6 +12,7 @@ import EmptyLayout from '@/layouts/empty-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
 import { $adminStore } from '@/store';
 import PageNotFound from '@/pages/page-not-found.vue';
+import { getCookie } from '@/utils/cookie';
 
 Vue.use(VueRouter);
 
@@ -83,12 +84,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  // 로컬 스토리지에 유저정보 저장 여부 확인
-  const username = localStorage.getItem('username');
-  const token = localStorage.getItem('accessToken');
+  // 쿠키에 유저정보 저장 여부 확인
+  const userName = getCookie('userName');
+  const token = getCookie('accessToken');
 
   // 유저정보 없으면 회원가입 화면으로
-  if( (!username) && (!token) && (to.name !== '로그인')) {next({ name: '로그인' });}
+  if( (!userName) && (!token) && (to.name !== '로그인')) {next({ name: '로그인' });}
   // 유저정보 있으면 유저 정보 vuex state 에 세팅
   else {
     $adminStore.fetchSetLoggedInfo();

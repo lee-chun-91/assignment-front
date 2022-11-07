@@ -2,6 +2,7 @@ import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 // import { userApi } from '@/apis/userApi';
 import router from '@/router';
 import { userApi } from '@/apis/userApi';
+import { deleteCookie, getCookie, setAccessCookie, setUserNameCookie } from '@/utils/cookie';
 
 export interface IAdminInfo {
   userName: string,
@@ -52,25 +53,29 @@ export default class ModuleAdmin extends VuexModule {
     };
     return await userApi.adminLogin(backUserInfo)
       .then((res) => {
-        localStorage.setItem('accessToken', res.data);
-        localStorage.setItem('userName', userInfo.userName);
+        console.log('login success', res);
+        setAccessCookie(res.data);
+        setUserNameCookie(userInfo.userName);
         router.push( { name: '설문 목록' });
       })
-      .catch((error) => {return Promise.reject(error.response.data);});
+      .catch((error) => {
+        console.log('login error', error);
+        return Promise.reject(error.response.data);});
   }
 
   @Action
   public fetchLogout() {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('userName');
+    deleteCookie('accessToken');
+    deleteCookie('userName');
+
     this.logout();
     router.push( { name: '로그인' });
   }
 
   @Action
   public fetchSetLoggedInfo() {
-    const userName = localStorage.getItem('userName');
-    const token = localStorage.getItem('accessToken');
+    const userName = getCookie('userName');
+    const token = getCookie('accessToken');
 
     if (userName && token) {
       this.setLoggedInfo(userName);
