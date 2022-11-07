@@ -1,12 +1,12 @@
 <template>
   <div class="survey-response">
-    <div class="container container--userCheck" v-if="!isCheckedUser" :key="componentKey">
+    <div class="container container--userCheck" v-if="!isCheckedUser">
       <h1 class="container__title">설문지 응답</h1>
       <AtomicInput class="container__input" title="username" placeholder="참여자 이름을 입력해주세요." :value="userName" @handle-input="updateUsername"></AtomicInput>
       <el-button class="container__button--userCheck" type="success" name="설문 시작" @click="userCheck">설문 시작</el-button>
     </div>
-    <div class="container container--response" v-else :key="componentKey">
-      <div class="container--response__wrapper">
+    <div class="container container--response" v-else>
+      <div class="container--response__wrapper" v-loading="loading">
         <survey-title :user-name="checkedUserName"></survey-title>
         <question-list></question-list>
         <el-button class="container__button container__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
@@ -30,6 +30,7 @@ export default class PageSurveyResponse extends Vue {
   userName = '';
   isCheckedUser = this.initIsCheckedUser();
   componentKey= 0;
+  loading= true;
   // endregion
 
   // region computed
@@ -46,7 +47,7 @@ export default class PageSurveyResponse extends Vue {
   // region watch
   @Watch('isCheckedUser', { immediate: true, deep: true })
   public example() {
-    console.log('watch example');
+    this.initIsCheckedUser();
   }
   // endregion
 
@@ -55,11 +56,11 @@ export default class PageSurveyResponse extends Vue {
   initIsCheckedUser() {
     let stored = getCookie('checkedUserName');
     if (stored) {
-      console.log('nothing checked. default is false');
-      return false;
-    } else {
       console.log('there is checked user');
       return true;
+    } else {
+      console.log('nothing checked. default is false');
+      return false;
     }
   }
 
@@ -121,37 +122,38 @@ export default class PageSurveyResponse extends Vue {
   // endregion
 
   // region lifecycle
-  async beforeCreate() {
-    console.log('beforeCreate start');
-    console.log('checkedUserName in componenet', this.userName);
-    console.log('checkedUserName in cookie', this.checkedUserName);
-    console.log('isCheckedUser', this.isCheckedUser);
-    // await $surveyStore.fetchGetSurvey(this.surveyId);
-    // await $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
-    console.log($surveyStore.survey);
-    console.log('beforeCreate end');
-    console.log('-----------------');
-  }
+  // async beforeCreate() {
+  //   console.log('beforeCreate start');
+  //   console.log('checkedUserName in componenet', this.userName);
+  //   console.log('checkedUserName in cookie', this.checkedUserName);
+  //   console.log('isCheckedUser', this.isCheckedUser);
+  //   console.log($surveyStore.survey);
+  //   console.log('beforeCreate end');
+  //   console.log('-----------------');
+  // }
 
   async created() {
-    console.log('created start');
-    console.log('isCheckedUser', this.isCheckedUser);
-    await $surveyStore.fetchGetSurvey(this.surveyId);
-    await $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
-    console.log($surveyStore.survey);
-    console.log('created end');
-    console.log('-----------------');
+    // console.log('created start');
+    // console.log('isCheckedUser', this.isCheckedUser);
+    console.log('this.loading', this.loading);
+    await $surveyStore.fetchGetSurvey(this.surveyId)
+      .then(() => this.loading = false);
+    console.log('this.loading', this.loading);
+    $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
+    // console.log($surveyStore.survey);
+    // console.log('created end');
+    // console.log('-----------------');
   }
 
-  beforeMount() {
-    console.log('beforeMount start');
-    console.log('checkedUserName in componenet', this.userName);
-    console.log('checkedUserName in cookie', this.checkedUserName);
-    console.log('isCheckedUser', this.isCheckedUser);
-    console.log($surveyStore.survey);
-    console.log('beforeMount end');
-    console.log('-----------------');
-  }
+  // beforeMount() {
+  //   console.log('beforeMount start');
+  //   console.log('checkedUserName in componenet', this.userName);
+  //   console.log('checkedUserName in cookie', this.checkedUserName);
+  //   console.log('isCheckedUser', this.isCheckedUser);
+  //   console.log($surveyStore.survey);
+  //   console.log('beforeMount end');
+  //   console.log('-----------------');
+  // }
 
   mounted() {
     console.log('mounted start');
@@ -163,12 +165,12 @@ export default class PageSurveyResponse extends Vue {
     console.log('-----------------');
   }
 
-  beforeUpdate() {
-    console.log('userName beforeUpdate', this.userName);
-    console.log('isCheckedUser beforeUpdate', this.isCheckedUser);
-    console.log('componentKey beforeUpdate', this.componentKey);
-    console.log('-----------------');
-  }
+  // beforeUpdate() {
+  //   console.log('userName beforeUpdate', this.userName);
+  //   console.log('isCheckedUser beforeUpdate', this.isCheckedUser);
+  //   console.log('componentKey beforeUpdate', this.componentKey);
+  //   console.log('-----------------');
+  // }
 
   updated() {
     console.log('userName updated', this.userName);
