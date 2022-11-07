@@ -74,7 +74,7 @@ const routes: Array<RouteConfig> = [
         component: PageUserCheck,
       },
       {
-        path: 'response/:surveyId/:userId',
+        path: 'response/:surveyId/:userName',
         name: PageNames.surveyResponse,
         component: PageSurveyResponse,
       },

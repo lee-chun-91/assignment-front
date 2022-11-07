@@ -11,7 +11,7 @@ const getCookie = (name: string) => {
 
 const setCookie = (name: string, value: string) => {
   const date = new Date();
-  date.setTime(date.getTime() + 1000 * 60 * 10 ); // 10분
+  date.setTime(date.getTime() + 1000 * 60 * 60 ); // 1시간
   document.cookie = `${name}=${value}; expires=${date}`;
 };
 

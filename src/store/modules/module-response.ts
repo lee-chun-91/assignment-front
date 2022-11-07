@@ -2,7 +2,6 @@ import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import { responseApi } from '@/apis/reponseApi';
 import { $surveyStore } from '@/store';
 import { QuestionTypes } from '@/enum/question-types';
-import { deleteCookie, setCookie } from '@/utils/cookie';
 import { NoticeMessage } from '@/enum/notice-message';
 
 
@@ -166,10 +165,6 @@ export default class ModuleResponse extends VuexModule {
   // ---------------------------ACTION START----------------------------
   @Action({ rawError: true })
   public async fetchUserCheck({ userName, surveyId }: Pick<IResponse, 'userName'|'surveyId'>) {
-    if (userName === '') {
-      return Promise.reject(NoticeMessage.emptyUserName);
-    }
-
     const params: Pick<IBackResponse, 'user_name'|'survey_id'> = {
       user_name: userName,
       survey_id: surveyId,

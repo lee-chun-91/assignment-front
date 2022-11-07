@@ -26,7 +26,7 @@
           <td><router-link :to="{ name: PageNames.surveyUpdate, params: { surveyId: survey._id }}">수정하러 가기</router-link></td>
           <td><router-link :to="{ name: PageNames.surveyReport, params: { surveyId: survey._id }}">리포트 보기</router-link></td>
           <td><router-link :to="{ name: PageNames.surveyLog, params: { surveyId: survey._id }}">로그 보기</router-link></td>
-          <td><router-link :to="{ name: PageNames.surveyResponse, params: { surveyId: survey._id }}">참여하러 가기</router-link></td>
+          <td><router-link :to="{ name: PageNames.userCheck, params: { surveyId: survey._id }}">참여하러 가기</router-link></td>
         </tr>
         </tbody>
       </table>

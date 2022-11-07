@@ -9,15 +9,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
-import { $responseStore, $surveyStore } from '@/store';
-import { UTILS } from '@/utils/index';
-import { deleteCookie, getCookie, setCookie } from '@/utils/cookie';
-import router from '@/router';
+import { $responseStore } from '@/store';
+import { setCookie } from '@/utils/cookie';
 import { NoticeMessage } from '@/enum/notice-message';
+import { PageNames } from '@/enum/page-names';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageUserCheck extends Vue {
@@ -42,23 +41,36 @@ export default class PageUserCheck extends Vue {
   }
 
   async userCheck() {
-    // userCheck 로직 추가
-    await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
-      .then((result) => {
-        if(result === 'new_user') {
-          setCookie('checkedUserName', this.userName);
-          $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
-          router.push( { name: '설문 웅답' });
-        }
-        else if(result === 'already_response') {
-          this.$message({
-            showClose: true,
-            message: NoticeMessage.alreadyResponse,
-            type: 'error'
-          });
-        }
-      })
-      .catch((error) => this.openModal(`${error}`, '오류'));
+    if (this.userName === '') {
+      this.$message({
+        showClose: true,
+        message: NoticeMessage.emptyUserName,
+        type: 'error'
+      });
+    }
+
+    else {
+      // userCheck 로직 추가
+      await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
+        .then((result) => {
+          if(result === 'new_user') {
+            console.log(this.userName, this.surveyId);
+            setCookie('checkedUserName', this.userName);
+            $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
+            this.$router.push( { name: PageNames.surveyResponse, params: { surveyId: this.surveyId, userName: this.userName } });
+          }
+          else if(result === 'already_response') {
+            this.$message({
+              showClose: true,
+              message: NoticeMessage.alreadyResponse,
+              type: 'error'
+            });
+          }
+        })
+        .catch((error) => this.openModal(`${error}`, '오류'));
+    }
+
+
   }
 
 
@@ -70,6 +82,10 @@ export default class PageUserCheck extends Vue {
   // endregion
 
   // region lifecycle
+  created() {
+    console.log(this.$route);
+    console.log(this.$router);
+  }
   // endregion
 }
 </script>
