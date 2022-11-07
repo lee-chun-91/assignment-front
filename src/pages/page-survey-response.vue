@@ -1,11 +1,11 @@
 <template>
   <div class="survey-response">
-    <div class="container container--userCheck" v-if="!isCheckedUser">
-      <h1 class="container__title">설문지 응답</h1>
-      <AtomicInput class="container__input" title="username" placeholder="참여자 이름을 입력해주세요." :value="userName" @handle-input="updateUsername"></AtomicInput>
-      <el-button class="container__button--userCheck" type="success" name="설문 시작" @click="userCheck">설문 시작</el-button>
-    </div>
-    <div class="container container--response" v-else>
+<!--    <div class="container container&#45;&#45;userCheck" v-if="!isCheckedUser">-->
+<!--      <h1 class="container__title">설문지 응답</h1>-->
+<!--      <AtomicInput class="container__input" title="username" placeholder="참여자 이름을 입력해주세요." :value="userName" @handle-input="updateUsername"></AtomicInput>-->
+<!--      <el-button class="container__button&#45;&#45;userCheck" type="success" name="설문 시작" @click="userCheck">설문 시작</el-button>-->
+<!--    </div>-->
+    <div class="container container--response">
       <div class="container--response__wrapper" v-loading="loading">
         <survey-title :user-name="checkedUserName"></survey-title>
         <question-list></question-list>
@@ -27,9 +27,8 @@ import { deleteCookie, getCookie, setCookie } from '@/utils/cookie';
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageSurveyResponse extends Vue {
   // region local
-  userName = '';
-  isCheckedUser = this.initIsCheckedUser();
-  componentKey= 0;
+  // userName = '';
+  // isCheckedUser = this.initIsCheckedUser();
   loading= true;
   // endregion
 
@@ -45,50 +44,10 @@ export default class PageSurveyResponse extends Vue {
   // endregion
 
   // region watch
-  @Watch('isCheckedUser', { immediate: true, deep: true })
-  public example() {
-    this.initIsCheckedUser();
-  }
   // endregion
 
 
   // region method
-  initIsCheckedUser() {
-    let stored = getCookie('checkedUserName');
-    if (stored) {
-      console.log('there is checked user');
-      return true;
-    } else {
-      console.log('nothing checked. default is false');
-      return false;
-    }
-  }
-
-  updateUsername(value: string) {
-    this.userName = value;
-  }
-
-  async userCheck() {
-    // userCheck 로직 추가
-    await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
-      .then((result) => {
-        if(result === 'new_user') {
-          setCookie('checkedUserName', this.userName);
-          // this.forceRerender();
-          this.initIsCheckedUser();
-          // this.$forceUpdate();
-        }
-        else if(result === 'already_response') {
-          this.$message({
-            showClose: true,
-            message: '이미 참여한 설문은 다시 참여할 수 없어요! 다른 설문에 참여해주세요.',
-            type: 'error'
-          });
-        }
-      })
-      .catch((error) => this.openModal(`${error}`, '오류'));
-  }
-
   saveResponse() {
     const convertedDate = UTILS.convertDate(new Date());
     $responseStore.fetchSaveResponse(convertedDate)
@@ -101,11 +60,8 @@ export default class PageSurveyResponse extends Vue {
       this.$alert(message, title, {
         confirmButtonText: '다른 응답 제출',
         callback: () => {
-          // // 유저 체크에 대한 값 지우기
-          // this.checkedUser = false;
           // cookie 의 응답 유저 정보 삭제
           deleteCookie('checkedUserName');
-          this.forceRerender();
         }
       });
     }
@@ -116,9 +72,6 @@ export default class PageSurveyResponse extends Vue {
     }
   }
 
-  forceRerender() {
-    this.componentKey += 1;
-  }
   // endregion
 
   // region lifecycle
@@ -139,7 +92,7 @@ export default class PageSurveyResponse extends Vue {
     await $surveyStore.fetchGetSurvey(this.surveyId)
       .then(() => this.loading = false);
     console.log('this.loading', this.loading);
-    $responseStore.fetchSetResponseItem({ userName: this.userName, surveyId: this.surveyId });
+    // $responseStore.fetchSetResponseItem({ userName: this.checkedUserName, surveyId: this.surveyId });
     // console.log($surveyStore.survey);
     // console.log('created end');
     // console.log('-----------------');
@@ -157,9 +110,7 @@ export default class PageSurveyResponse extends Vue {
 
   mounted() {
     console.log('mounted start');
-    console.log('checkedUserName in componenet', this.userName);
     console.log('checkedUserName in cookie', this.checkedUserName);
-    console.log('isCheckedUser', this.isCheckedUser);
     console.log($surveyStore.survey);
     console.log('mounted end');
     console.log('-----------------');
@@ -172,12 +123,6 @@ export default class PageSurveyResponse extends Vue {
   //   console.log('-----------------');
   // }
 
-  updated() {
-    console.log('userName updated', this.userName);
-    console.log('isCheckedUser updated', this.isCheckedUser);
-    console.log('componentKey updated', this.componentKey);
-    console.log('-----------------');
-  }
 
   beforeDestroy() {
     console.log('beforeDestroy');
