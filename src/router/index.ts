@@ -12,6 +12,7 @@ import EmptyLayout from '@/layouts/empty-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
 import { $adminStore } from '@/store';
 import PageNotFound from '@/pages/page-not-found.vue';
+import { getCookie } from '@/utils/cookie';
 
 Vue.use(VueRouter);
 
@@ -83,19 +84,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  /**
-   * to: 이동할 url 정보가 담긴 라우터 객체
-   * from: 현재 url 정보가 담긴 라우터 객체
-   * next: to에서 지정한 url로 이동하기 위해 꼭 호출해야 하는 함수
-   * next() 가 호출되기 전까지 화면 전환되지 않음
-   */
-
-
-
-
-  // 로컬 스토리지에 유저정보 저장 여부 확인
-  const username = localStorage.getItem('username');
-  const token = localStorage.getItem('accessToken');
+  // 쿠키에 유저정보 저장 여부 확인
+  const userName = getCookie('userName');
+  const token = getCookie('accessToken');
 
   // 설문 참여 페이지에는 관리자 정보 확인 안하고 이동시킴
   if (to.name === '설문 응답') {
