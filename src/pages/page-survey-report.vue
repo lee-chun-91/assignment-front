@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="survey-report__result" v-else>
-      <div v-for="reportData in totalData" :key="reportData.questionId">
+      <div v-for="reportData in totalReportData" :key="reportData.questionId">
         <question-report
           :question-name="reportData.questionName"
           :questionId="reportData.questionId"
@@ -31,7 +31,7 @@ import ReportCount from '@/components/survey-report/report-count.vue';
 import QuestionReport from '@/components/survey-report/question-report.vue';
 import { UTILS } from '@/utils/index';
 
-export interface IQuestionData {
+export interface IReportData {
   questionName: string;
   questionId: string;
   reportType: number;
@@ -56,7 +56,7 @@ export default class PageSurveyReport extends Vue {
   // region local
   totalLog = 0
   todayLog = 0
-  totalData: IQuestionData[] = []
+  totalReportData: IReportData[] = []
   // endregion
 
   // region computed
@@ -75,8 +75,8 @@ export default class PageSurveyReport extends Vue {
 
   // region method
   updateReportType({ questionId, value }: {questionId: string, value: number}) {
-    const foundIndex = this.totalData.findIndex((item) => item.questionId === questionId);
-    this.totalData[foundIndex].reportType = value;
+    const foundIndex = this.totalReportData.findIndex((reportData) => reportData.questionId === questionId);
+    this.totalReportData[foundIndex].reportType = value;
   }
   // endregion
 
@@ -123,16 +123,16 @@ export default class PageSurveyReport extends Vue {
         chartData.datasets[0].data.push(count);
       }
 
-      // 2.6. questionData 값을 만든다.
-      let questionData: IQuestionData = {
+      // 2.6. reportData 값을 만든다.
+      let reportData: IReportData = {
         questionName: qName,
         questionId: qId,
         reportType: 0,
         chartData,
       };
 
-      // 2.7. 만든 questionData 를 totalData 에 push 한다.
-      this.totalData.push(questionData);
+      // 2.7. 만든 reportData 를 totalData 에 push 한다.
+      this.totalReportData.push(reportData);
     });
 
     // 2. totalLog 구하기

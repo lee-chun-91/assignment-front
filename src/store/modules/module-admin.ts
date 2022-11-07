@@ -1,8 +1,7 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
-// import { userApi } from '@/apis/userApi';
 import router from '@/router';
-import { userApi } from '@/apis/userApi';
 import { deleteCookie, getCookie, setAccessCookie, setUserNameCookie } from '@/utils/cookie';
+import { adminApi } from '@/apis/adminApi';
 
 export interface IAdminInfo {
   userName: string,
@@ -51,7 +50,7 @@ export default class ModuleAdmin extends VuexModule {
       user_name: userInfo.userName,
       password: userInfo.password,
     };
-    return await userApi.adminLogin(backUserInfo)
+    return await adminApi.adminLogin(backUserInfo)
       .then((res) => {
         console.log('login success', res);
         setAccessCookie(res.data);

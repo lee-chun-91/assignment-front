@@ -49,7 +49,11 @@ export default class PageSurveyResponse extends Vue {
           this.checkedUser = true;
         }
         else if(result === 'already_response') {
-          this.openModal('이미 참여한 설문은 다시 참여할 수 없어요! 다른 설문에 참여해주세요.', '안내');
+          this.$message({
+            showClose: true,
+            message: '이미 참여한 설문은 다시 참여할 수 없어요! 다른 설문에 참여해주세요.',
+            type: 'error'
+          });
         }
       })
       .catch((error) => this.openModal(`${error}`, '오류'));
@@ -65,9 +69,11 @@ export default class PageSurveyResponse extends Vue {
   openModal(message: string, title: string) {
     if (title === '안내') {
       this.$alert(message, title, {
-        confirmButtonText: 'OK',
+        confirmButtonText: '다른 응답 제출',
         callback: () => {
-          this.$router.push('/');}
+          // 유저 체크에 대한 값 지우기
+          this.checkedUser = false;
+        }
       });
     }
     else if (title === '오류') {

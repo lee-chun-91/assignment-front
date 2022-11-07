@@ -262,6 +262,7 @@ export default class ModuleSurvey extends VuexModule {
     const emptyQuestionNameList = this.survey.questionList.filter((q) => q.questionName === '');
 
     if (this.survey.surveyName === '') {
+      console.log(Promise.reject('설문 제목이 비어있습니다. 설문 제목을 입력해주세요'));
       return Promise.reject('설문 제목이 비어있습니다. 설문 제목을 입력해주세요');
     }
     else if (emptyQuestionNameList.length !== 0) {
@@ -283,6 +284,7 @@ export default class ModuleSurvey extends VuexModule {
 
     return await surveyApi.saveSurvey(backSurvey)
       .then((res) => {
+        console.log('saveSurvey result', res);
         this.setInitialSurvey();
       })
       .catch((error) => console.log(error));

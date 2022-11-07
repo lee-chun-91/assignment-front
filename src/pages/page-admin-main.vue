@@ -64,7 +64,6 @@ export default class PageAdminMain extends Vue {
 
   // region method
   async handleCurrentChange(page: number) {
-    console.log(`current page: ${page}`);
     await $surveyStore.fetchGetSurveyList(page);
   }
   // endregion
