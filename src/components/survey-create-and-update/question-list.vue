@@ -43,6 +43,7 @@ import draggable from 'vuedraggable';
 import { $surveyStore } from '@/store';
 import AnswerOptionList from '@/components/survey-create-and-update/answer-option-list.vue';
 import { IQuestion } from '@/store/modules/module-survey';
+import { QuestionTypes } from '@/enum/question-types';
 
 @Component({ components: { draggable, AnswerOptionList } })
 export default class QuestionList extends Vue {

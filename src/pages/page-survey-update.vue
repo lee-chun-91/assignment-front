@@ -14,6 +14,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import SurveyTitle from '@/components/survey-create-and-update/survey-title.vue';
 import QuestionList from '@/components/survey-create-and-update/question-list.vue';
 import { $surveyStore } from '@/store';
+import { NoticeMessage } from '@/enum/notice-message';
 
 @Component({ components: { SurveyTitle, QuestionList } })
 export default class PageSurveyUpdate extends Vue {
@@ -30,7 +31,7 @@ export default class PageSurveyUpdate extends Vue {
 
   updateSurvey() {
     $surveyStore.fetchUpdateSurvey(this.surveyId)
-      .then(() => this.$alert('설문지가 수정되었습니다', '안내', {
+      .then(() => this.$alert(NoticeMessage.successUpdateSurvey, '안내', {
         confirmButtonText: 'OK',
         callback: () => {
           this.$router.push('/');}

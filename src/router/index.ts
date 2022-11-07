@@ -10,10 +10,12 @@ import PageSurveyResponse from '@/pages/page-survey-response.vue';
 import DefaultLayout from '@/layouts/default-layout.vue';
 import EmptyLayout from '@/layouts/empty-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
-import { $adminStore } from '@/store';
 import PageNotFound from '@/pages/page-not-found.vue';
-import { getCookie } from '@/utils/cookie';
 import PageUserCheck from '@/pages/page-user-check.vue';
+
+import { $adminStore } from '@/store';
+import { getCookie } from '@/utils/cookie';
+import { PageNames } from '@/enum/page-names';
 
 Vue.use(VueRouter);
 
@@ -26,32 +28,32 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: '',
-        name: '설문 목록',
+        name: PageNames.adminMain,
         component: PageAdminMain,
       },
       {
         path: 'create',
-        name: '설문지 생성',
+        name: PageNames.surveyCreate,
         component: PageSurveyCreate,
       },
       {
         path: 'update/:surveyId',
-        name: '설문지 수정',
+        name: PageNames.surveyUpdate,
         component: PageSurveyUpdate,
       },
       {
         path: 'report/:surveyId',
-        name: '설문 리포트',
+        name: PageNames.surveyReport,
         component: PageSurveyReport,
       },
       {
         path: 'log/:surveyId',
-        name: '설문 로그',
+        name: PageNames.surveyLog,
         component: PageSurveyLog,
       },
       {
         path: 'log/:surveyId/:userName',
-        name: '개별 로그',
+        name: PageNames.surveyLogDetail,
         component: PageSurveyLogDetail,
       },
 
@@ -63,17 +65,17 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: 'signIn',
-        name: '로그인',
+        name: PageNames.signIn,
         component: PageSignIn,
       },
       {
         path: 'response/:surveyId',
-        name: '설문 유저 체크',
+        name: PageNames.userCheck,
         component: PageUserCheck,
       },
       {
         path: 'response/:surveyId/:userId',
-        name: '설문 응답',
+        name: PageNames.surveyResponse,
         component: PageSurveyResponse,
       },
     ]
@@ -95,12 +97,12 @@ router.beforeEach(async (to, from, next) => {
   const token = getCookie('accessToken');
 
   // 설문 참여 페이지에는 관리자 정보 확인 안하고 이동시킴
-  if (to.name === '설문 응답') {
+  if (to.name === PageNames.surveyResponse) {
     next();
   }
 
   // 유저정보 없으면 회원가입 화면으로
-  else if( (!userName) && (!token) && (to.name !== '로그인')) {next({ name: '로그인' });}
+  else if( (!userName) && (!token) && (to.name !== PageNames.signIn)) {next({ name: PageNames.signIn });}
   // 유저정보 있으면 유저 정보 vuex state 에 세팅
 
   else {

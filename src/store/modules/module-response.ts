@@ -1,8 +1,9 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import { responseApi } from '@/apis/reponseApi';
 import { $surveyStore } from '@/store';
-import { QUESTION_TYPES } from '@/const/index';
+import { QuestionTypes } from '@/enum/question-types';
 import { deleteCookie, setCookie } from '@/utils/cookie';
+import { NoticeMessage } from '@/enum/notice-message';
 
 
 export interface ILogList {
@@ -95,11 +96,11 @@ export default class ModuleResponse extends VuexModule {
       // selectedAnswer 가 answer 배열에 저장되어 있는지 체크
       const answerIndex = this.response.questionAnswer[questionAnswerIndex]['answer'].findIndex((a) => a === data.selectedAnswer);
 
-      if (answerType === QUESTION_TYPES.YES_NO || answerType === QUESTION_TYPES.ONE_CHOICE) {
+      if (answerType === QuestionTypes.yesNo || answerType === QuestionTypes.oneChoice) {
         this.response.questionAnswer[questionAnswerIndex] = { questionId: data.questionId, answer: [data.selectedAnswer] };
       }
       // 4.2.1. 답변 타입이 multiple, questionAnswer 의 answer 배열에 checkedAnswer 값이 저장되어 있으면 그 값을 뺀다
-      else if (answerType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+      else if (answerType === QuestionTypes.multipleChoice) {
         if (answerIndex >= 0) {
           this.response.questionAnswer[questionAnswerIndex]['answer'].splice(answerIndex, 1);
         }
@@ -166,7 +167,7 @@ export default class ModuleResponse extends VuexModule {
   @Action({ rawError: true })
   public async fetchUserCheck({ userName, surveyId }: Pick<IResponse, 'userName'|'surveyId'>) {
     if (userName === '') {
-      return Promise.reject('참여자 이름을 입력해주세요.');
+      return Promise.reject(NoticeMessage.emptyUserName);
     }
 
     const params: Pick<IBackResponse, 'user_name'|'survey_id'> = {
@@ -204,7 +205,7 @@ export default class ModuleResponse extends VuexModule {
     const isUncheckedAnswer = this.response.questionAnswer.length !== $surveyStore.survey.questionList.length;
 
     if (isUncheckedAnswer) {
-      return Promise.reject('응답하지 않은 질문이 있습니다. 질문에 응답값을 체크해주세요.');
+      return Promise.reject(NoticeMessage.failSaveResponse);
     }
 
     const question_answer = this.response.questionAnswer.map((i) => { return {

@@ -23,6 +23,7 @@ import QuestionList from '@/components/survey-response-and-log/question-list.vue
 import { $responseStore, $surveyStore } from '@/store';
 import { UTILS } from '@/utils/index';
 import { deleteCookie, getCookie, setCookie } from '@/utils/cookie';
+import { NoticeMessage } from '@/enum/notice-message';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageSurveyResponse extends Vue {
@@ -51,7 +52,7 @@ export default class PageSurveyResponse extends Vue {
   saveResponse() {
     const convertedDate = UTILS.convertDate(new Date());
     $responseStore.fetchSaveResponse(convertedDate)
-      .then(() => this.openModal('응답이 제출되었습니다', '완료'))
+      .then(() => this.openModal(NoticeMessage.successSaveResponse, '완료'))
       .catch((error) => this.openModal(`${error}`, '오류'));
   }
 

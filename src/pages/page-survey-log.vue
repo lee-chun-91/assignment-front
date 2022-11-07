@@ -18,7 +18,7 @@
             :key="index"
             v-for="(response, index) in responseList"
         >
-          <td><router-link :to="{ name: '개별 로그', params: { surveyId: response.surveyId, userName: response.userName }}">{{response.userName}}</router-link></td>
+          <td><router-link :to="{ name: PageNames.surveyLogDetail, params: { surveyId: response.surveyId, userName: response.userName }}">{{response.userName}}</router-link></td>
           <td>{{ response.createdAt }}</td>
         </tr>
         </tbody>
@@ -35,9 +35,14 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { $responseStore } from '@/store';
+import { PageNames } from '@/enum/page-names';
 
 @Component({})
 export default class PageSurveyLog extends Vue {
+  // region data
+  PageNames = PageNames
+  // endregion
+
   // region computed
   get surveyId() {
     return this.$route.params.surveyId;

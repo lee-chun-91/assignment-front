@@ -17,6 +17,7 @@ import { $responseStore, $surveyStore } from '@/store';
 import { UTILS } from '@/utils/index';
 import { deleteCookie, getCookie, setCookie } from '@/utils/cookie';
 import router from '@/router';
+import { NoticeMessage } from '@/enum/notice-message';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageUserCheck extends Vue {
@@ -52,7 +53,7 @@ export default class PageUserCheck extends Vue {
         else if(result === 'already_response') {
           this.$message({
             showClose: true,
-            message: '이미 참여한 설문은 다시 참여할 수 없어요! 다른 설문에 참여해주세요.',
+            message: NoticeMessage.alreadyResponse,
             type: 'error'
           });
         }
