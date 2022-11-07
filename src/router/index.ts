@@ -13,6 +13,7 @@ import PageSignIn from '@/pages/page-sign-in.vue';
 import { $adminStore } from '@/store';
 import PageNotFound from '@/pages/page-not-found.vue';
 import { getCookie } from '@/utils/cookie';
+import PageUserCheck from '@/pages/page-user-check.vue';
 
 Vue.use(VueRouter);
 
@@ -67,6 +68,11 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: 'response/:surveyId',
+        name: '설문 유저 체크',
+        component: PageUserCheck,
+      },
+      {
+        path: 'response/:surveyId/:userId',
         name: '설문 응답',
         component: PageSurveyResponse,
       },
