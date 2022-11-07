@@ -1,7 +1,6 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
-// import { userApi } from '@/apis/userApi';
 import router from '@/router';
-import { userApi } from '@/apis/userApi';
+import { adminApi } from '@/apis/adminApi';
 
 export interface IAdminInfo {
   userName: string,
@@ -50,7 +49,7 @@ export default class ModuleAdmin extends VuexModule {
       user_name: userInfo.userName,
       password: userInfo.password,
     };
-    return await userApi.adminLogin(backUserInfo)
+    return await adminApi.adminLogin(backUserInfo)
       .then((res) => {
         localStorage.setItem('accessToken', res.data);
         localStorage.setItem('userName', userInfo.userName);
