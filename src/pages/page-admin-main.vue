@@ -23,10 +23,10 @@
         >
           <td>{{ survey.surveyName }}</td>
           <td>{{ survey.questionList.length }}개</td>
-          <td><router-link :to="{ name: '설문지 수정', params: { surveyId: survey._id }}">수정하러 가기</router-link></td>
-          <td><router-link :to="{ name: '설문 리포트', params: { surveyId: survey._id }}">리포트 보기</router-link></td>
-          <td><router-link :to="{ name: '설문 로그', params: { surveyId: survey._id }}">로그 보기</router-link></td>
-          <td><router-link :to="{ name: '설문 응답', params: { surveyId: survey._id }}">참여하러 가기</router-link></td>
+          <td><router-link :to="{ name: PageNames.surveyUpdate, params: { surveyId: survey._id }}">수정하러 가기</router-link></td>
+          <td><router-link :to="{ name: PageNames.surveyReport, params: { surveyId: survey._id }}">리포트 보기</router-link></td>
+          <td><router-link :to="{ name: PageNames.surveyLog, params: { surveyId: survey._id }}">로그 보기</router-link></td>
+          <td><router-link :to="{ name: PageNames.userCheck, params: { surveyId: survey._id }}">참여하러 가기</router-link></td>
         </tr>
         </tbody>
       </table>
@@ -41,9 +41,13 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
+import { PageNames } from '@/enum/page-names';
 
 @Component({})
 export default class PageAdminMain extends Vue {
+  // region data
+  PageNames = PageNames
+  // endregion
   // region computed
   get surveyList() {
     return $surveyStore.surveyList.data;

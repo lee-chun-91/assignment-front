@@ -19,8 +19,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { QUESTION_TYPES } from '@/const/index';
+import { QuestionTypes } from '@/enum/question-types';
 import { $responseStore, $surveyStore } from '@/store';
+import { PageNames } from '@/enum/page-names';
 
 @Component({})
 export default class AnswerOptionList extends Vue {
@@ -44,11 +45,11 @@ export default class AnswerOptionList extends Vue {
     return $surveyStore.survey.questionList[foundIndex].answerOptionList;
   }
   get isRadioButton() {
-    return this.answerType === QUESTION_TYPES.YES_NO || this.answerType === QUESTION_TYPES.ONE_CHOICE;
+    return this.answerType === QuestionTypes.yesNo || this.answerType === QuestionTypes.oneChoice;
   }
 
   get isCheckbox() {
-    return this.answerType === QUESTION_TYPES.MULTIPLE_CHOICE;
+    return this.answerType === QuestionTypes.multipleChoice;
   }
   // endregion
 
@@ -61,7 +62,7 @@ export default class AnswerOptionList extends Vue {
 
   isCheckedAnswer(answerOption: string) {
     // 개별 로그 페이지일 때만 로직 진행
-    if (this.$route.name === '개별 로그') {
+    if (this.$route.name === PageNames.surveyLogDetail) {
       // 1. 질문 id 값 같은 아이템 찾기
       const foundAnswerIndex = $responseStore.logDetail.questionAnswer.findIndex((i) => i.questionId === this.questionId);
 

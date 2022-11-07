@@ -2,6 +2,7 @@ import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import router from '@/router';
 import { adminApi } from '@/apis/adminApi';
 import { deleteCookie, getCookie, setCookie } from '@/utils/cookie';
+import { PageNames } from '@/enum/page-names';
 
 export interface IAdminInfo {
   userName: string,
@@ -55,7 +56,7 @@ export default class ModuleAdmin extends VuexModule {
         console.log('login success', res);
         setCookie('accessToken', res.data);
         setCookie('userName', userInfo.userName);
-        router.push( { name: '설문 목록' });
+        router.push( { name: PageNames.adminMain });
       })
       .catch((error) => {
         console.log('login error', error);
@@ -69,7 +70,7 @@ export default class ModuleAdmin extends VuexModule {
     deleteCookie('userName');
 
     this.logout();
-    router.push( { name: '로그인' });
+    router.push( { name: PageNames.signIn });
   }
 
   @Action

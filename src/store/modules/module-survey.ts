@@ -1,5 +1,5 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
-import { QUESTION_TYPES } from '@/const/index';
+import { QuestionTypes } from '@/enum/question-types';
 import { surveyApi } from '@/apis/surveyApi';
 import { UTILS } from '@/utils/index';
 
@@ -44,7 +44,7 @@ export interface IBackQuestion {
 const newQuestion = (newId: string) => ({
   questionId: newId,
   questionName: '제목 없는 질문',
-  answerType: QUESTION_TYPES.YES_NO,
+  answerType: QuestionTypes.yesNo,
   answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
 });
 
@@ -61,7 +61,7 @@ export default class ModuleSurvey extends VuexModule {
     questionList: [
       { questionId: UTILS.uuid(),
         questionName: '제목 없는 질문',
-        answerType: QUESTION_TYPES.YES_NO,
+        answerType: QuestionTypes.yesNo,
         answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
       },
     ],
@@ -75,7 +75,7 @@ export default class ModuleSurvey extends VuexModule {
       questionList: [
         { questionId: UTILS.uuid(),
           questionName: '제목 없는 질문',
-          answerType: QUESTION_TYPES.YES_NO,
+          answerType: QuestionTypes.yesNo,
           answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
         },
       ],

@@ -12,7 +12,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
 import AnswerOptionList from '@/components/survey-response-and-log/answer-option-list.vue';
-import { QUESTION_TYPES } from '@/const/index';
+import { QuestionTypes } from '@/enum/question-types';
 
 @Component({
   components: { AnswerOptionList }
@@ -32,10 +32,10 @@ export default class QuestionList extends Vue {
 
   // region method
   description(answerType: number) {
-    if (answerType === QUESTION_TYPES.YES_NO || answerType === QUESTION_TYPES.ONE_CHOICE) {
+    if (answerType === QuestionTypes.yesNo || answerType === QuestionTypes.oneChoice) {
       return '하나의 답변을 선택해주세요.';
     }
-    else if (answerType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+    else if (answerType === QuestionTypes.multipleChoice) {
       return '여러 개의 답변을 선택할 수 있습니다.';
     }
   }
