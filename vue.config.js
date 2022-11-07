@@ -1,6 +1,8 @@
 const { defineConfig } = require('@vue/cli-service');
 
 module.exports = defineConfig({
+  // publicPath: '/surveySystem',
+  outputDir: 'docs',
   transpileDependencies: true,
   css: {
     loaderOptions: {

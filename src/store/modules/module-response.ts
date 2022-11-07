@@ -2,6 +2,7 @@ import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import { responseApi } from '@/apis/reponseApi';
 import { $surveyStore } from '@/store';
 import { QUESTION_TYPES } from '@/const/index';
+import { deleteCookie, setCookie } from '@/utils/cookie';
 
 
 export interface ILogList {
@@ -219,7 +220,10 @@ export default class ModuleResponse extends VuexModule {
     };
 
     return await responseApi.saveResponse(backResponse)
-      .then((res) => this.setInitialResponse())
+      .then((res) => {
+        // initial state
+        this.setInitialResponse();
+      })
       .catch((error) => console.log(error));
   }
 

@@ -9,16 +9,10 @@ const getCookie = (name: string) => {
   }
 };
 
-const setAccessCookie = (token: string) => {
+const setCookie = (name: string, value: string) => {
   const date = new Date();
-  date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // 1일
-  document.cookie = `accessToken=${token}; expires=${date}`;
-};
-
-const setUserNameCookie = (userName: string) => {
-  const date = new Date();
-  date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // 1일
-  document.cookie = `userName=${userName}; expires=${date}`;
+  date.setTime(date.getTime() + 1000 * 60 * 10 ); // 10분
+  document.cookie = `${name}=${value}; expires=${date}`;
 };
 
 
@@ -27,4 +21,4 @@ const deleteCookie = (name: string) => {
   document.cookie = name + '=; expires=' + date;
 };
 
-export { getCookie, setAccessCookie, setUserNameCookie, deleteCookie };
+export { getCookie, setCookie, deleteCookie };

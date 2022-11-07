@@ -79,7 +79,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   routes
 });
 
@@ -94,7 +94,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // 유저정보 없으면 회원가입 화면으로
-  else if( (!username) && (!token) && (to.name !== '로그인')) {next({ name: '로그인' });}
+  else if( (!userName) && (!token) && (to.name !== '로그인')) {next({ name: '로그인' });}
   // 유저정보 있으면 유저 정보 vuex state 에 세팅
 
   else {
