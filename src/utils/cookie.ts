@@ -12,7 +12,7 @@ const getCookie = (name: string) : string|undefined => {
 
 const setCookie = (name: string, value: string) => {
   const date = new Date();
-  date.setTime(date.getTime() + 1000 * 10 ); // 10초
+  date.setTime(date.getTime() + 1000 * 60 * 60 * 24 ); // 1일
   document.cookie = `${name}=${value}; expires=${date}`;
 };
 

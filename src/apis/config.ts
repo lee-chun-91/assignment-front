@@ -30,9 +30,6 @@ instance.interceptors.request.use(
   }
 );
 
-// 401 에러 뜨면 토큰 만료인 경우이므로, 로그인 페이지로 이동 처리 로직 추가
-
-
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
     return response;

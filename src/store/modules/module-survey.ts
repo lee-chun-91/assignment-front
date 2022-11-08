@@ -69,7 +69,7 @@ export default class ModuleSurvey extends VuexModule {
 
   // ---------------------------MUTATION START----------------------------
   @Mutation
-  private setInitialSurvey() {
+  private initSurveyState() {
     const initialSurvey: ISurvey = {
       surveyName: '제목 없는 설문지',
       questionList: [
@@ -285,14 +285,14 @@ export default class ModuleSurvey extends VuexModule {
     return await surveyApi.saveSurvey(backSurvey)
       .then((res) => {
         console.log('saveSurvey result', res);
-        this.setInitialSurvey();
+        // this.initSurveyState();
       })
       .catch((error) => console.log(error));
   }
 
   @Action
-  public fetchSetInitialSurvey() {
-    this.setInitialSurvey();
+  public fetchInitSurveyState() {
+    this.initSurveyState();
   }
 
   // 설문 리스트 get
@@ -339,9 +339,7 @@ export default class ModuleSurvey extends VuexModule {
     };
 
     return await surveyApi.updateSurvey({ surveyId, backSurvey })
-      .then((res) => {
-        this.setInitialSurvey();
-      });
+      .then((res) => console.log(res));
     // .catch((error) => console.log(error));
   }
 }
