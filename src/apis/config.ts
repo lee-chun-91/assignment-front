@@ -1,5 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getCookie } from '@/utils/cookie';
+import { PageNames } from '@/enum/page-names';
+import router from '@/router';
+import { useRouter } from 'vue-router/composables';
+import { Message } from 'element-ui';
+import { MessageBox } from 'element-ui';
+import { NoticeMessage } from '@/enum/notice-message';
 
 export const instance = axios.create({
   baseURL: 'https://localhost:7063/',
@@ -36,6 +42,33 @@ instance.interceptors.response.use(
   },
   (error) => {
     console.log('response error', error);
+
+    console.log();
+
+    if (router.currentRoute.name === PageNames.signIn) {
+      Message({
+        type: 'info',
+        message: error.response.data
+      });
+    }
+    // else if (router.currentRoute.name === PageNames.signIn) {
+    //   MessageBox({
+    //     type: 'info',
+    //     message: error.response.data,
+    //     confirmButtonText: '확인'
+    //   });
+    // }
+    else if (error.response.status === 401) {
+      MessageBox({
+        type: 'info',
+        message: NoticeMessage.expireToken,
+        confirmButtonText: NoticeMessage.goSignInPage,
+        callback: () => {
+          router.push({ name: PageNames.signIn });
+        }
+      });
+    }
+
     return Promise.reject(error);
   }
 );
