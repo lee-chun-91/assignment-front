@@ -301,16 +301,16 @@ export default class ModuleSurvey extends VuexModule {
     await surveyApi.getSurveyList(page)
       .then((res) => {
         this.getSurveyList(res.data);
-      })
-      .catch((error) => console.log(error));
+      });
+    // .catch((error) => console.log(error));
   }
 
   // 설문 get
   @Action
   public async fetchGetSurvey(surveyId: string) {
     return await surveyApi.getSurvey(surveyId)
-      .then((res) => this.setSurvey(res.data))
-      .catch((error) => console.log(error));
+      .then((res) => this.setSurvey(res.data));
+    // .catch((error) => console.log(error));
   }
 
   // 설문 수정
@@ -341,7 +341,7 @@ export default class ModuleSurvey extends VuexModule {
     return await surveyApi.updateSurvey({ surveyId, backSurvey })
       .then((res) => {
         this.setInitialSurvey();
-      })
-      .catch((error) => console.log(error));
+      });
+    // .catch((error) => console.log(error));
   }
 }
