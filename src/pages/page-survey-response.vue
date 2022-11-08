@@ -17,7 +17,7 @@ import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $responseStore, $surveyStore } from '@/store';
 import { UTILS } from '@/utils/index';
-import { NoticeMessage } from '@/enum/notice-message';
+import { NoticeMessages } from '@/enum/notice-messages';
 import { PageRouteNames } from '@/enum/page-names';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
@@ -66,7 +66,7 @@ export default class PageSurveyResponse extends Vue {
     const convertedDate = UTILS.convertDate(new Date());
     $responseStore.fetchSaveResponse(convertedDate)
       .then(() =>
-        this.$alert(NoticeMessage.successSaveResponse, '완료', {
+        this.$alert(NoticeMessages.successSaveResponse, '완료', {
           confirmButtonText: '다른 응답 제출',
           callback: () => {
             this.$router.push( { name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: this.surveyId } });

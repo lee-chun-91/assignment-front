@@ -1,5 +1,5 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
-import { QuestionTypes } from '@/enum/question-types';
+import { AnswerTypes } from '@/enum/answer-types';
 import { surveyApi } from '@/apis/surveyApi';
 import { UTILS } from '@/utils/index';
 
@@ -31,23 +31,20 @@ export interface IQuestion {
   questionId : string;
   questionName: string;
   answerType: number;
-  answerOptionList: string[];
+  answerOptionList: IAnswerOption[];
 }
 
 export interface IBackQuestion {
   question_id : string;
   question_name: string;
   answer_type: number;
-  answer_option_list: string[];
+  answer_option_list: IAnswerOption[];
 }
 
-const newQuestion = (newId: string) => ({
-  questionId: newId,
-  questionName: '제목 없는 질문',
-  answerType: QuestionTypes.yesNo,
-  answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
-});
-
+export interface IAnswerOption {
+  id: string,
+  text: string,
+}
 
 @Module({ namespaced: true, name: 'survey' })
 export default class ModuleSurvey extends VuexModule {
@@ -61,8 +58,11 @@ export default class ModuleSurvey extends VuexModule {
     questionList: [
       { questionId: UTILS.uuid(),
         questionName: '제목 없는 질문',
-        answerType: QuestionTypes.yesNo,
-        answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
+        answerType: AnswerTypes.yesNo,
+        answerOptionList: [
+          { id: UTILS.uuid(), text: '답변 옵션 1' },
+          { id: UTILS.uuid(), text: '답변 옵션 2' }
+        ],
       },
     ],
   };
@@ -75,8 +75,11 @@ export default class ModuleSurvey extends VuexModule {
       questionList: [
         { questionId: UTILS.uuid(),
           questionName: '제목 없는 질문',
-          answerType: QuestionTypes.yesNo,
-          answerOptionList: ['답변 옵션 1', '답변 옵션 2'],
+          answerType: AnswerTypes.yesNo,
+          answerOptionList: [
+            { id: UTILS.uuid(), text: '답변 옵션 1' },
+            { id: UTILS.uuid(), text: '답변 옵션 2' }
+          ],
         },
       ],
     };
@@ -122,7 +125,7 @@ export default class ModuleSurvey extends VuexModule {
   private addAnswerOption(questionId: string) {
     const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
     const answerOptionLength = this.survey.questionList[foundIndex].answerOptionList.length;
-    const newAnswerOption = `답변 옵션 ${answerOptionLength + 1}`;
+    const newAnswerOption = { id: UTILS.uuid(), text: `답변 옵션 ${answerOptionLength + 1}` };
     this.survey.questionList[foundIndex].answerOptionList.push(newAnswerOption);
   }
 
@@ -132,7 +135,7 @@ export default class ModuleSurvey extends VuexModule {
   private updateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
     answerOptionIndex: number, answerOption: string}) {
     const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    this.survey.questionList[foundIndex].answerOptionList[answerOptionIndex] = answerOption;
+    this.survey.questionList[foundIndex].answerOptionList[answerOptionIndex].text = answerOption;
   }
 
   // 질문 답변 옵션 삭제
@@ -208,8 +211,16 @@ export default class ModuleSurvey extends VuexModule {
   // 질문 추가
   @Action
   public fetchAddQuestion() {
-    const newId = UTILS.uuid();
-    this.addQuestion(newQuestion(newId));
+    const newQuestion = {
+      questionId: UTILS.uuid(),
+      questionName: '제목 없는 질문',
+      answerType: AnswerTypes.yesNo,
+      answerOptionList: [
+        { id: UTILS.uuid(), text: '답변 옵션 1' },
+        { id: UTILS.uuid(), text: '답변 옵션 2' }
+      ],
+    };
+    this.addQuestion(newQuestion);
   }
 
   // 질문 삭제
@@ -302,7 +313,6 @@ export default class ModuleSurvey extends VuexModule {
       .then((res) => {
         this.getSurveyList(res.data);
       });
-    // .catch((error) => console.log(error));
   }
 
   // 설문 get
@@ -310,7 +320,6 @@ export default class ModuleSurvey extends VuexModule {
   public async fetchGetSurvey(surveyId: string) {
     return await surveyApi.getSurvey(surveyId)
       .then((res) => this.setSurvey(res.data));
-    // .catch((error) => console.log(error));
   }
 
   // 설문 수정
@@ -340,6 +349,5 @@ export default class ModuleSurvey extends VuexModule {
 
     return await surveyApi.updateSurvey({ surveyId, backSurvey })
       .then((res) => console.log(res));
-    // .catch((error) => console.log(error));
   }
 }

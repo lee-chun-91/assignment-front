@@ -20,9 +20,9 @@
             <input class="question__input" type="text" id="질문내용"  placeholder="질문을 입력해주세요"
                    name="questionName" :value="questionName" @input="updateQuestionName(questionId, $event)"/>
             <select name="answerType" @change="updateAnswerType(questionId, $event)">
-              <option value="0">YES/NO</option>
-              <option value="1">단일선택</option>
-              <option value="2">다중선택</option>
+              <option :value="AnswerTypes.yesNo">YES/NO</option>
+              <option :value="AnswerTypes.oneChoice">단일선택</option>
+              <option :value="AnswerTypes.multipleChoice">다중선택</option>
             </select>
           </div>
           <answer-option-list :questionId="questionId"></answer-option-list>
@@ -43,13 +43,14 @@ import draggable from 'vuedraggable';
 import { $surveyStore } from '@/store';
 import AnswerOptionList from '@/components/survey-create-and-update/answer-option-list.vue';
 import { IQuestion } from '@/store/modules/module-survey';
-import { QuestionTypes } from '@/enum/question-types';
+import { AnswerTypes } from '@/enum/answer-types';
 
 @Component({ components: { draggable, AnswerOptionList } })
 export default class QuestionList extends Vue {
   // region local
   enabled = true
   dragging= false
+  AnswerTypes = AnswerTypes
   // endregion
 
   // region computed

@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { QuestionTypes } from '@/enum/question-types';
+import { AnswerTypes } from '@/enum/answer-types';
 import { $responseStore, $surveyStore } from '@/store';
 import { PageRouteNames } from '@/enum/page-names';
 
@@ -45,11 +45,11 @@ export default class AnswerOptionList extends Vue {
     return $surveyStore.survey.questionList[foundIndex].answerOptionList;
   }
   get isRadioButton() {
-    return this.answerType === QuestionTypes.yesNo || this.answerType === QuestionTypes.oneChoice;
+    return this.answerType === AnswerTypes.yesNo || this.answerType === AnswerTypes.oneChoice;
   }
 
   get isCheckbox() {
-    return this.answerType === QuestionTypes.multipleChoice;
+    return this.answerType === AnswerTypes.multipleChoice;
   }
   // endregion
 

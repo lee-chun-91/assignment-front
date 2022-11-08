@@ -4,7 +4,7 @@ import { PageRouteNames } from '@/enum/page-names';
 import router from '@/router';
 import { Message } from 'element-ui';
 import { MessageBox } from 'element-ui';
-import { NoticeMessage } from '@/enum/notice-message';
+import { NoticeMessages } from '@/enum/notice-messages';
 
 export const instance = axios.create({
   baseURL: 'https://localhost:7063/',
@@ -46,8 +46,8 @@ instance.interceptors.response.use(
     else if (error.response.status === 401) {
       MessageBox({
         type: 'info',
-        message: NoticeMessage.expireToken,
-        confirmButtonText: NoticeMessage.goToPageSignIn,
+        message: NoticeMessages.expireToken,
+        confirmButtonText: NoticeMessages.goToPageSignIn,
         callback: () => {
           router.push({ name: PageRouteNames.signIn });
         }

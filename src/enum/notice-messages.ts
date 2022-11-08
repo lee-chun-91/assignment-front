@@ -1,4 +1,4 @@
-export enum NoticeMessage {
+export enum NoticeMessages {
   failSignIn = '',
   successSaveSurvey = '설문지가 저장되었습니다',
   failSaveSurvey = '설문지 저장에 실패했습니다',
