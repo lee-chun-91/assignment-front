@@ -8,14 +8,13 @@ import PageSurveyLog from '@/pages/page-survey-log.vue';
 import PageSurveyLogDetail from '@/pages/page-survey-log-detail.vue';
 import PageSurveyResponse from '@/pages/page-survey-response.vue';
 import DefaultLayout from '@/layouts/default-layout.vue';
-import EmptyLayout from '@/layouts/empty-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
 import PageNotFound from '@/pages/page-not-found.vue';
-import PageUserCheck from '@/pages/page-user-check.vue';
+import pageSurveyResponseUserValidate from '@/pages/page-survey-response-user-validate.vue';
 
 import { $adminStore } from '@/store';
 import { getCookie } from '@/utils/cookie';
-import { PageNames } from '@/enum/page-names';
+import { PageRouteNames } from '@/enum/page-names';
 
 Vue.use(VueRouter);
 
@@ -28,57 +27,63 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: '',
-        name: PageNames.adminMain,
+        name: PageRouteNames.adminMain,
         component: PageAdminMain,
       },
       {
         path: 'create',
-        name: PageNames.surveyCreate,
+        name: PageRouteNames.surveyCreate,
         component: PageSurveyCreate,
       },
       {
         path: 'update/:surveyId',
-        name: PageNames.surveyUpdate,
+        name: PageRouteNames.surveyUpdate,
         component: PageSurveyUpdate,
       },
       {
         path: 'report/:surveyId',
-        name: PageNames.surveyReport,
+        name: PageRouteNames.surveyReport,
         component: PageSurveyReport,
       },
       {
         path: 'log/:surveyId',
-        name: PageNames.surveyLog,
+        name: PageRouteNames.surveyLog,
         component: PageSurveyLog,
       },
       {
         path: 'log/:surveyId/:userName',
-        name: PageNames.surveyLogDetail,
+        name: PageRouteNames.surveyLogDetail,
         component: PageSurveyLogDetail,
       },
 
     ]
   },
   {
-    path: '/',
-    component: EmptyLayout,
-    children: [
-      {
-        path: 'signIn',
-        name: PageNames.signIn,
-        component: PageSignIn,
-      },
-      {
-        path: 'response/:surveyId',
-        name: PageNames.userCheck,
-        component: PageUserCheck,
-      },
-      {
-        path: 'response/:surveyId/:userName',
-        name: PageNames.surveyResponse,
-        component: PageSurveyResponse,
-      },
-    ]
+    path: '/signIn',
+    name: PageRouteNames.signIn,
+    component: PageSignIn,
+  },
+  {
+    path: '/response/:surveyId',
+    name: PageRouteNames.surveyResponseUserValidate,
+    component: pageSurveyResponseUserValidate,
+  },
+  {
+    path: '/response/:surveyId/:userName',
+    name: PageRouteNames.surveyResponse,
+    component: PageSurveyResponse,
+
+    // beforeEnter 는 라우팅이 다시 될 때에 페이지 들어가기 전 실행된다.
+
+    // beforeEnter: (to, from, next) => {
+    //   console.log(to, from);
+    //   if(from.name !== PageRouteNames.userCheck) {
+    //     next({ name: PageRouteNames.userCheck });
+    //   }
+    //   else {
+    //     next();
+    //   }
+    // }
   },
   {
     path: '*',
@@ -87,7 +92,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   routes
 });
 
@@ -97,12 +102,12 @@ router.beforeEach(async (to, from, next) => {
   const token = getCookie('accessToken');
 
   // 설문 참여 페이지에는 관리자 로그인 여부 확인 안하고 이동
-  if (to.name === PageNames.surveyResponse) {
+  if (to.name === PageRouteNames.surveyResponseUserValidate || to.name === PageRouteNames.surveyResponse ) {
     next();
   }
 
   // 관리자 페이지 접근 시 쿠키에 관리자 정보 없으면, 로그인 화면으로 이동
-  else if( (!userName) && (!token) && (to.name !== PageNames.signIn)) {next({ name: PageNames.signIn });}
+  else if( (!userName) && (!token) && (to.name !== PageRouteNames.signIn)) {next({ name: PageRouteNames.signIn });}
 
   // 관리자 페이지 접근 시 쿠키에 관리자 정보 있으면, 관리자 정보 vuex state 에 세팅
   else {

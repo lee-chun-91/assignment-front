@@ -2,7 +2,7 @@ import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import router from '@/router';
 import { adminApi } from '@/apis/adminApi';
 import { deleteCookie, getCookie, setCookie } from '@/utils/cookie';
-import { PageNames } from '@/enum/page-names';
+import { PageRouteNames } from '@/enum/page-names';
 
 export interface IAdminInfo {
   userName: string,
@@ -58,7 +58,7 @@ export default class ModuleAdmin extends VuexModule {
         if (history) {
           history.back();
         }
-        // router.push( { name: PageNames.adminMain });
+        // router.push( { name: PageRouteNames.adminMain });
       });
     // .catch((error) => {
     //   return Promise.reject(error.response.data);});
@@ -72,7 +72,7 @@ export default class ModuleAdmin extends VuexModule {
     deleteCookie('userName');
 
     this.logout();
-    router.push( { name: PageNames.signIn });
+    router.push( { name: PageRouteNames.signIn });
   }
 
   @Action

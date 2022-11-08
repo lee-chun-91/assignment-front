@@ -2,7 +2,7 @@
   <div class="survey-response">
     <div class="container container--response" v-loading.fullscreen.lock="fullscreenLoading">
       <div class="container--response__wrapper">
-        <survey-title :user-name="checkedUserName"></survey-title>
+        <survey-title :user-name="userName"></survey-title>
         <question-list></question-list>
         <el-button class="container__button container__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
       </div>
@@ -17,14 +17,13 @@ import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $responseStore, $surveyStore } from '@/store';
 import { UTILS } from '@/utils/index';
-import { deleteCookie, getCookie } from '@/utils/cookie';
 import { NoticeMessage } from '@/enum/notice-message';
-import { PageNames } from '@/enum/page-names';
+import { PageRouteNames } from '@/enum/page-names';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
 export default class PageSurveyResponse extends Vue {
   // region local
-  fullscreenLoading= true;
+  fullscreenLoading = true
   // endregion
 
   // region computed
@@ -32,111 +31,75 @@ export default class PageSurveyResponse extends Vue {
     return this.$route.params.surveyId;
   }
 
-  get checkedUserName() {
-    return getCookie('checkedUserName');
+  get userName() {
+    return this.$route.params.userName;
   }
-  // endregion
 
-  // region watch
+  // get checkedUserName() {
+  //   console.log(getCookie('checkedUserName'));
+  //   return getCookie('checkedUserName');
+  // }
   // endregion
-
 
   // region method
-  saveResponse() {
-    const convertedDate = UTILS.convertDate(new Date());
-    $responseStore.fetchSaveResponse(convertedDate)
-      .then(() => this.openModal(NoticeMessage.successSaveResponse, '완료'))
-      .catch((error) => this.openModal(`${error}`, '오류'));
+  // beforeRouteUpdate
+  // 컴포넌트 라우트 시 자동 실행된다고 한다. 그러나 여기서는 실행되지 않는 것으로 확인.
+  // beforeRouteUpdate(to, from) {
+  //   console.log(to, from);
+  // }
+
+  async userCheck() {
+    await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
+      .then((result) => {
+        if(result.isChecked) {
+          return;
+        }
+        else if (!result.isChecked) {
+          // this.$router.push( { name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: this.surveyId } });
+        }
+      });
+    // .catch((error) => this.openModal(`${error}`, '오류'));
   }
 
   openModal(message: string, title: string) {
-    if (title === '완료') {
-      this.$alert(message, title, {
-        confirmButtonText: '다른 응답 제출',
-        callback: () => {
-          // cookie 의 응답 유저 정보 삭제
-          deleteCookie('checkedUserName');
-          this.$router.push( { name: PageNames.userCheck, params: { surveyId: this.surveyId } });
-        }
-      });
-    }
-    else if (title === '오류') {
-      this.$alert(message, title, {
-        confirmButtonText: 'OK',
-      });
-    }
+    this.$alert(message, title, {
+      confirmButtonText: 'OK',
+    });
   }
 
+  saveResponse() {
+    const convertedDate = UTILS.convertDate(new Date());
+    $responseStore.fetchSaveResponse(convertedDate)
+      .then(() =>
+        this.$alert(NoticeMessage.successSaveResponse, '완료', {
+          confirmButtonText: '다른 응답 제출',
+          callback: () => {
+            this.$router.push( { name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: this.surveyId } });
+          }
+        })
+      )
+      .catch((error) => this.$message({ showClose: true, message: error, type: 'error' }));
+  }
   // endregion
 
+
   // region lifecycle
-  // async beforeCreate() {
-  //   console.log('beforeCreate start');
-  //   console.log('checkedUserName in componenet', this.userName);
-  //   console.log('checkedUserName in cookie', this.checkedUserName);
-  //   console.log('isCheckedUser', this.isCheckedUser);
-  //   console.log($surveyStore.survey);
-  //   console.log('beforeCreate end');
-  //   console.log('-----------------');
-  // }
-
   async created() {
-
-    // const loading = this.$loading({
-    //   lock: true,
-    //   text: 'Loading',
-    //   spinner: 'el-icon-loading',
-    //   background: 'rgba(0, 0, 0, 0.7)'
-    // });
-    // console.log('created start');
-    // console.log('isCheckedUser', this.isCheckedUser);
-    // console.log('this.loading', this.loading);
+    await this.userCheck();
     await $surveyStore.fetchGetSurvey(this.surveyId)
       .then(() => {
         this.fullscreenLoading = false;
-        // loading.close()
       });
-    // console.log('this.loading', this.loading);
-    // $responseStore.fetchSetResponseItem({ userName: this.checkedUserName, surveyId: this.surveyId });
-    // console.log($surveyStore.survey);
-    // console.log('created end');
-    // console.log('-----------------');
+
+    // params 가 변경된 것이지 라우팅이 변경된 게 아니기 때문에, $watch 로 변화를 비교할 수 있다.
+    this.$watch(() => this.$route.params, (current, old) => {
+      console.log(current, old);
+      if (current.userName !== old.userName) {
+        this.$router.push({ name: PageRouteNames.surveyResponseUserValidate });
+      }
+    });
+
   }
 
-  // beforeMount() {
-  //   console.log('beforeMount start');
-  //   console.log('checkedUserName in componenet', this.userName);
-  //   console.log('checkedUserName in cookie', this.checkedUserName);
-  //   console.log('isCheckedUser', this.isCheckedUser);
-  //   console.log($surveyStore.survey);
-  //   console.log('beforeMount end');
-  //   console.log('-----------------');
-  // }
-
-  mounted() {
-    console.log('mounted start');
-    console.log('checkedUserName in cookie', this.checkedUserName);
-    console.log($surveyStore.survey);
-    console.log('mounted end');
-    console.log('-----------------');
-  }
-
-  // beforeUpdate() {
-  //   console.log('userName beforeUpdate', this.userName);
-  //   console.log('isCheckedUser beforeUpdate', this.isCheckedUser);
-  //   console.log('componentKey beforeUpdate', this.componentKey);
-  //   console.log('-----------------');
-  // }
-
-
-  beforeDestroy() {
-    console.log('beforeDestroy');
-    console.log('-----------------');
-  }
-
-  destroyed() {
-    console.log('destroyed');
-  }
-  // endregion
 }
 </script>

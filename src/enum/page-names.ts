@@ -1,5 +1,5 @@
 
-export enum PageNames {
+export enum PageRouteNames {
   adminMain = '설문 목록',
   surveyCreate = '설문 생성',
   surveyUpdate = '설문 수정',
@@ -7,7 +7,7 @@ export enum PageNames {
   surveyLog = '설문 로그',
   surveyLogDetail = '설문 개별 로그',
   signIn = '로그인',
-  userCheck = '설문 유저 체크',
+  surveyResponseUserValidate = '설문 유저 체크',
   surveyResponse = '설문 응답'
 }
 

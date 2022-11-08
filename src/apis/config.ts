@@ -1,8 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getCookie } from '@/utils/cookie';
-import { PageNames } from '@/enum/page-names';
+import { PageRouteNames } from '@/enum/page-names';
 import router from '@/router';
-import { useRouter } from 'vue-router/composables';
 import { Message } from 'element-ui';
 import { MessageBox } from 'element-ui';
 import { NoticeMessage } from '@/enum/notice-message';
@@ -36,35 +35,24 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
-    console.log('AxiosResponse', response);
-    // localStorage.setItem('accessToken', response.data);
     return response;
   },
   (error) => {
-    console.log('response error', error);
 
-    console.log();
-
-    if (router.currentRoute.name === PageNames.signIn) {
+    if (router.currentRoute.name === PageRouteNames.signIn) {
       Message({
         type: 'info',
         message: error.response.data
       });
     }
-    // else if (router.currentRoute.name === PageNames.signIn) {
-    //   MessageBox({
-    //     type: 'info',
-    //     message: error.response.data,
-    //     confirmButtonText: '확인'
-    //   });
-    // }
+
     else if (error.response.status === 401) {
       MessageBox({
         type: 'info',
         message: NoticeMessage.expireToken,
-        confirmButtonText: NoticeMessage.goSignInPage,
+        confirmButtonText: NoticeMessage.goToPageSignIn,
         callback: () => {
-          router.push({ name: PageNames.signIn });
+          router.push({ name: PageRouteNames.signIn });
         }
       });
     }

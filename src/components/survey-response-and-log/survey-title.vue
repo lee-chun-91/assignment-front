@@ -8,7 +8,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
-import { PageNames } from '@/enum/page-names';
+import { PageRouteNames } from '@/enum/page-names';
 
 @Component({})
 export default class SurveyTitle extends Vue {
@@ -24,7 +24,7 @@ export default class SurveyTitle extends Vue {
   get description() {
     const routeName = this.$route.name;
 
-    if(routeName === PageNames.surveyLogDetail) return `${this.userName} 님의 응답`;
+    if(routeName === PageRouteNames.surveyLogDetail) return `${this.userName} 님의 응답`;
     else { return `${this.userName} 님, 설문에 응답해주세요.`;}
   }
   // endregion
