@@ -3,6 +3,7 @@ import { responseApi } from '@/apis/reponseApi';
 import { $surveyStore } from '@/store';
 import { QuestionTypes } from '@/enum/question-types';
 import { NoticeMessage } from '@/enum/notice-message';
+import { AxiosResponse } from 'axios';
 
 
 export interface ILogList {
@@ -170,9 +171,11 @@ export default class ModuleResponse extends VuexModule {
       survey_id: surveyId,
     };
     return await responseApi.responseUserCheck(params)
-      .then((res) => {
-        const result: string = res.data.result;
-        if (result === 'new_user') {
+      .then((res:AxiosResponse) => {
+        const result = res.data;
+        // console.log(result);
+
+        if (result.isChecked) {
           this.setResponse({ userName, surveyId });
         }
 

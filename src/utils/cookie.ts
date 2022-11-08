@@ -1,12 +1,13 @@
-const getCookie = (name: string) => {
+const getCookie = (name: string) : string|undefined => {
   const value = '; ' + document.cookie;
-  const parts: string[] = value.split(`; ${name}=`);
+  const parts: string[] | undefined = value.split(`; ${name}=`);
 
   if (parts.length === 2) {
     // array.pop() 이 undefined 를 잠재하고 있어서 as string 을 써서 우회
     const item = parts.pop() as string;
     return item.split(';').shift();
   }
+  else return undefined;
 };
 
 const setCookie = (name: string, value: string) => {

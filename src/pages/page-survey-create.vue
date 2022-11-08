@@ -35,10 +35,23 @@ export default class PageSurveyCreate extends Vue {
         callback: () => {
           this.$router.push('/');}
       }))
-      .catch((error) => this.$alert(error, '오류', {
-        confirmButtonText: 'OK',
-      }));
+      .catch((error) =>
+        this.$message({
+          showClose: true,
+          message: error,
+          type: 'error'
+        })
+      //   this.$alert(error, '오류', {
+      //   confirmButtonText: 'OK',
+      // })
+      );
   }
+
+  // this.$message({
+  //   showClose: true,
+  //   message: NoticeMessage.emptyUserNameField,
+  //   type: 'error'
+  // });
   // endregion
 
   // region lifecycle

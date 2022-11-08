@@ -21,7 +21,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { QuestionTypes } from '@/enum/question-types';
 import { $responseStore, $surveyStore } from '@/store';
-import { PageNames } from '@/enum/page-names';
+import { PageRouteNames } from '@/enum/page-names';
 
 @Component({})
 export default class AnswerOptionList extends Vue {
@@ -62,7 +62,7 @@ export default class AnswerOptionList extends Vue {
 
   isCheckedAnswer(answerOption: string) {
     // 개별 로그 페이지일 때만 로직 진행
-    if (this.$route.name === PageNames.surveyLogDetail) {
+    if (this.$route.name === PageRouteNames.surveyLogDetail) {
       // 1. 질문 id 값 같은 아이템 찾기
       const foundAnswerIndex = $responseStore.logDetail.questionAnswer.findIndex((i) => i.questionId === this.questionId);
 
