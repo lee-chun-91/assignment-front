@@ -53,10 +53,12 @@ export default class ModuleAdmin extends VuexModule {
     };
     return await adminApi.adminLogin(backUserInfo)
       .then((res) => {
-        console.log('login success', res);
         setCookie('accessToken', res.data);
         setCookie('userName', userInfo.userName);
-        router.push( { name: PageNames.adminMain });
+        if (history) {
+          history.back();
+        }
+        // router.push( { name: PageNames.adminMain });
       });
     // .catch((error) => {
     //   return Promise.reject(error.response.data);});

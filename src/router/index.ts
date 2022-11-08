@@ -96,15 +96,15 @@ router.beforeEach(async (to, from, next) => {
   const userName = getCookie('userName');
   const token = getCookie('accessToken');
 
-  // 설문 참여 페이지에는 관리자 정보 확인 안하고 이동시킴
+  // 설문 참여 페이지에는 관리자 로그인 여부 확인 안하고 이동
   if (to.name === PageNames.surveyResponse) {
     next();
   }
 
-  // 유저정보 없으면 회원가입 화면으로
+  // 관리자 페이지 접근 시 쿠키에 관리자 정보 없으면, 로그인 화면으로 이동
   else if( (!userName) && (!token) && (to.name !== PageNames.signIn)) {next({ name: PageNames.signIn });}
-  // 유저정보 있으면 유저 정보 vuex state 에 세팅
 
+  // 관리자 페이지 접근 시 쿠키에 관리자 정보 있으면, 관리자 정보 vuex state 에 세팅
   else {
     $adminStore.fetchSetLoggedInfo();
     next();
