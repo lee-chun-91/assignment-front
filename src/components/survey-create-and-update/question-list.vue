@@ -13,7 +13,7 @@
                v-model="questionList"
     >
       <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
-        <div class="question" v-for="{ questionId, questionName } in questionList" :key="questionId">
+        <div class="question" v-for="{ questionId, questionName, answerType } in questionList" :key="questionId">
           <i class="el-icon-rank handle"></i>
           <div class="question__title">
             <label for="질문내용"></label>
@@ -27,8 +27,7 @@
           </div>
           <answer-option-list :questionId="questionId"></answer-option-list>
           <div class="question__footer">
-            <el-button square size="mini" @click="addAnswerOption(questionId)">+ 답변 옵션 추가</el-button>
-<!--            <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="deleteQuestion(questionId)"></el-button>-->
+            <el-button square size="mini" @click="addAnswerOption(questionId)" :style="isShowAddAnswerOptionButton(answerType)">+ 답변 옵션 추가</el-button>
             <el-button size="mini" @click="deleteQuestion(questionId)"> - 질문 삭제 </el-button>
           </div>
         </div>
@@ -61,6 +60,8 @@ export default class QuestionList extends Vue {
   set questionList(questionList: IQuestion[]) {
     $surveyStore.fetchUpdateQuestionOrder(questionList);
   }
+
+
   // endregion
 
   // region method
@@ -80,6 +81,11 @@ export default class QuestionList extends Vue {
     const eventTarget = e.target as HTMLSelectElement;
     const answerType = Number(eventTarget.value);
     $surveyStore.fetchUpdateAnswerType({ questionId, answerType });
+  }
+
+  isShowAddAnswerOptionButton(answerType: number) {
+    return answerType === AnswerTypes.yesNo ?
+      { 'visibility': 'hidden' } : { 'visibility': 'visible' };
   }
 
   addAnswerOption(questionId: string) {
