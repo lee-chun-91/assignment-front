@@ -33,12 +33,7 @@ export default class PageSignIn extends Vue {
   }
 
   login() {
-    $adminStore.fetchLogin({ userName: this.userName, password: this.password })
-      .catch((error) => {
-        this.$alert(error, '오류', {
-          confirmButtonText: 'OK',
-        });
-      });
+    $adminStore.fetchLogin({ userName: this.userName, password: this.password });
   }
   // endregion
 }

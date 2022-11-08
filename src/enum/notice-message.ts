@@ -6,5 +6,7 @@ export enum NoticeMessage {
   emptyUserName = '응답자 이름을 입력해주세요',
   alreadyResponse = '이미 참여한 설문은 다시 참여할 수 없어요! 다른 설문에 참여해주세요',
   successSaveResponse = '응답이 제출되었습니다',
-  failSaveResponse = '응답하지 않은 질문이 있습니다. 질문에 응답값을 체크해주세요.'
+  failSaveResponse = '응답하지 않은 질문이 있습니다. 질문에 응답값을 체크해주세요.',
+  expireToken = '토큰이 만료되었습니다. 다시 로그인해주세요',
+  goSignInPage = '로그인 하러가기'
 }

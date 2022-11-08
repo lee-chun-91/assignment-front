@@ -57,11 +57,11 @@ export default class ModuleAdmin extends VuexModule {
         setCookie('accessToken', res.data);
         setCookie('userName', userInfo.userName);
         router.push( { name: PageNames.adminMain });
-      })
-      .catch((error) => {
-        console.log('login error', error);
-        return Promise.reject(error.response.data);});
+      });
+    // .catch((error) => {
+    //   return Promise.reject(error.response.data);});
   }
+
 
 
   @Action
