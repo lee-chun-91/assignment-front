@@ -43,24 +43,24 @@ export default class PageSurveyResponse extends Vue {
   //   console.log(to, from);
   // }
 
-  async userCheck() {
-    await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
-      .then((result) => {
-        if(result.isChecked) {
-          return;
-        }
-        else if (!result.isChecked) {
-          // this.$router.push( { name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: this.surveyId } });
-        }
-      });
-    // .catch((error) => this.openModal(`${error}`, '오류'));
-  }
+  // async userCheck() {
+  //   await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
+  //     .then((result) => {
+  //       if(result.isChecked) {
+  //         return;
+  //       }
+  //       else if (!result.isChecked) {
+  //         // this.$router.push( { name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: this.surveyId } });
+  //       }
+  //     });
+  //   // .catch((error) => this.openModal(`${error}`, '오류'));
+  // }
 
-  openModal(message: string, title: string) {
-    this.$alert(message, title, {
-      confirmButtonText: 'OK',
-    });
-  }
+  // openModal(message: string, title: string) {
+  //   this.$alert(message, title, {
+  //     confirmButtonText: 'OK',
+  //   });
+  // }
 
   saveResponse() {
     const convertedDate = UTILS.convertDate(new Date());
@@ -80,7 +80,7 @@ export default class PageSurveyResponse extends Vue {
 
   // region lifecycle
   async created() {
-    await this.userCheck();
+    // await this.userCheck();
     await $surveyStore.fetchGetSurvey(this.surveyId)
       .then(() => {
         this.fullscreenLoading = false;
@@ -93,7 +93,10 @@ export default class PageSurveyResponse extends Vue {
         this.$router.push({ name: PageRouteNames.surveyResponseUserValidate });
       }
     });
+  }
 
+  beforeDestroy() {
+    $responseStore.fetchInitResponseState();
   }
 
 }

@@ -38,9 +38,6 @@ export default class PageSignIn extends Vue {
   // endregion
 
   // region lifecycle
-  beforeCreate() {
-    console.log(history);
-  }
   // endregion
 }
 </script>

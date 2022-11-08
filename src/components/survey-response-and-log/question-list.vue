@@ -2,7 +2,7 @@
   <div class="question-list">
     <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, index) in questionList" :key="questionId">
       <div class="question__title">질문{{index}}. {{questionName}}</div>
-      <div class="question__description">{{description(answerType)}}</div>
+      <div class="question__description">{{questionDescription(answerType)}}</div>
       <answer-option-list :isLog="isLog" :answerOptionList="answerOptionList" :questionId="questionId"></answer-option-list>
     </div>
   </div>
@@ -31,7 +31,7 @@ export default class QuestionList extends Vue {
   // endregion
 
   // region method
-  description(answerType: number) {
+  questionDescription(answerType: number) {
     if (answerType === AnswerTypes.yesNo || answerType === AnswerTypes.oneChoice) {
       return '하나의 답변을 선택해주세요.';
     }

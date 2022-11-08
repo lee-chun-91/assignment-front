@@ -4,6 +4,7 @@ import { $surveyStore } from '@/store';
 import { AnswerTypes } from '@/enum/answer-types';
 import { NoticeMessages } from '@/enum/notice-messages';
 import { AxiosResponse } from 'axios';
+import { IAnswerOption } from '@/store/modules/module-survey';
 
 
 export interface ILogList {
@@ -22,30 +23,30 @@ export interface IResponse {
   userName: string;
   surveyId: string;
   createdAt?: string;
-  questionAnswer: IQuestionAnswer[];
+  answerList: IAnswerList[];
 }
 
 export interface IBackResponse {
   user_name: string;
   survey_id: string,
   created_at: string;
-  question_answer: IBackQuestionAnswer[];
+  answer_list: IBackAnswerList[];
 }
 
-export interface IQuestionAnswer {
+export interface IAnswerList {
   questionId : string;
-  answer: string[];
+  answer: IAnswerOption[];
 }
 
-export interface IBackQuestionAnswer {
+export interface IBackAnswerList {
   question_id : string;
-  answer: string[];
+  answer: IAnswerOption[];
 }
 
 const initialResponse: IResponse = {
   userName: '',
   surveyId: '',
-  questionAnswer: [],
+  answerList: [],
 };
 
 
@@ -64,72 +65,73 @@ export default class ModuleResponse extends VuexModule {
   // ---------------------------MUTATION START----------------------------
 
   @Mutation
-  private setInitialResponse() {
+  private initResponseState() {
     const initialResponse: IResponse = {
       userName: '',
       surveyId: '',
-      questionAnswer: [],
+      answerList: [],
     };
 
     this.response = initialResponse;
   }
 
   @Mutation
-  private setResponse({ userName, surveyId }: Omit<IResponse, 'questionAnswer'>) {
+  private setResponse({ userName, surveyId }: Omit<IResponse, 'answerList'>) {
     this.response.userName = userName;
     this.response.surveyId = surveyId;
   }
 
   @Mutation
-  private updateQuestionAnswer(data: {questionId: string, selectedAnswer: string}) {
+  private updateAnswer(data: {questionId: string, selectedAnswer: IAnswerOption}) {
     // 1.해당 질문을 설문지 state 에서 찾기
     const questionIndexInSurvey = $surveyStore.survey.questionList.findIndex((q) => q.questionId === data.questionId);
 
     // 2. 해당 질문에 대한 answer type 확인
     const answerType = $surveyStore.survey.questionList[questionIndexInSurvey].answerType;
 
-    // 3. response questionAnswer 에 해당 질문에 대한 답변 있는지 찾기
-    const questionAnswerIndex = this.response.questionAnswer.findIndex((i) => i.questionId === data.questionId);
+    // 3. response answerList 에 해당 질문에 대한 답변 있는지 찾기
+    const foundIndex = this.response.answerList.findIndex((i) => i.questionId === data.questionId);
 
-    //4.1. 답변이 이미 저장되어 있고 답변타입이 단일이면, response 에 저장되어 있는 questionAnswer 값을 바꾼다
-    if (questionAnswerIndex >= 0) {
+    //4.1. 답변이 이미 저장되어 있고 답변타입이 단일이면, response 에 저장되어 있는 answerList 값을 바꾼다
+    if (foundIndex >= 0) {
       // selectedAnswer 가 answer 배열에 저장되어 있는지 체크
-      const answerIndex = this.response.questionAnswer[questionAnswerIndex]['answer'].findIndex((a) => a === data.selectedAnswer);
+      const answerIndex = this.response.answerList[foundIndex]['answer'].findIndex((a) => a === data.selectedAnswer);
 
       if (answerType === AnswerTypes.yesNo || answerType === AnswerTypes.oneChoice) {
-        this.response.questionAnswer[questionAnswerIndex] = { questionId: data.questionId, answer: [data.selectedAnswer] };
+        this.response.answerList[foundIndex] = { questionId: data.questionId, answer: [data.selectedAnswer] };
       }
-      // 4.2.1. 답변 타입이 multiple, questionAnswer 의 answer 배열에 checkedAnswer 값이 저장되어 있으면 그 값을 뺀다
+
       else if (answerType === AnswerTypes.multipleChoice) {
+        // 4.2.1. 답변 타입이 multiple, answerList 의 answer 배열에 checkedAnswer 값이 저장되어 있으면 그 값을 뺀다
         if (answerIndex >= 0) {
-          this.response.questionAnswer[questionAnswerIndex]['answer'].splice(answerIndex, 1);
+          this.response.answerList[foundIndex]['answer'].splice(answerIndex, 1);
         }
-        // 4.2.2. 답변 타입이 multiple, questionAnswer 의 answer 배열에 checkedAnswer 값이 없으면 그 값을 넣는다.
+        // 4.2.2. 답변 타입이 multiple, answerList 의 answer 배열에 checkedAnswer 값이 없으면 그 값을 넣는다.
         else if (answerIndex === -1) {
-          this.response.questionAnswer[questionAnswerIndex]['answer'].push(data.selectedAnswer);
+          this.response.answerList[foundIndex]['answer'].push(data.selectedAnswer);
         }
       }
     }
-    // 4.2. 답변이 저장되어 있지 않았다면, response questionAnswer 에 data 를 넣는다.
-    else if (questionAnswerIndex === -1) {
-      this.response.questionAnswer.push({ questionId: data.questionId, answer: [data.selectedAnswer] });
+    // 4.2. 답변이 저장되어 있지 않았다면, response answerList 에 data 를 넣는다.
+    else if (foundIndex === -1) {
+      this.response.answerList.push({ questionId: data.questionId, answer: [data.selectedAnswer] });
     }
   }
 
 
   @Mutation
   private getLogList(backLogList: IBackLogList) {
-    const data: IResponse[] = backLogList.data.map((responsse) => {
-      const questionAnswer: IQuestionAnswer[] = responsse.question_answer.map((i) => {
+    const data: IResponse[] = backLogList.data.map((response) => {
+      const answerList: IAnswerList[] = response.answer_list.map((i) => {
         return {
           questionId: i.question_id,
           answer: i.answer,
         };});
       return {
-        userName: responsse.user_name,
-        surveyId: responsse.survey_id,
-        createdAt: responsse.created_at,
-        questionAnswer
+        userName: response.user_name,
+        surveyId: response.survey_id,
+        createdAt: response.created_at,
+        answerList
       };
     });
 
@@ -144,7 +146,7 @@ export default class ModuleResponse extends VuexModule {
 
   @Mutation
   private getLogDetail(data: IBackResponse) {
-    const questionAnswer: IQuestionAnswer[] = data.question_answer.map((i) => {
+    const answerList: IAnswerList[] = data.answer_list.map((i) => {
       return {
         questionId: i.question_id,
         answer: i.answer,
@@ -155,7 +157,7 @@ export default class ModuleResponse extends VuexModule {
       userName: data.user_name,
       surveyId: data.survey_id,
       createdAt: data.created_at,
-      questionAnswer,
+      answerList,
     };
 
     this.logDetail = logDetail;
@@ -164,6 +166,7 @@ export default class ModuleResponse extends VuexModule {
   // ---------------------------MUTATION END----------------------------
 
   // ---------------------------ACTION START----------------------------
+
   @Action({ rawError: true })
   public async fetchUserCheck({ userName, surveyId }: Pick<IResponse, 'userName'|'surveyId'>) {
     const params: Pick<IBackResponse, 'user_name'|'survey_id'> = {
@@ -192,21 +195,21 @@ export default class ModuleResponse extends VuexModule {
 
   // 응답 update
   @Action
-  public fetchUpdateQuestionAnswer(data: { questionId:string, selectedAnswer:string }) {
-    this.updateQuestionAnswer(data);
+  public fetchUpdateAnswer(data: { questionId:string, selectedAnswer:IAnswerOption }) {
+    this.updateAnswer(data);
   }
 
-  // 응답 저장
+  // 유저 설문 응답 저장
   @Action({ rawError: true })
   public async fetchSaveResponse(convertedDate: string) {
     // 질문 응답 여부 validation
-    const isUncheckedAnswer = this.response.questionAnswer.length !== $surveyStore.survey.questionList.length;
+    const isUncheckedAnswer = this.response.answerList.length !== $surveyStore.survey.questionList.length;
 
     if (isUncheckedAnswer) {
       return Promise.reject(NoticeMessages.failSaveResponse);
     }
 
-    const question_answer = this.response.questionAnswer.map((i) => { return {
+    const answer_list = this.response.answerList.map((i) => { return {
       question_id: i.questionId,
       answer: i.answer,
     };});
@@ -215,17 +218,20 @@ export default class ModuleResponse extends VuexModule {
       user_name: this.response.userName,
       survey_id: this.response.surveyId,
       created_at: convertedDate,
-      question_answer,
+      answer_list,
     };
 
     return await responseApi.saveResponse(backResponse)
       .then((res) => {
-        // initial state
-        this.setInitialResponse();
+        console.log(res);
       })
       .catch((error) => console.log(error));
   }
 
+  @Action
+  public async fetchInitResponseState() {
+    this.initResponseState();
+  }
 
   @Action
   public async fetchGetLogListAll(surveyId: string) {

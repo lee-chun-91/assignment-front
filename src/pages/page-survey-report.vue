@@ -1,8 +1,8 @@
 <template>
   <div class="survey-report">
     <div class="survey-report__count">
-      <report-count title="총 참여자" :count="totalLog"></report-count>
-      <report-count title="오늘 참여자" :count="todayLog"></report-count>
+      <report-count title="총 참여자" :count="totalLogCount"></report-count>
+      <report-count title="오늘 참여자" :count="todayLogCount"></report-count>
     </div>
     <div class="survey-report__result" v-if="isEmpty">
       <div class="survey-report--noContent">
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="survey-report__result" v-else>
-      <div v-for="reportData in totalReportData" :key="reportData.questionId">
+      <div v-for="reportData in reportData" :key="reportData.questionId">
         <question-report
           :question-name="reportData.questionName"
           :questionId="reportData.questionId"
@@ -31,7 +31,7 @@ import ReportCount from '@/components/survey-report/report-count.vue';
 import QuestionReport from '@/components/survey-report/question-report.vue';
 import { UTILS } from '@/utils/index';
 
-export interface IReportData {
+export interface IReportDataItem {
   questionName: string;
   questionId: string;
   reportType: number;
@@ -54,9 +54,9 @@ export interface IDatasets {
 })
 export default class PageSurveyReport extends Vue {
   // region local
-  totalLog = 0
-  todayLog = 0
-  totalReportData: IReportData[] = []
+  totalLogCount = 0
+  todayLogCount = 0
+  reportData: IReportDataItem[] = []
   // endregion
 
   // region computed
@@ -75,8 +75,8 @@ export default class PageSurveyReport extends Vue {
 
   // region method
   updateReportType({ questionId, value }: {questionId: string, value: number}) {
-    const foundIndex = this.totalReportData.findIndex((reportData) => reportData.questionId === questionId);
-    this.totalReportData[foundIndex].reportType = value;
+    const foundIndex = this.reportData.findIndex((reportData) => reportData.questionId === questionId);
+    this.reportData[foundIndex].reportType = value;
   }
   // endregion
 
@@ -88,22 +88,22 @@ export default class PageSurveyReport extends Vue {
 
     // 2. reportData 만들기
     // 2.1. survey 의 질문별 응답값과 응답값별 빈도를 산출하기 위해 반복문을 돌린다
-    $surveyStore.survey.questionList.map((q) => {
-      const qName = q.questionName;
-      const qId = q.questionId;
+    $surveyStore.survey.questionList.forEach((question) => {
+      const qName = question.questionName;
+      const qId = question.questionId;
       let answerArray: string[] = [];
       const logList = $responseStore.logList.data;
 
       // 2.2. logList 에서 질문에 대한 응답을 찾고, 그 값들을 answerArray 에 모은다
-      logList.map((log) => {
-        const foundIndex = log.questionAnswer.findIndex(item =>
+      logList.forEach((log) => {
+        const foundIndex = log.answerList.findIndex(item =>
           item.questionId === qId);
         if (foundIndex < 0) {
           return;
         }
         else {
-          const data = log.questionAnswer[foundIndex].answer;
-          answerArray.push(...data);
+          const answer = log.answerList[foundIndex].answer;
+          answer.forEach((answer) => answerArray.push(answer.text));
         }
       });
 
@@ -124,7 +124,7 @@ export default class PageSurveyReport extends Vue {
       }
 
       // 2.6. reportData 값을 만든다.
-      let reportData: IReportData = {
+      let reportDataItem: IReportDataItem = {
         questionName: qName,
         questionId: qId,
         reportType: 0,
@@ -132,15 +132,15 @@ export default class PageSurveyReport extends Vue {
       };
 
       // 2.7. 만든 reportData 를 totalData 에 push 한다.
-      this.totalReportData.push(reportData);
+      this.reportData.push(reportDataItem);
     });
 
-    // 2. totalLog 구하기
-    this.totalLog = $responseStore.logList.data.length;
+    // 2. totalLogCount 구하기
+    this.totalLogCount = $responseStore.logList.data.length;
 
-    // 3. todayLog count 구하기
+    // 3. todayLogCount count 구하기
     const today = new Date();
-    this.todayLog = $responseStore.logList.data.filter((i) => {
+    this.todayLogCount = $responseStore.logList.data.filter((i) => {
       return UTILS.isSameDate(today, new Date(`${i.createdAt}`));}).length;
   }
   // endregion
