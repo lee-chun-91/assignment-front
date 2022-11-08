@@ -41,22 +41,17 @@ export default class PageSurveyCreate extends Vue {
           message: error,
           type: 'error'
         })
-      //   this.$alert(error, '오류', {
-      //   confirmButtonText: 'OK',
-      // })
       );
   }
-
-  // this.$message({
-  //   showClose: true,
-  //   message: NoticeMessage.emptyUserNameField,
-  //   type: 'error'
-  // });
   // endregion
 
   // region lifecycle
   created() {
-    $surveyStore.fetchSetInitialSurvey();
+    // $surveyStore.fetchInitSurveyState();
+  }
+
+  async beforeDestroy() {
+    await $surveyStore.fetchInitSurveyState();
   }
   // endregion
 }

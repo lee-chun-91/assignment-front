@@ -46,6 +46,10 @@ export default class PageSurveyUpdate extends Vue {
   async created() {
     await $surveyStore.fetchGetSurvey(this.surveyId);
   }
+
+  async beforeDestroy() {
+    await $surveyStore.fetchInitSurveyState();
+  }
   // endregion
 }
 </script>

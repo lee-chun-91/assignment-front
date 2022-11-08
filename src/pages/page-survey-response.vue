@@ -34,11 +34,6 @@ export default class PageSurveyResponse extends Vue {
   get userName() {
     return this.$route.params.userName;
   }
-
-  // get checkedUserName() {
-  //   console.log(getCookie('checkedUserName'));
-  //   return getCookie('checkedUserName');
-  // }
   // endregion
 
   // region method
