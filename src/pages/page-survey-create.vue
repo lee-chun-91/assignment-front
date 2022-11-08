@@ -14,7 +14,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import SurveyTitle from '@/components/survey-create-and-update/survey-title.vue';
 import QuestionList from '@/components/survey-create-and-update/question-list.vue';
 import { $surveyStore } from '@/store';
-import { NoticeMessage } from '@/enum/notice-message';
+import { NoticeMessages } from '@/enum/notice-messages';
 
 @Component({
   components: {
@@ -30,7 +30,7 @@ export default class PageSurveyCreate extends Vue {
 
   saveSurvey() {
     $surveyStore.fetchSaveSurvey()
-      .then(() => this.$alert(NoticeMessage.successSaveSurvey, '안내', {
+      .then(() => this.$alert(NoticeMessages.successSaveSurvey, '안내', {
         confirmButtonText: 'OK',
         callback: () => {
           this.$router.push('/');}
@@ -46,10 +46,6 @@ export default class PageSurveyCreate extends Vue {
   // endregion
 
   // region lifecycle
-  created() {
-    // $surveyStore.fetchInitSurveyState();
-  }
-
   async beforeDestroy() {
     await $surveyStore.fetchInitSurveyState();
   }

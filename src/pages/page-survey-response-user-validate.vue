@@ -14,7 +14,7 @@ import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $responseStore } from '@/store';
-import { NoticeMessage } from '@/enum/notice-message';
+import { NoticeMessages } from '@/enum/notice-messages';
 import { PageRouteNames } from '@/enum/page-names';
 
 @Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
@@ -46,7 +46,7 @@ export default class PageSurveyResponseUserValidate extends Vue {
     if (this.userName === '') {
       this.$message({
         showClose: true,
-        message: NoticeMessage.emptyUserNameField,
+        message: NoticeMessages.emptyUserNameField,
         type: 'error'
       });
     }
@@ -62,7 +62,7 @@ export default class PageSurveyResponseUserValidate extends Vue {
           else {
             this.$message({
               showClose: true,
-              message: NoticeMessage.failSurveyResponseUserValidate,
+              message: NoticeMessages.failSurveyResponseUserValidate,
               type: 'error'
             });
           }

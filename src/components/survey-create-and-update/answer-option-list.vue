@@ -4,14 +4,14 @@
       <div class="answer-option" v-if="isRadioButton">
         <label :for="index">
           <input type="radio" disabled="true"/>
-          <input class="answer-option__input" type="text" :id="index" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
+          <input class="answer-option__input" type="text" :id="index" :value="item.text" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button size="mini" circle :style="isShown" @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
       <div class="answer-option" v-else-if="isCheckbox">
         <label :for="index">
           <input type="checkbox" disabled="true"/>
-          <input class="answer-option__input" type="text" :id="index" :value="item" @input="updateAnswerOption(questionId, index, $event)" />
+          <input class="answer-option__input" type="text" :id="index" :value="item.text" @input="updateAnswerOption(questionId, index, $event)" />
           <el-button size="mini" circle :style="isShown" @click="deleteAnswerOption(questionId, index)"><i class="el-icon-delete"></i></el-button>
         </label>
       </div>
@@ -22,7 +22,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
-import { QuestionTypes } from '@/enum/question-types';
+import { AnswerTypes } from '@/enum/answer-types';
 
 @Component({})
 export default class AnswerOptionList extends Vue {
@@ -44,11 +44,11 @@ export default class AnswerOptionList extends Vue {
     return $surveyStore.survey.questionList[foundIndex].answerOptionList;
   }
   get isRadioButton() {
-    return this.answerType === QuestionTypes.yesNo || this.answerType === QuestionTypes.oneChoice;
+    return this.answerType === AnswerTypes.yesNo || this.answerType === AnswerTypes.oneChoice;
   }
 
   get isCheckbox() {
-    return this.answerType === QuestionTypes.multipleChoice;
+    return this.answerType === AnswerTypes.multipleChoice;
   }
 
   get isShown() {
@@ -59,10 +59,6 @@ export default class AnswerOptionList extends Vue {
   // endregion
 
   // region method
-  notChecked() {
-    return false;
-  }
-
   updateAnswerOption(questionId: string, answerOptionIndex: number, e: InputEvent) {
     if(!e.target) {
       return;
@@ -75,12 +71,6 @@ export default class AnswerOptionList extends Vue {
   deleteAnswerOption(questionId: string, answerOptionIndex: number) {
     $surveyStore.fetchDeleteAnswerOption({ questionId, answerOptionIndex });
   }
-  // endregion
-
-  // region emit
-  // endregion
-
-  // region lifecycle
   // endregion
 }
 </script>

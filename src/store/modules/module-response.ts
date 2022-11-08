@@ -1,8 +1,8 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import { responseApi } from '@/apis/reponseApi';
 import { $surveyStore } from '@/store';
-import { QuestionTypes } from '@/enum/question-types';
-import { NoticeMessage } from '@/enum/notice-message';
+import { AnswerTypes } from '@/enum/answer-types';
+import { NoticeMessages } from '@/enum/notice-messages';
 import { AxiosResponse } from 'axios';
 
 
@@ -96,11 +96,11 @@ export default class ModuleResponse extends VuexModule {
       // selectedAnswer 가 answer 배열에 저장되어 있는지 체크
       const answerIndex = this.response.questionAnswer[questionAnswerIndex]['answer'].findIndex((a) => a === data.selectedAnswer);
 
-      if (answerType === QuestionTypes.yesNo || answerType === QuestionTypes.oneChoice) {
+      if (answerType === AnswerTypes.yesNo || answerType === AnswerTypes.oneChoice) {
         this.response.questionAnswer[questionAnswerIndex] = { questionId: data.questionId, answer: [data.selectedAnswer] };
       }
       // 4.2.1. 답변 타입이 multiple, questionAnswer 의 answer 배열에 checkedAnswer 값이 저장되어 있으면 그 값을 뺀다
-      else if (answerType === QuestionTypes.multipleChoice) {
+      else if (answerType === AnswerTypes.multipleChoice) {
         if (answerIndex >= 0) {
           this.response.questionAnswer[questionAnswerIndex]['answer'].splice(answerIndex, 1);
         }
@@ -203,7 +203,7 @@ export default class ModuleResponse extends VuexModule {
     const isUncheckedAnswer = this.response.questionAnswer.length !== $surveyStore.survey.questionList.length;
 
     if (isUncheckedAnswer) {
-      return Promise.reject(NoticeMessage.failSaveResponse);
+      return Promise.reject(NoticeMessages.failSaveResponse);
     }
 
     const question_answer = this.response.questionAnswer.map((i) => { return {
