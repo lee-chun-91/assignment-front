@@ -12,7 +12,7 @@ import PageSignIn from '@/pages/page-sign-in.vue';
 import PageNotFound from '@/pages/page-not-found.vue';
 import pageSurveyResponseUserValidate from '@/pages/page-survey-response-user-validate.vue';
 
-import { $adminStore } from '@/store';
+import { $adminStore, $responseStore, $surveyStore } from '@/store';
 import { getCookie } from '@/utils/cookie';
 import { PageRouteNames } from '@/enum/page-names';
 
@@ -54,6 +54,11 @@ const routes: Array<RouteConfig> = [
         path: 'log/:surveyId/:userName',
         name: PageRouteNames.surveyLogDetail,
         component: PageSurveyLogDetail,
+        // beforeEnter: (to, from, next) => {
+        //   $responseStore.fetchGetLogDetail({ surveyId: to.params.surveyId, userName: to.params.userName });
+        //   $surveyStore.fetchGetSurvey(to.params.surveyId);
+        //   next();
+        // }
       },
 
     ]

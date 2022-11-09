@@ -33,6 +33,10 @@ export default class AnswerOptionList extends Vue {
   @Prop( { type: Boolean }) isLog?: boolean;
   // endregion
 
+  // region local
+  // fullscreenLoading = true;
+  // endregion
+
   // region computed
   get surveyId() {
     return this.$route.params.surveyId;
@@ -77,5 +81,15 @@ export default class AnswerOptionList extends Vue {
     }
   }
   // endregion
+
+  // region lifecycle
+  beforeCreate() {
+    // console.log($responseStore.logDetail);
+  }
+
+  updated() {
+    // this.fullscreenLoading = false;
+  }
+
 }
 </script>
