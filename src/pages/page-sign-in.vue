@@ -2,8 +2,8 @@
   <div class="sign-in">
     <h1 class="sign-in__title">설문지 시스템</h1>
     <div class="sign-in__body">
-      <AtomicInput class="sign-in__input" title="id" placeholder="id를 입력해주세요" :value="userName" @handle-input="updateId"></AtomicInput>
-      <AtomicInput class="sign-in__input" title="password" placeholder="password를 입력해주세요" :value="password" @handle-input="updatePassword"></AtomicInput>
+      <AtomicInput class="sign-in__input" type="text" title="id" placeholder="id를 입력해주세요" :value="userName" @handle-input="updateId"></AtomicInput>
+      <AtomicInput class="sign-in__input" type="password" title="password" placeholder="password를 입력해주세요" :value="password" @handle-input="updatePassword"></AtomicInput>
       <el-button class="sign-in__button" type="success" name="로그인" @click="login">로그인</el-button>
     </div>
   </div>

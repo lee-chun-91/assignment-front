@@ -1,7 +1,7 @@
 <template>
   <div class="atomic-input">
     <label :for="title"></label>
-    <input class="atomic-input__input" type="text" :id="title" :placeholder="placeholder" :value="value"
+    <input class="atomic-input__input" :type="type" :id="title" :placeholder="placeholder" :value="value"
            @input="handleInput"/>
   </div>
 </template>
@@ -14,6 +14,7 @@ import {
 @Component({})
 export default class AtomicInput extends Vue {
   // region prop
+  @Prop({ type: String }) readonly type!: string
   @Prop({ type: String }) readonly title!: string
   @Prop({ type: String }) readonly placeholder!: string
   @Prop({ type: String }) value!: string
