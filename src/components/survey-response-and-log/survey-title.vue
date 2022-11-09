@@ -28,8 +28,5 @@ export default class SurveyTitle extends Vue {
     else { return `${this.userName} 님, 설문에 응답해주세요.`;}
   }
   // endregion
-
-  // region lifecycle
-  // endregion
 }
 </script>

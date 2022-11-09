@@ -22,7 +22,9 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { AnswerTypes } from '@/enum/answer-types';
 import { $responseStore, $surveyStore } from '@/store';
 import { PageRouteNames } from '@/enum/page-names';
-import { IAnswerOption } from '@/store/modules/module-survey';
+import { IAnswerOption, IQuestion } from '@/store/modules/module-survey';
+import { IQuestionResponse } from '@/store/modules/module-response';
+import _ from 'lodash';
 
 @Component({})
 export default class AnswerOptionList extends Vue {
@@ -37,13 +39,13 @@ export default class AnswerOptionList extends Vue {
   }
 
   get answerType() {
-    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
-    return $surveyStore.survey.questionList[foundIndex].answerType;
+    const question = _.find($surveyStore.survey.questionList, { questionId: this.questionId }) as IQuestion;
+    return question.answerType;
   }
 
   get answerOptionList() {
-    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === this.questionId);
-    return $surveyStore.survey.questionList[foundIndex].answerOptionList;
+    const question = _.find($surveyStore.survey.questionList, { questionId: this.questionId }) as IQuestion;
+    return question.answerOptionList;
   }
   get isRadioButton() {
     return this.answerType === AnswerTypes.yesNo || this.answerType === AnswerTypes.oneChoice;
@@ -57,24 +59,20 @@ export default class AnswerOptionList extends Vue {
   // region method
   handleChangeAnswer(e: MouseEvent) {
     const selected = e.target as HTMLInputElement;
-    console.log('selectedAnswer', selected.value);
-
     $responseStore.fetchUpdateAnswer({ questionId: this.questionId, selectedAnswer: JSON.parse(selected.value) });
-    console.log('response', $responseStore.response);
   }
 
   isCheckedAnswer(answerOption: IAnswerOption) {
     // 개별 로그 페이지일 때만 로직 진행
     if (this.$route.name === PageRouteNames.surveyLogDetail) {
-      // 1. 질문 id 값 같은 아이템 찾기
-      const foundIndex = $responseStore.logDetail.answerList.findIndex((i) => i.questionId === this.questionId);
-      // 2.1. 질문 id 값 같은 아이템이 없다면(유저가 해당 질문에 대해 응답한 적이 없다면) false return
-      if (foundIndex === -1) return false;
-      // 2.2. 질문 id 값 같은 아이템 있다면, 그 질문에 대한 응답 Array 에 answerOption 이 포함되어 있는지 체크하여 return
-      else {
-        const answer = $responseStore.logDetail.answerList[foundIndex].answer;
-        return answer.filter((answerItem) => answerItem.text === answerOption.text).length > 0;
-      }
+
+      // 특정 question 에 대한 choiceAnswerList 가 answerOption 의 text 값을 가지고 있는지를 판별하는 로직
+      // 1. questionResponseList 를 순회하며, questionResponse 와 같은 questionId 를 가지고 있는 값을 찾는다.
+      const questionResponse = _.find($responseStore.logDetail.questionResponseList,
+        { questionId: this.questionId }) as IQuestionResponse;
+
+      // 2. 찾은 questionResponse 의 choiceAnswerList 에서 answerOption 의 text 와 같은 값이 있는지 판별하여 true, false
+      return _.filter(questionResponse.choiceAnswerList, { text: answerOption.text }).length > 0;
     }
   }
   // endregion

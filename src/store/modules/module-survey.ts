@@ -2,6 +2,7 @@ import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import { AnswerTypes } from '@/enum/answer-types';
 import { surveyApi } from '@/apis/surveyApi';
 import { UTILS } from '@/utils/index';
+import _ from 'lodash';
 
 export interface ISurveyList {
   total: number;
@@ -101,32 +102,56 @@ export default class ModuleSurvey extends VuexModule {
   // 질문 삭제
   @Mutation
   private deleteQuestion(question_id: string) {
-    this.survey.questionList = this.survey.questionList.filter(
-      (item) => item.questionId !== question_id
-    );
+    this.survey.questionList = _.filter(this.survey.questionList,(question) => {
+      return question.questionId !== question_id;
+    } );
+
+    // this.survey.questionList = this.survey.questionList.filter(
+    //   (item) => item.questionId !== question_id
+    // );
   }
 
   // 질문 내용 수정
   @Mutation
   private updateQuestionName({ questionId, questionName }: Pick<IQuestion, 'questionId'|'questionName'>) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    this.survey.questionList[foundIndex] = { ...this.survey.questionList[foundIndex], questionName };
+    _.forEach(this.survey.questionList, (question) => {
+      if(question.questionId === questionId) {
+        question.questionName = questionName;
+      }
+    });
+
+    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    // this.survey.questionList[foundIndex] = { ...this.survey.questionList[foundIndex], questionName };
   }
 
   // 질문 답변 타입 수정
   @Mutation
   private updateAnswerType({ questionId, answerType }: Pick<IQuestion, 'questionId'|'answerType'>) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    this.survey.questionList[foundIndex].answerType = answerType;
+    _.forEach(this.survey.questionList, (question) => {
+      if(question.questionId === questionId) {
+        question.answerType = answerType;
+      }
+    });
+
+    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    // this.survey.questionList[foundIndex].answerType = answerType;
   }
 
   // 질문 답변 옵션 추가
   @Mutation
   private addAnswerOption(questionId: string) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    const answerOptionLength = this.survey.questionList[foundIndex].answerOptionList.length;
-    const newAnswerOption = { id: UTILS.uuid(), text: `답변 옵션 ${answerOptionLength + 1}` };
-    this.survey.questionList[foundIndex].answerOptionList.push(newAnswerOption);
+    _.forEach(this.survey.questionList, (question) => {
+      if(question.questionId === questionId) {
+        const answerOptionLength = question.answerOptionList.length;
+        const newAnswerOption = { id: UTILS.uuid(), text: `답변 옵션 ${answerOptionLength + 1}` };
+        question.answerOptionList.push(newAnswerOption);
+      }
+    });
+
+    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    // const answerOptionLength = this.survey.questionList[foundIndex].answerOptionList.length;
+    // const newAnswerOption = { id: UTILS.uuid(), text: `답변 옵션 ${answerOptionLength + 1}` };
+    // this.survey.questionList[foundIndex].answerOptionList.push(newAnswerOption);
   }
 
 
@@ -134,15 +159,27 @@ export default class ModuleSurvey extends VuexModule {
   @Mutation
   private updateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
     answerOptionIndex: number, answerOption: string}) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    this.survey.questionList[foundIndex].answerOptionList[answerOptionIndex].text = answerOption;
+    _.forEach(this.survey.questionList, (question) => {
+      if(question.questionId === questionId) {
+        question.answerOptionList[answerOptionIndex].text = answerOption;
+      }
+    });
+
+    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    // this.survey.questionList[foundIndex].answerOptionList[answerOptionIndex].text = answerOption;
   }
 
   // 질문 답변 옵션 삭제
   @Mutation
   private deleteAnswerOption({ questionId, answerOptionIndex }: { questionId: string, answerOptionIndex: number }) {
-    const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    this.survey.questionList[foundIndex].answerOptionList.splice(answerOptionIndex, 1);
+    _.forEach(this.survey.questionList, (question) => {
+      if(question.questionId === questionId) {
+        question.answerOptionList.slice(answerOptionIndex, 1);
+      }
+    });
+
+    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
+    // this.survey.questionList[foundIndex].answerOptionList.splice(answerOptionIndex, 1);
   }
 
   // 질문 순서 수정
@@ -155,19 +192,37 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 리스트 get
   @Mutation
   private getSurveyList(backSurveyList: IBackSurveyList) {
-    const data: ISurvey[] = backSurveyList.data.map((s) => {
-      const questionList: IQuestion[] = s.question_list.map((q) => {return {
-        questionId: q.question_id,
-        questionName: q.question_name,
-        answerType: q.answer_type,
-        answerOptionList: q.answer_option_list
-      };});
+
+    const data: ISurvey[] = _.map(backSurveyList.data, (backSurvey) => {
+
+      const questionList: IQuestion[] = _.map(backSurvey.question_list, (backQuestion) => {
+        return {
+          questionId: backQuestion.question_id,
+          questionName: backQuestion.question_name,
+          answerType: backQuestion.answer_type,
+          answerOptionList: backQuestion.answer_option_list
+        };});
 
       return {
-        _id: s._id,
-        surveyName: s.survey_name,
+        _id: backSurvey._id,
+        surveyName: backSurvey.survey_name,
         questionList,
       };});
+
+    // const data: ISurvey[] = backSurveyList.data.map((s) => {
+    //   const questionList: IQuestion[] = s.question_list.map((q) => {return {
+    //     questionId: q.question_id,
+    //     questionName: q.question_name,
+    //     answerType: q.answer_type,
+    //     answerOptionList: q.answer_option_list
+    //   };});
+    //
+    //   return {
+    //     _id: s._id,
+    //     surveyName: s.survey_name,
+    //     questionList,
+    //   };});
+
 
     const surveyList: ISurveyList = {
       total: backSurveyList.total,
@@ -181,11 +236,11 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 get
   @Mutation
   private setSurvey(backSurvey: IBackSurvey) {
-    const questionList = backSurvey.question_list.map((q) => {return {
-      questionId: q.question_id,
-      questionName: q.question_name,
-      answerType: q.answer_type,
-      answerOptionList: q.answer_option_list,
+    const questionList = backSurvey.question_list.map((backQuestion) => {return {
+      questionId: backQuestion.question_id,
+      questionName: backQuestion.question_name,
+      answerType: backQuestion.answer_type,
+      answerOptionList: backQuestion.answer_option_list,
     };});
 
     const frontSurvey: ISurvey = {
@@ -269,7 +324,8 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 저장
   @Action({ rawError: true })
   public async fetchSaveSurvey() {
-    // form validation
+
+    // form validation, element ui 적용 시 수정
     const emptyQuestionNameList = this.survey.questionList.filter((q) => q.questionName === '');
 
     if (this.survey.surveyName === '') {
@@ -281,24 +337,33 @@ export default class ModuleSurvey extends VuexModule {
     }
 
     // form validation 통과 시
-    const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
-      question_id : q.questionId,
-      question_name: q.questionName,
-      answer_type: q.answerType,
-      answer_option_list: q.answerOptionList,
-    }; });
+
+    const question_list: IBackQuestion[]  = _.map(this.survey.questionList, (question) => {
+      return {
+        question_id : question.questionId,
+        question_name: question.questionName,
+        answer_type: question.answerType,
+        answer_option_list: question.answerOptionList,
+      }; });
+
+    // const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
+    //   question_id : q.questionId,
+    //   question_name: q.questionName,
+    //   answer_type: q.answerType,
+    //   answer_option_list: q.answerOptionList,
+    // }; });
 
     const backSurvey: IBackSurvey = {
       survey_name: this.survey.surveyName,
-      question_list: question_list
+      question_list
     };
 
     return await surveyApi.saveSurvey(backSurvey)
       .then((res) => {
-        console.log('saveSurvey result', res);
+        // console.log('saveSurvey result', res);
         // this.initSurveyState();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => { return Promise.reject(error); });
   }
 
   @Action
@@ -325,7 +390,8 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 수정
   @Action({ rawError: true })
   public async fetchUpdateSurvey(surveyId: string) {
-    // form validation
+
+    // form validation. element ui 적용 시 수정
     const emptyQuestionNameList = this.survey.questionList.filter((q) => q.questionName === '');
 
     if (this.survey.surveyName === '') {
@@ -335,12 +401,20 @@ export default class ModuleSurvey extends VuexModule {
       return Promise.reject('비어있는 질문이 있습니다. 모든 질문에 내용을 입력해주세요.');
     }
 
-    const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
-      question_id : q.questionId,
-      question_name: q.questionName,
-      answer_type: q.answerType,
-      answer_option_list: q.answerOptionList,
-    }; });
+    const question_list: IBackQuestion[]  = _.map(this.survey.questionList, (question) => {
+      return {
+        question_id : question.questionId,
+        question_name: question.questionName,
+        answer_type: question.answerType,
+        answer_option_list: question.answerOptionList,
+      }; });
+
+    // const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
+    //   question_id : q.questionId,
+    //   question_name: q.questionName,
+    //   answer_type: q.answerType,
+    //   answer_option_list: q.answerOptionList,
+    // }; });
 
     const backSurvey: IBackSurvey = {
       survey_name: this.survey.surveyName,
@@ -348,6 +422,9 @@ export default class ModuleSurvey extends VuexModule {
     };
 
     return await surveyApi.updateSurvey({ surveyId, backSurvey })
-      .then((res) => console.log(res));
+      .then((result) => {
+        console.log('update api then result', result);
+        return Promise.resolve(result);
+      });
   }
 }

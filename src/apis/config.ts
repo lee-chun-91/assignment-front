@@ -5,6 +5,7 @@ import router from '@/router';
 import { Message } from 'element-ui';
 import { MessageBox } from 'element-ui';
 import { NoticeMessages } from '@/enum/notice-messages';
+import { $adminStore } from '@/store';
 
 export const instance = axios.create({
   baseURL: 'https://localhost:7063/',
@@ -32,9 +33,13 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
+    // console.log('response interceptor fulfilled', response);
+    // console.log('response interceptor fulfilled', Promise.resolve(response));
     return response;
   },
+
   (error) => {
+    console.log('response interceptor rejected', error);
 
     if (router.currentRoute.name === PageRouteNames.signIn) {
       Message({
@@ -49,8 +54,20 @@ instance.interceptors.response.use(
         message: NoticeMessages.expireToken,
         confirmButtonText: NoticeMessages.goToPageSignIn,
         callback: () => {
-          router.push({ name: PageRouteNames.signIn });
+          $adminStore.fetchLogout();
+          // router.push({ name: PageRouteNames.signIn });
         }
+      });
+    }
+
+    else if (error.response.status === 400) {
+      Message({
+        type: 'error',
+        message: error.response.data,
+        // confirmButtonText: '확인',
+        // callback: () => {
+        //   router.push({ name: PageRouteNames.signIn });
+        // }
       });
     }
 

@@ -63,39 +63,53 @@ export default class PageSurveyResponse extends Vue {
   // }
 
   saveResponse() {
+    // 질문 응답 여부 validation
+    const isUncheckedAnswer = $responseStore.response.questionResponseList.length !== $surveyStore.survey.questionList.length;
+
+    if (isUncheckedAnswer) {
+      this.$message({
+        showClose: true,
+        message: NoticeMessages.failSaveResponse,
+        type: 'error'
+      });
+      return;
+    }
+
     const convertedDate = UTILS.convertDate(new Date());
     $responseStore.fetchSaveResponse(convertedDate)
-      .then(() =>
+      .then((res) =>
         this.$alert(NoticeMessages.successSaveResponse, '완료', {
           confirmButtonText: '다른 응답 제출',
           callback: () => {
             this.$router.push( { name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: this.surveyId } });
           }
         })
-      )
-      .catch((error) => this.$message({ showClose: true, message: error, type: 'error' }));
+      );
+    // .catch((error) => {
+    //   console.log('save error', error);
+    //   this.$message({ showClose: true, message: error, type: 'error' });
+    // });
   }
   // endregion
 
 
   // region lifecycle
   async created() {
-    // await this.userCheck();
+    await $responseStore.fetchSetResponseUserNameAndSurveyId({
+      userName: this.userName, surveyId: this.surveyId });
+
     await $surveyStore.fetchGetSurvey(this.surveyId)
-      .then(() => {
-        this.fullscreenLoading = false;
-      });
+      .then(() => { this.fullscreenLoading = false; });
 
     // params 가 변경된 것이지 라우팅이 변경된 게 아니기 때문에, $watch 로 변화를 비교할 수 있다.
     this.$watch(() => this.$route.params, (current, old) => {
-      console.log(current, old);
       if (current.userName !== old.userName) {
         this.$router.push({ name: PageRouteNames.surveyResponseUserValidate });
       }
     });
   }
 
-  beforeDestroy() {
+  destroyed() {
     $responseStore.fetchInitResponseState();
   }
 

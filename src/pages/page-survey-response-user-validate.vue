@@ -22,7 +22,6 @@ export default class PageSurveyResponseUserValidate extends Vue {
   // region local
   userName = '';
   from = '';
-
   // endregion
 
   // region computed
@@ -31,13 +30,7 @@ export default class PageSurveyResponseUserValidate extends Vue {
   }
   // endregion
 
-  // region watch
-  // endregion
-
-
   // region method
-
-
   updateUsername(value: string) {
     this.userName = value;
   }
@@ -55,38 +48,12 @@ export default class PageSurveyResponseUserValidate extends Vue {
       // userCheck 로직 추가
       await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
         .then((result) => {
-          if(result.isChecked) {
+          if(result.data.isChecked) {
             this.$router.push( { name: PageRouteNames.surveyResponse, params: { surveyId: this.surveyId, userName: this.userName } });
           }
-
-          else {
-            this.$message({
-              showClose: true,
-              message: NoticeMessages.failSurveyResponseUserValidate,
-              type: 'error'
-            });
-          }
-        })
-        .catch((error) => this.openModal(`${error}`, '오류'));
+        });
     }
   }
-
-
-  openModal(message: string, title: string) {
-    this.$alert(message, title, {
-      confirmButtonText: 'OK',
-    });
-  }
-  // endregion
-
-  // region lifecycle
-  // mounted() {
-  //   const checkedUserName = getCookie('checkedUserName');
-  //   if( checkedUserName !== undefined ) {
-  //
-  //     this.$router.push({ name: PageRouteNames.surveyResponse, params: { surveyId: this.surveyId, userName: checkedUserName } });
-  //   }
-  // }
   // endregion
 }
 </script>

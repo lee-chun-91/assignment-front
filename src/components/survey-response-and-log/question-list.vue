@@ -14,14 +14,10 @@ import { $surveyStore } from '@/store';
 import AnswerOptionList from '@/components/survey-response-and-log/answer-option-list.vue';
 import { AnswerTypes } from '@/enum/answer-types';
 
-@Component({
-  components: { AnswerOptionList }
-})
+@Component({ components: { AnswerOptionList } })
 export default class QuestionList extends Vue {
   // region prop
   @Prop( { type: Boolean }) isLog?: boolean;
-  // endregion
-  // region local
   // endregion
 
   // region computed
@@ -39,12 +35,6 @@ export default class QuestionList extends Vue {
       return '여러 개의 답변을 선택할 수 있습니다.';
     }
   }
-  // endregion
-
-  // region emit
-  // endregion
-
-  // region lifecycle
   // endregion
 }
 </script>

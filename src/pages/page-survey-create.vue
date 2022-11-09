@@ -46,7 +46,7 @@ export default class PageSurveyCreate extends Vue {
   // endregion
 
   // region lifecycle
-  async beforeDestroy() {
+  async destroyed() {
     await $surveyStore.fetchInitSurveyState();
   }
   // endregion
