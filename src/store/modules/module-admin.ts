@@ -55,10 +55,7 @@ export default class ModuleAdmin extends VuexModule {
       .then((res) => {
         setCookie('accessToken', res.data);
         setCookie('userName', userInfo.userName);
-        if (history) {
-          history.back();
-        }
-        // router.push( { name: PageRouteNames.adminMain });
+        history.back();
       });
     // .catch((error) => {
     //   return Promise.reject(error.response.data);});
@@ -70,7 +67,6 @@ export default class ModuleAdmin extends VuexModule {
   public fetchLogout() {
     deleteCookie('accessToken');
     deleteCookie('userName');
-
     this.logout();
     router.push( { name: PageRouteNames.signIn });
   }
@@ -79,7 +75,6 @@ export default class ModuleAdmin extends VuexModule {
   public fetchSetLoggedInfo() {
     const userName = getCookie('userName');
     const token = getCookie('accessToken');
-
     if (userName && token) {
       this.setLoggedInfo(userName);
     }

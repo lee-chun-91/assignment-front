@@ -26,7 +26,7 @@
       <el-pagination layout="prev, pager, next"
                      :page-size="perPage"
                      :total="total"
-                     @current-change="handleCurrentChange">
+                     @current-change="handleChangeCurrentPage">
       </el-pagination>
     </div>
   </div>
@@ -65,8 +65,7 @@ export default class PageSurveyLog extends Vue {
   // endregion
 
   // region method
-  async handleCurrentChange(page: number) {
-    console.log(`current page: ${page}`);
+  async handleChangeCurrentPage(page: number) {
     await $responseStore.fetchGetLogList({ page, surveyId: this.surveyId });
   }
   // endregion

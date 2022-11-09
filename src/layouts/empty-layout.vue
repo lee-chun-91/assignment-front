@@ -1,34 +1,34 @@
-<template>
-  <div class="empty-layout">
-      <router-view></router-view>
-  </div>
-</template>
+<!--<template>-->
+<!--  <div class="empty-layout">-->
+<!--      <router-view></router-view>-->
+<!--  </div>-->
+<!--</template>-->
 
-<script lang="ts">
-import {
-  Vue, Component, Prop, Emit,
-} from 'vue-property-decorator';
-import AdminHeader from '@/layouts/admin-header.vue';
-import { $adminStore } from '@/store';
+<!--<script lang="ts">-->
+<!--import {-->
+<!--  Vue, Component, Prop, Emit,-->
+<!--} from 'vue-property-decorator';-->
+<!--import AdminHeader from '@/layouts/admin-header.vue';-->
+<!--import { $adminStore } from '@/store';-->
 
-@Component({})
-export default class EmptyLayout extends Vue {
-  // region prop
-  // endregion
+<!--@Component({})-->
+<!--export default class EmptyLayout extends Vue {-->
+<!--  // region prop-->
+<!--  // endregion-->
 
-  // region local
-  // endregion
+<!--  // region local-->
+<!--  // endregion-->
 
-  // region computed
-  // endregion
+<!--  // region computed-->
+<!--  // endregion-->
 
-  // region method
-  // endregion
+<!--  // region method-->
+<!--  // endregion-->
 
-  // region emit
-  // endregion
+<!--  // region emit-->
+<!--  // endregion-->
 
-  // region lifecycle
-  // endregion
-}
-</script>
+<!--  // region lifecycle-->
+<!--  // endregion-->
+<!--}-->
+<!--</script>-->

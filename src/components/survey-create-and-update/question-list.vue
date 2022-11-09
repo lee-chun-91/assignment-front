@@ -19,7 +19,7 @@
             <label for="질문내용"></label>
             <input class="question__input" type="text" id="질문내용"  placeholder="질문을 입력해주세요"
                    name="questionName" :value="questionName" @input="updateQuestionName(questionId, $event)"/>
-            <select name="answerType" @change="updateAnswerType(questionId, $event)">
+            <select name="answerType" :value="answerType" @change="updateAnswerType(questionId, $event)">
               <option :value="AnswerTypes.yesNo">YES/NO</option>
               <option :value="AnswerTypes.oneChoice">단일선택</option>
               <option :value="AnswerTypes.multipleChoice">다중선택</option>
@@ -96,5 +96,14 @@ export default class QuestionList extends Vue {
     $surveyStore.fetchDeleteQuestion(questionId);
   }
   // endregion
+
+  // region lifecycle
+  beforeCreate() {
+    console.log('questionList in question-list at beforeCreate', this.questionList);
+  }
+
+  created() {
+    console.log('questionList in question-list at created', this.questionList);
+  }
 }
 </script>
