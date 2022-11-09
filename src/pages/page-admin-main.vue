@@ -48,6 +48,7 @@ export default class PageAdminMain extends Vue {
   // region data
   PageRouteNames = PageRouteNames
   // endregion
+
   // region computed
   get surveyList() {
     return $surveyStore.surveyList.data;

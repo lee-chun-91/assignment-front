@@ -2,8 +2,6 @@ import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 import { responseApi } from '@/apis/reponseApi';
 import { $surveyStore } from '@/store';
 import { AnswerTypes } from '@/enum/answer-types';
-import { NoticeMessages } from '@/enum/notice-messages';
-import { AxiosResponse } from 'axios';
 import { IAnswerOption, IQuestion } from '@/store/modules/module-survey';
 import _ from 'lodash';
 
@@ -46,17 +44,7 @@ export interface IBackQuestionResponse {
 const initialResponse: IResponse = {
   userName: '',
   surveyId: '',
-  questionResponseList: [
-    {
-      questionId: '',
-      choiceAnswerList: [
-        {
-          id: '',
-          text: '',
-        }
-      ],
-    }
-  ],
+  questionResponseList: []
 };
 
 
@@ -79,17 +67,7 @@ export default class ModuleResponse extends VuexModule {
     const initialResponse: IResponse = {
       userName: '',
       surveyId: '',
-      questionResponseList: [
-        {
-          questionId: '',
-          choiceAnswerList: [
-            {
-              id: '',
-              text: '',
-            }
-          ],
-        }
-      ],
+      questionResponseList: []
     };
 
     this.response = initialResponse;
@@ -103,20 +81,23 @@ export default class ModuleResponse extends VuexModule {
 
   @Mutation
   private updateAnswer(data: {questionId: string, selectedAnswer: IAnswerOption}) {
+
     // 1.해당 질문을 survey State 에서 찾고, 해당 질문에 대한 answer type 확인
     const question = _.find($surveyStore.survey.questionList, { 'questionId': data.questionId }) as IQuestion;
     const answerType = question.answerType;
 
     // 2. questionResponseList 에 해당 question 에 대한 response 가 저장되어 있는지 찾기
     const indexOfQuestionResponse =  _.findIndex(this.response.questionResponseList,
-      (questionLResponse) => { return questionLResponse.questionId === data.questionId; });
+      (questionResponse) => {
+        return questionResponse.questionId === data.questionId; });
 
 
     // 3.1. questionResponse 가 저장되어 있는 경우
     if(indexOfQuestionResponse !== -1) {
+      const questionResponse = this.response.questionResponseList[indexOfQuestionResponse];
 
       // choiceAnswerList 에 유저가 체크한 selectedAnswer 가 있는지 여부 확인, findIndex 로 index 찾아냄
-      const indexOfSelectedAnswer = _.findIndex(this.response.questionResponseList[indexOfQuestionResponse].choiceAnswerList,
+      const indexOfSelectedAnswer = _.findIndex(questionResponse.choiceAnswerList,
         (choiceAnswer) => {return choiceAnswer.text === data.selectedAnswer.text ;});
 
       // 3.1.1. 답변타입이 yesno, 단일인 경우 questionResponse 값을 새로 할당
@@ -144,17 +125,20 @@ export default class ModuleResponse extends VuexModule {
 
   @Mutation
   private getLogList(backLogList: IBackLogList) {
+    const data: IResponse[] = _.map(backLogList.data, (backResponse) => {
+      const questionResponseList: IQuestionResponse[] = _.map(backResponse.question_response_list,
+        (backQuestionResponse) => {
+          return {
+            questionId: backQuestionResponse.question_id,
+            choiceAnswerList: backQuestionResponse.choice_answer_list,
+          };
+        }
+      );
 
-    const data: IResponse[] = backLogList.data.map((response) => {
-      const questionResponseList: IQuestionResponse[] = response.question_response_list.map((i) => {
-        return {
-          questionId: i.question_id,
-          choiceAnswerList: i.choice_answer_list,
-        };});
       return {
-        userName: response.user_name,
-        surveyId: response.survey_id,
-        createdAt: response.created_at,
+        userName: backResponse.user_name,
+        surveyId: backResponse.survey_id,
+        createdAt: backResponse.created_at,
         questionResponseList
       };
     });
@@ -170,10 +154,10 @@ export default class ModuleResponse extends VuexModule {
 
   @Mutation
   private getLogDetail(data: IBackResponse) {
-    const questionResponseList: IQuestionResponse[] = data.question_response_list.map((i) => {
+    const questionResponseList: IQuestionResponse[] = _.map(data.question_response_list, (backQuestionResponse) => {
       return {
-        questionId: i.question_id,
-        choiceAnswerList: i.choice_answer_list,
+        questionId: backQuestionResponse.question_id,
+        choiceAnswerList: backQuestionResponse.choice_answer_list,
       };
     });
 
@@ -216,10 +200,12 @@ export default class ModuleResponse extends VuexModule {
   // 유저 설문 응답 저장
   @Action({ rawError: true })
   public async fetchSaveResponse(convertedDate: string) {
-    const question_response_list = this.response.questionResponseList.map((i) => { return {
-      question_id: i.questionId,
-      choice_answer_list: i.choiceAnswerList,
-    };});
+    const question_response_list = _.map(this.response.questionResponseList, (questionResponse) => {
+      return {
+        question_id: questionResponse.questionId,
+        choice_answer_list: questionResponse.choiceAnswerList,
+      };
+    });
 
     const backResponse: IBackResponse = {
       user_name: this.response.userName,

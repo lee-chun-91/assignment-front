@@ -60,6 +60,7 @@ export default class AnswerOptionList extends Vue {
   handleChangeAnswer(e: MouseEvent) {
     const selected = e.target as HTMLInputElement;
     $responseStore.fetchUpdateAnswer({ questionId: this.questionId, selectedAnswer: JSON.parse(selected.value) });
+    console.log($responseStore.response);
   }
 
   isCheckedAnswer(answerOption: IAnswerOption) {

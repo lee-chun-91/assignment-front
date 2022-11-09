@@ -36,8 +36,5 @@ export default class PageSignIn extends Vue {
     $adminStore.fetchLogin({ userName: this.userName, password: this.password });
   }
   // endregion
-
-  // region lifecycle
-  // endregion
 }
 </script>
