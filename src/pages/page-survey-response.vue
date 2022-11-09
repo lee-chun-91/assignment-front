@@ -43,25 +43,6 @@ export default class PageSurveyResponse extends Vue {
   //   console.log(to, from);
   // }
 
-  // async userCheck() {
-  //   await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
-  //     .then((result) => {
-  //       if(result.isChecked) {
-  //         return;
-  //       }
-  //       else if (!result.isChecked) {
-  //         // this.$router.push( { name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: this.surveyId } });
-  //       }
-  //     });
-  //   // .catch((error) => this.openModal(`${error}`, '오류'));
-  // }
-
-  // openModal(message: string, title: string) {
-  //   this.$alert(message, title, {
-  //     confirmButtonText: 'OK',
-  //   });
-  // }
-
   saveResponse() {
     // 질문 응답 여부 validation
     const isUncheckedAnswer = $responseStore.response.questionResponseList.length !== $surveyStore.survey.questionList.length;
@@ -85,10 +66,6 @@ export default class PageSurveyResponse extends Vue {
           }
         })
       );
-    // .catch((error) => {
-    //   console.log('save error', error);
-    //   this.$message({ showClose: true, message: error, type: 'error' });
-    // });
   }
   // endregion
 
@@ -112,6 +89,9 @@ export default class PageSurveyResponse extends Vue {
   destroyed() {
     $responseStore.fetchInitResponseState();
   }
+  // endregion
+
+
 
 }
 </script>

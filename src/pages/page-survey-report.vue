@@ -10,13 +10,13 @@
       </div>
     </div>
     <div class="survey-report__result" v-else>
-      <div v-for="reportData in reportData" :key="reportData.questionId">
+      <div v-for="reportDataItem in surveyReportData" :key="reportDataItem.questionId">
         <question-report
-          :question-name="reportData.questionName"
-          :questionId="reportData.questionId"
-          :reportType="reportData.reportType"
-          :chartData="reportData.chartData"
-          :datasets="reportData.chartData.datasets"
+          :question-name="reportDataItem.questionName"
+          :questionId="reportDataItem.questionId"
+          :reportType="reportDataItem.reportType"
+          :chartData="reportDataItem.chartData"
+          :datasets="reportDataItem.chartData.datasets"
           @update-report-type="updateReportType">
         </question-report>
       </div>
@@ -59,7 +59,7 @@ export default class PageSurveyReport extends Vue {
   // region local
   totalLogCount = 0
   todayLogCount = 0
-  reportData: IReportDataItem[] = []
+  surveyReportData: IReportDataItem[] = []
   // endregion
 
   // region computed
@@ -78,8 +78,11 @@ export default class PageSurveyReport extends Vue {
 
   // region method
   updateReportType({ questionId, value }: {questionId: string, value: number}) {
-    _.forEach(this.reportData, (reportDataItem: IReportDataItem) => {
-      if (reportDataItem.questionId === questionId) reportDataItem.reportType = value;
+    _.forEach(this.surveyReportData, (reportDataItem: IReportDataItem) => {
+      if (reportDataItem.questionId === questionId) {
+        reportDataItem.reportType = value;
+        return false;
+      }
     });
   }
   // endregion
@@ -96,30 +99,23 @@ export default class PageSurveyReport extends Vue {
     _.forEach($surveyStore.survey.questionList, ((question) => {
       const qName = question.questionName;
       const qId = question.questionId;
-      let answerArray: string[] = [];
+      let sumAnswer: string[] = [];
       const logList = $responseStore.logList.data;
 
       // 2.2. logList 에서 질문에 대한 응답을 찾고, 그 값들을 answerArray 에 모은다
+      // loop 를 3겹으로 쌓았다는 점에서 나쁜 알고리즘이라고 생각. 더 나은 방법을 찾자.
       _.forEach(logList, (log) => {
         _.forEach(log.questionResponseList, (questionResponse: IQuestionResponse) => {
           if(questionResponse.questionId === qId) {
             _.forEach(questionResponse.choiceAnswerList, (answer: IAnswerOption) =>
-              answerArray.push(answer.text));
+              sumAnswer.push(answer.text));
+            return false;
           }
         });
-
-        // const foundIndex = _.findIndex(log.questionResponseList, item =>
-        //   item.questionId === qId);
-        //
-        // if (foundIndex === -1) return;
-        // else {
-        //   const answer = log.questionResponseList[foundIndex].answer;
-        //   _.forEach(answer, (answer) => answerArray.push(answer.text));
-        // }
       });
 
       // 2.3. 데이터별 빈도를 산출한다.
-      const elementCount = UTILS.getElementCount(answerArray);
+      const countPerAnswer = UTILS.getElementCount(sumAnswer);
 
       // 2.4. initial chartData 를 선언하고,
       let chartData: IChartData = {
@@ -128,7 +124,7 @@ export default class PageSurveyReport extends Vue {
       };
 
       // 2.5. chartData 에 값을 넣는다.
-      for (let [answer, count] of Object.entries(elementCount)) {
+      for (let [answer, count] of Object.entries(countPerAnswer)) {
         chartData.labels.push(answer);
         chartData.datasets[0].backgroundColor.push(UTILS.getRandomColor());
         chartData.datasets[0].data.push(count);
@@ -143,66 +139,14 @@ export default class PageSurveyReport extends Vue {
       };
 
       // 2.7. 만든 reportData 를 totalData 에 push 한다.
-      this.reportData.push(reportDataItem);
+      this.surveyReportData.push(reportDataItem);
     }));
 
 
-
-
-    // 아래는 기존 ------------------------------------------------
-
-    //
-    // $surveyStore.survey.questionList.forEach((question) => {
-    //   const qName = question.questionName;
-    //   const qId = question.questionId;
-    //   let answerArray: string[] = [];
-    //   const logList = $responseStore.logList.data;
-    //
-    //   // 2.2. logList 에서 질문에 대한 응답을 찾고, 그 값들을 answerArray 에 모은다
-    //   logList.forEach((log) => {
-    //     const foundIndex = log.questionResponseList.findIndex(item =>
-    //       item.questionId === qId);
-    //     if (foundIndex < 0) {
-    //       return;
-    //     }
-    //     else {
-    //       const answer = log.questionResponseList[foundIndex].answer;
-    //       answer.forEach((answer) => answerArray.push(answer.text));
-    //     }
-    //   });
-    //
-    //   // 2.3. 데이터별 빈도를 산출한다.
-    //   const elementCount = UTILS.getElementCount(answerArray);
-    //
-    //   // 2.4. initial chartData 를 선언하고,
-    //   let chartData: IChartData = {
-    //     labels: [],
-    //     datasets: [{ label: '', backgroundColor: [], data: [] }]
-    //   };
-    //
-    //   // 2.5. chartData 에 값을 넣는다.
-    //   for (let [answer, count] of Object.entries(elementCount)) {
-    //     chartData.labels.push(answer);
-    //     chartData.datasets[0].backgroundColor.push(UTILS.getRandomColor());
-    //     chartData.datasets[0].data.push(count);
-    //   }
-    //
-    //   // 2.6. reportData 값을 만든다.
-    //   let reportDataItem: IReportDataItem = {
-    //     questionName: qName,
-    //     questionId: qId,
-    //     reportType: 0,
-    //     chartData,
-    //   };
-    //
-    //   // 2.7. 만든 reportData 를 totalData 에 push 한다.
-    //   this.reportData.push(reportDataItem);
-    // });
-
-    // 2. totalLogCount 구하기
+    // 3. totalLogCount 구하기
     this.totalLogCount = $responseStore.logList.data.length;
 
-    // 3. todayLogCount count 구하기
+    // 4. todayLogCount count 구하기
     const today = new Date();
     this.todayLogCount = $responseStore.logList.data.filter((i) => {
       return UTILS.isSameDate(today, new Date(`${i.createdAt}`));}).length;

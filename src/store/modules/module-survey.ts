@@ -95,8 +95,17 @@ export default class ModuleSurvey extends VuexModule {
 
   // 질문 추가
   @Mutation
-  private addQuestion(question: IQuestion) {
-    this.survey.questionList.push(question);
+  private addQuestion() {
+    const newQuestion = {
+      questionId: UTILS.uuid(),
+      questionName: '제목 없는 질문',
+      answerType: AnswerTypes.yesNo,
+      answerOptionList: [
+        { id: UTILS.uuid(), text: '답변 옵션 1' },
+        { id: UTILS.uuid(), text: '답변 옵션 2' }
+      ],
+    };
+    this.survey.questionList.push(newQuestion);
   }
 
   // 질문 삭제
@@ -105,10 +114,6 @@ export default class ModuleSurvey extends VuexModule {
     this.survey.questionList = _.filter(this.survey.questionList,(question) => {
       return question.questionId !== question_id;
     } );
-
-    // this.survey.questionList = this.survey.questionList.filter(
-    //   (item) => item.questionId !== question_id
-    // );
   }
 
   // 질문 내용 수정
@@ -117,11 +122,9 @@ export default class ModuleSurvey extends VuexModule {
     _.forEach(this.survey.questionList, (question) => {
       if(question.questionId === questionId) {
         question.questionName = questionName;
+        return false;
       }
     });
-
-    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    // this.survey.questionList[foundIndex] = { ...this.survey.questionList[foundIndex], questionName };
   }
 
   // 질문 답변 타입 수정
@@ -130,11 +133,9 @@ export default class ModuleSurvey extends VuexModule {
     _.forEach(this.survey.questionList, (question) => {
       if(question.questionId === questionId) {
         question.answerType = answerType;
+        return false;
       }
     });
-
-    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    // this.survey.questionList[foundIndex].answerType = answerType;
   }
 
   // 질문 답변 옵션 추가
@@ -145,13 +146,9 @@ export default class ModuleSurvey extends VuexModule {
         const answerOptionLength = question.answerOptionList.length;
         const newAnswerOption = { id: UTILS.uuid(), text: `답변 옵션 ${answerOptionLength + 1}` };
         question.answerOptionList.push(newAnswerOption);
+        return false;
       }
     });
-
-    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    // const answerOptionLength = this.survey.questionList[foundIndex].answerOptionList.length;
-    // const newAnswerOption = { id: UTILS.uuid(), text: `답변 옵션 ${answerOptionLength + 1}` };
-    // this.survey.questionList[foundIndex].answerOptionList.push(newAnswerOption);
   }
 
 
@@ -162,18 +159,20 @@ export default class ModuleSurvey extends VuexModule {
     _.forEach(this.survey.questionList, (question) => {
       if(question.questionId === questionId) {
         question.answerOptionList[answerOptionIndex].text = answerOption;
+        return false;
       }
     });
-
-    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    // this.survey.questionList[foundIndex].answerOptionList[answerOptionIndex].text = answerOption;
   }
 
   // 질문 답변 옵션 삭제
   @Mutation
   private deleteAnswerOption({ questionId, answerOptionIndex }: { questionId: string, answerOptionIndex: number }) {
-    const foundIndex = _.findIndex(this.survey.questionList, (i) => i.questionId === questionId);
-    this.survey.questionList[foundIndex].answerOptionList.splice(answerOptionIndex, 1);
+    _.forEach(this.survey.questionList, (question) => {
+      if (question.questionId === questionId) {
+        question.answerOptionList.splice(answerOptionIndex, 1);
+        return false;
+      }}
+    );
   }
 
   // 질문 순서 수정
@@ -186,9 +185,7 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 리스트 get
   @Mutation
   private getSurveyList(backSurveyList: IBackSurveyList) {
-
     const data: ISurvey[] = _.map(backSurveyList.data, (backSurvey) => {
-
       const questionList: IQuestion[] = _.map(backSurvey.question_list, (backQuestion) => {
         return {
           questionId: backQuestion.question_id,
@@ -203,21 +200,6 @@ export default class ModuleSurvey extends VuexModule {
         questionList,
       };});
 
-    // const data: ISurvey[] = backSurveyList.data.map((s) => {
-    //   const questionList: IQuestion[] = s.question_list.map((q) => {return {
-    //     questionId: q.question_id,
-    //     questionName: q.question_name,
-    //     answerType: q.answer_type,
-    //     answerOptionList: q.answer_option_list
-    //   };});
-    //
-    //   return {
-    //     _id: s._id,
-    //     surveyName: s.survey_name,
-    //     questionList,
-    //   };});
-
-
     const surveyList: ISurveyList = {
       total: backSurveyList.total,
       perPage: backSurveyList.per_page,
@@ -230,7 +212,7 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 get
   @Mutation
   private setSurvey(backSurvey: IBackSurvey) {
-    const questionList = backSurvey.question_list.map((backQuestion) => {return {
+    const questionList = _.map(backSurvey.question_list, (backQuestion) => { return {
       questionId: backQuestion.question_id,
       questionName: backQuestion.question_name,
       answerType: backQuestion.answer_type,
@@ -242,6 +224,7 @@ export default class ModuleSurvey extends VuexModule {
       surveyName: backSurvey.survey_name,
       questionList,
     };
+
     this.survey = frontSurvey;
   }
 
@@ -260,16 +243,7 @@ export default class ModuleSurvey extends VuexModule {
   // 질문 추가
   @Action
   public fetchAddQuestion() {
-    const newQuestion = {
-      questionId: UTILS.uuid(),
-      questionName: '제목 없는 질문',
-      answerType: AnswerTypes.yesNo,
-      answerOptionList: [
-        { id: UTILS.uuid(), text: '답변 옵션 1' },
-        { id: UTILS.uuid(), text: '답변 옵션 2' }
-      ],
-    };
-    this.addQuestion(newQuestion);
+    this.addQuestion();
   }
 
   // 질문 삭제
@@ -331,7 +305,6 @@ export default class ModuleSurvey extends VuexModule {
     }
 
     // form validation 통과 시
-
     const question_list: IBackQuestion[]  = _.map(this.survey.questionList, (question) => {
       return {
         question_id : question.questionId,
@@ -340,23 +313,13 @@ export default class ModuleSurvey extends VuexModule {
         answer_option_list: question.answerOptionList,
       }; });
 
-    // const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
-    //   question_id : q.questionId,
-    //   question_name: q.questionName,
-    //   answer_type: q.answerType,
-    //   answer_option_list: q.answerOptionList,
-    // }; });
-
     const backSurvey: IBackSurvey = {
       survey_name: this.survey.surveyName,
       question_list
     };
 
     return await surveyApi.saveSurvey(backSurvey)
-      .then((res) => {
-        // console.log('saveSurvey result', res);
-        // this.initSurveyState();
-      })
+      .then((result) => { return Promise.resolve(result); })
       .catch((error) => { return Promise.reject(error); });
   }
 
@@ -369,9 +332,7 @@ export default class ModuleSurvey extends VuexModule {
   @Action
   public async fetchGetSurveyList(page: number) {
     await surveyApi.getSurveyList(page)
-      .then((res) => {
-        this.getSurveyList(res.data);
-      });
+      .then((res) => { this.getSurveyList(res.data); });
   }
 
   // 설문 get
@@ -403,22 +364,12 @@ export default class ModuleSurvey extends VuexModule {
         answer_option_list: question.answerOptionList,
       }; });
 
-    // const question_list: IBackQuestion[]  = this.survey.questionList.map((q) => { return {
-    //   question_id : q.questionId,
-    //   question_name: q.questionName,
-    //   answer_type: q.answerType,
-    //   answer_option_list: q.answerOptionList,
-    // }; });
-
     const backSurvey: IBackSurvey = {
       survey_name: this.survey.surveyName,
       question_list: question_list
     };
 
     return await surveyApi.updateSurvey({ surveyId, backSurvey })
-      .then((result) => {
-        console.log('update api then result', result);
-        return Promise.resolve(result);
-      });
+      .then((result) => { return Promise.resolve(result); });
   }
 }
