@@ -43,12 +43,18 @@ export default class PageSurveyUpdate extends Vue {
   // endregion
 
   // region lifecycle
-  async created() {
-    await $surveyStore.fetchGetSurvey(this.surveyId);
+  beforeCreate() {
+    // console.log('survey state in update page at beforeCreate', $surveyStore.survey);
   }
 
-  async destroyed() {
-    await $surveyStore.fetchInitSurveyState();
+  async created() {
+    // console.log('survey state in update page at created', 'before api', $surveyStore.survey);
+    await $surveyStore.fetchGetSurvey(this.surveyId);
+    // console.log('survey state in update page at created', 'after api', $surveyStore.survey);
+  }
+
+  destroyed() {
+    $surveyStore.fetchInitSurveyState();
   }
   // endregion
 }

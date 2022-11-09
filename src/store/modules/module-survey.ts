@@ -172,14 +172,8 @@ export default class ModuleSurvey extends VuexModule {
   // 질문 답변 옵션 삭제
   @Mutation
   private deleteAnswerOption({ questionId, answerOptionIndex }: { questionId: string, answerOptionIndex: number }) {
-    _.forEach(this.survey.questionList, (question) => {
-      if(question.questionId === questionId) {
-        question.answerOptionList.slice(answerOptionIndex, 1);
-      }
-    });
-
-    // const foundIndex = this.survey.questionList.findIndex((i) => i.questionId === questionId);
-    // this.survey.questionList[foundIndex].answerOptionList.splice(answerOptionIndex, 1);
+    const foundIndex = _.findIndex(this.survey.questionList, (i) => i.questionId === questionId);
+    this.survey.questionList[foundIndex].answerOptionList.splice(answerOptionIndex, 1);
   }
 
   // 질문 순서 수정
