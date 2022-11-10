@@ -18,13 +18,10 @@
 @import "pages/page-not-found.scss";
 
 
-// sign-in component
-@import "components/sign-in/atomic-input.scss";
 
 // survey-create-and-update components
 @import "components/survey-create-and-update/question-list.scss";
 @import "components/survey-create-and-update/survey-title.scss";
-@import "components/survey-create-and-update/answer-option-list.scss";
 
 // survey-report component
 @import "components/survey-report/report-count.scss";
@@ -33,5 +30,4 @@
 // survey-response-and-log-and-log components
 @import "components/survey-response-and-log/survey-title.scss";
 @import "components/survey-response-and-log/question-list.scss";
-@import "components/survey-response-and-log/answer-option-list.scss";
 

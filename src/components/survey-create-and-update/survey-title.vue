@@ -1,7 +1,7 @@
 <template>
-  <div class="survey-title">
+  <div class="survey-create-and-update survey-title">
     <label for="설문지 제목"></label>
-    <input class="survey-title__input" type="text" id="설문지 제목" placeholder="제목 없는 설문지"
+    <input class="survey-create-and-update survey-title__input" type="text" id="설문지 제목" placeholder="제목 없는 설문지"
            :value="surveyName" @input="updateSurveyName"/>
   </div>
 </template>

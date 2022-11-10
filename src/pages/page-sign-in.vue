@@ -18,14 +18,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Ref } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import { $adminStore } from '@/store';
 import { ElForm } from 'element-ui/types/form';
 
 @Component({})
 export default class PageSignIn extends Vue {
-  // @Ref() formName: Element;
-
   // region local
   ruleForm = {
     userName: '',

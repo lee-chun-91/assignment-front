@@ -2,11 +2,11 @@
   <div class="question-report">
     <div class="question-report__header">
       <h3>질문. {{questionName}}</h3>
-      <select name="reportType" @change="updateReportType($event)">
-        <option value="0">파이차트</option>
-        <option value="1">컬럼차트</option>
-        <option value="2">테이블</option>
-      </select>
+      <el-select :value="reportType" @change="handleUpdateReportType($event)">
+        <el-option label="파이차트" :value="0"></el-option>
+        <el-option label="컬럼차트" :value="1"></el-option>
+        <el-option label="테이블" :value="2"></el-option>
+      </el-select>
     </div>
     <div class="question-report__body">
       <div class="question-report__noResponse" v-if="hasNoQuestionResponse">문항에 대한 응답이 없습니다.</div>
@@ -106,13 +106,8 @@ export default class QuestionReport extends Vue {
 
   // region emit
   @Emit()
-  updateReportType(e: Event) {
-    if(!e.target) {
-      return;
-    }
-    const eventTarget = e.target as HTMLSelectElement;
-    const value = Number(eventTarget.value);
-    return { questionId: this.questionId, value };
+  handleUpdateReportType(reportType: number) {
+    return { questionId: this.questionId, reportType };
   }
   // endregion
 }

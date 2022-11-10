@@ -35,13 +35,6 @@ export default class PageSurveyCreate extends Vue {
         callback: () => {
           this.$router.push('/');}
       }));
-    // .catch((error) =>
-    //   this.$message({
-    //     showClose: true,
-    //     message: error,
-    //     type: 'error'
-    //   })
-    // );
   }
   // endregion
 

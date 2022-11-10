@@ -1,9 +1,5 @@
 <template>
   <div class="admin-main">
-<!--    <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">-->
-<!--      <el-breadcrumb-item>메인</el-breadcrumb-item>-->
-<!--    </el-breadcrumb>-->
-
     <div class="button">
       <router-link to="/create"><el-button plain class="button button--create">설문지 추가</el-button></router-link>
     </div>
@@ -27,10 +23,26 @@
         >
           <td>{{ survey.surveyName }}</td>
           <td>{{ survey.questionList.length }}개</td>
-          <td><router-link :to="{ name: PageRouteNames.surveyUpdate, params: { surveyId: survey._id }}">수정하러 가기</router-link></td>
-          <td><router-link :to="{ name: PageRouteNames.surveyReport, params: { surveyId: survey._id }}">리포트 보기</router-link></td>
-          <td><router-link :to="{ name: PageRouteNames.surveyLog, params: { surveyId: survey._id }}">로그 보기</router-link></td>
-          <td><router-link :to="{ name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: survey._id }}">참여하러 가기</router-link></td>
+          <td>
+            <router-link :to="{ name: PageRouteNames.surveyUpdate, params: { surveyId: survey._id }}">
+              수정하러 가기
+            </router-link>
+          </td>
+          <td>
+            <router-link :to="{ name: PageRouteNames.surveyReport, params: { surveyId: survey._id }}">
+              리포트 보기
+            </router-link>
+          </td>
+          <td>
+            <router-link :to="{ name: PageRouteNames.surveyLog, params: { surveyId: survey._id }}">
+              로그 보기
+            </router-link>
+          </td>
+          <td>
+            <router-link :to="{ name: PageRouteNames.surveyResponseUserValidate, params: { surveyId: survey._id }}">
+              참여하러 가기
+            </router-link>
+          </td>
         </tr>
         </tbody>
       </table>

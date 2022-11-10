@@ -9,7 +9,6 @@
         <el-form-item>
           <el-button class="container__button--userCheck" type="success" name="설문 시작" @click="userCheck('ruleForm')">설문 시작</el-button>
         </el-form-item>
-<!--        <AtomicInput class="container__input" title="username" placeholder="참여자 이름을 입력해주세요." :value="userName" @handle-input="updateUsername"></AtomicInput>-->
       </el-form>
     </div>
   </div>
@@ -17,7 +16,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $adminStore, $responseStore } from '@/store';
@@ -25,7 +23,7 @@ import { NoticeMessages } from '@/enum/notice-messages';
 import { PageRouteNames } from '@/enum/page-names';
 import { ElForm } from 'element-ui/types/form';
 
-@Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
+@Component({ components: { QuestionList, SurveyTitle  } })
 export default class PageSurveyResponseUserValidate extends Vue {
   // region local
   ruleForm = {
