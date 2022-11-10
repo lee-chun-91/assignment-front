@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $responseStore, $surveyStore } from '@/store';
@@ -20,7 +19,7 @@ import { UTILS } from '@/utils/index';
 import { NoticeMessages } from '@/enum/notice-messages';
 import { PageRouteNames } from '@/enum/page-names';
 
-@Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
+@Component({ components: { QuestionList, SurveyTitle  } })
 export default class PageSurveyResponse extends Vue {
   // region local
   fullscreenLoading = true

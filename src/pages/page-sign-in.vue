@@ -2,38 +2,74 @@
   <div class="sign-in">
     <h1 class="sign-in__title">설문지 시스템</h1>
     <div class="sign-in__body">
-      <AtomicInput class="sign-in__input" type="text" title="id" placeholder="id를 입력해주세요" :value="userName" @handle-input="updateId"></AtomicInput>
-      <AtomicInput class="sign-in__input" type="password" title="password" placeholder="password를 입력해주세요" :value="password" @handle-input="updatePassword"></AtomicInput>
-      <el-button class="sign-in__button" type="success" name="로그인" @click="login">로그인</el-button>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="sign-in__form">
+        <el-form-item label="ID" prop="userName">
+          <el-input placeholder="id를 입력해주세요" v-model="ruleForm.userName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Password" prop="password">
+          <el-input placeholder="password를 입력해주세요" v-model="ruleForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="sign-in__button" type="success" name="로그인" @click="login('ruleForm')">로그인</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import AtomicInput from '@/components/sign-in/atomic-input.vue';
+import { Vue, Component, Ref } from 'vue-property-decorator';
 import { $adminStore } from '@/store';
+import { ElForm } from 'element-ui/types/form';
 
-@Component({
-  components: { AtomicInput },
-})
+@Component({})
 export default class PageSignIn extends Vue {
+  // @Ref() formName: Element;
+
   // region local
-  userName = '';
-  password = '';
+  ruleForm = {
+    userName: '',
+    password: '',
+    validateId:  (rule, value, callback) => {
+      if(value === '') {
+        callback(new Error('Id 를 입력해주세요'));
+      }
+      callback();
+    },
+    validatePassword: (rule, value, callback) => {
+      if(value === '') {
+        callback(new Error('password 를 입력해주세요'));
+      }
+      callback();
+    }
+  }
+
+
+  rules = {
+    userName: [
+      // { validator: this.ruleForm.validateId, trigger: 'blur' }
+      { required: true, message: 'Id 를 입력해주세요', trigger: 'blur' },
+      { min: 1, message: '최소 1자 이상 입력', trigger: 'blur' }
+    ],
+    password: [
+      // { validator: this.ruleForm.validatePassword, trigger: 'blur' }
+      { required: true, message: 'password 를 입력해주세요', trigger: 'blur' },
+      { min: 1, message: '최소 1자 이상 입력', trigger: 'blur' }
+    ]
+  }
   // endregion
 
   // region method
-  updateId(value: string) {
-    this.userName = value;
-  }
-
-  updatePassword(value: string) {
-    this.password = value;
-  }
-
-  login() {
-    $adminStore.fetchLogin({ userName: this.userName, password: this.password });
+  login(formName) {
+    (this.$refs[formName] as ElForm).validate((valid) => {
+      if (valid) {
+        // alert('submit!');
+        $adminStore.fetchLogin({ userName: this.ruleForm.userName, password: this.ruleForm.password });
+      } else {
+        console.log('error submit!!');
+        return false;
+      }
+    });
   }
   // endregion
 }

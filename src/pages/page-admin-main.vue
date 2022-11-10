@@ -1,5 +1,9 @@
 <template>
   <div class="admin-main">
+<!--    <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">-->
+<!--      <el-breadcrumb-item>메인</el-breadcrumb-item>-->
+<!--    </el-breadcrumb>-->
+
     <div class="button">
       <router-link to="/create"><el-button plain class="button button--create">설문지 추가</el-button></router-link>
     </div>

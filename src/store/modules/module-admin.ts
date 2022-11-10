@@ -57,8 +57,6 @@ export default class ModuleAdmin extends VuexModule {
         setCookie('userName', userInfo.userName);
         history.back();
       });
-    // .catch((error) => {
-    //   return Promise.reject(error.response.data);});
   }
 
 

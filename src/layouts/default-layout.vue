@@ -9,6 +9,12 @@
         </div>
       </div>
     </div>
+<!--    <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">-->
+<!--      <el-breadcrumb-item :to="{ path: '/' }">메인</el-breadcrumb-item>-->
+<!--      <div v-for="(matched, idx) in routeMatchedList" :key="idx">-->
+<!--        <el-breadcrumb-item :to="{ path: `${matched.path}` }">{{matched.name}}</el-breadcrumb-item>-->
+<!--      </div>-->
+<!--    </el-breadcrumb>-->
     <div class="breadcrumb">
       <router-link :to="{ path: '/' }">메인</router-link>
       <span v-for="(matched, idx) in routeMatchedList"
