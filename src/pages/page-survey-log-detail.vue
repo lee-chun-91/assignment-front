@@ -27,26 +27,13 @@ export default class PageSurveyLogDetail extends Vue {
   // endregion
 
   // region method
-  // getData() {
-  //   $surveyStore.fetchGetSurvey(this.surveyId);
-  //   return $responseStore.fetchGetLogDetail({ surveyId: this.surveyId, userName: this.userName });
-  // }
   // endregion
-
 
   // region lifecycle
   async created() {
     await $surveyStore.fetchGetSurvey(this.surveyId);
     await $responseStore.fetchGetLogDetail({ surveyId: this.surveyId, userName: this.userName });
   }
-
-  // mounted() {
-  //   console.log('mounted execute page');
-  // }
-  //
-  // updated() {
-  //   console.log('updated execute page');
-  // }
   // endregion
 }
 </script>

@@ -17,7 +17,7 @@
           :reportType="reportDataItem.reportType"
           :chartData="reportDataItem.chartData"
           :datasets="reportDataItem.chartData.datasets"
-          @update-report-type="updateReportType">
+          @handle-update-report-type="updateReportType">
         </question-report>
       </div>
     </div>
@@ -77,10 +77,10 @@ export default class PageSurveyReport extends Vue {
   // endregion
 
   // region method
-  updateReportType({ questionId, value }: {questionId: string, value: number}) {
+  updateReportType({ questionId, reportType }: {questionId: string, reportType: number}) {
     _.forEach(this.surveyReportData, (reportDataItem: IReportDataItem) => {
       if (reportDataItem.questionId === questionId) {
-        reportDataItem.reportType = value;
+        reportDataItem.reportType = reportType;
         return false;
       }
     });

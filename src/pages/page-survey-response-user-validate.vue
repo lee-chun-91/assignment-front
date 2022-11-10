@@ -1,27 +1,42 @@
 <template>
   <div class="survey-response">
     <div class="container container--userCheck">
-      <h1 class="container__title">설문지 응답</h1>
-      <AtomicInput class="container__input" title="username" placeholder="참여자 이름을 입력해주세요." :value="userName" @handle-input="updateUsername"></AtomicInput>
-      <el-button class="container__button--userCheck" type="success" name="설문 시작" @click="userCheck">설문 시작</el-button>
+      <el-form  :model="ruleForm" :rules="rules" ref="ruleForm" label-position="top" label-width="100px">
+        <h1 class="container__title">설문지 응답</h1>
+        <el-form-item label="응답자 이름" prop="userName">
+          <el-input :placeholder="NoticeMessages.emptyUserNameField" v-model="ruleForm.userName"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="container__button--userCheck" type="success" name="설문 시작" @click="userCheck('ruleForm')">설문 시작</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import AtomicInput from '@/components/sign-in/atomic-input.vue';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
-import { $responseStore } from '@/store';
+import { $adminStore, $responseStore } from '@/store';
 import { NoticeMessages } from '@/enum/notice-messages';
 import { PageRouteNames } from '@/enum/page-names';
+import { ElForm } from 'element-ui/types/form';
 
-@Component({ components: { AtomicInput, QuestionList, SurveyTitle  } })
+@Component({ components: { QuestionList, SurveyTitle  } })
 export default class PageSurveyResponseUserValidate extends Vue {
   // region local
-  userName = '';
-  from = '';
+  ruleForm = {
+    userName: '',
+  }
+
+  rules = {
+    userName: [
+      { required: true, message: '응답자 이름을 입력해주세요', trigger: 'blur' },
+      { min: 1, message: '최소 1자 이상 입력', trigger: 'blur' }
+    ],
+  }
+  NoticeMessages = NoticeMessages
   // endregion
 
   // region computed
@@ -31,28 +46,20 @@ export default class PageSurveyResponseUserValidate extends Vue {
   // endregion
 
   // region method
-  updateUsername(value: string) {
-    this.userName = value;
-  }
-
-  async userCheck() {
-    if (this.userName === '') {
-      this.$message({
-        showClose: true,
-        message: NoticeMessages.emptyUserNameField,
-        type: 'error'
-      });
-    }
-
-    else {
-      // userCheck 로직 추가
-      await $responseStore.fetchUserCheck({ userName: this.userName, surveyId: this.surveyId })
-        .then((result) => {
-          if(result.data.isChecked) {
-            this.$router.push( { name: PageRouteNames.surveyResponse, params: { surveyId: this.surveyId, userName: this.userName } });
-          }
-        });
-    }
+  async userCheck(formName) {
+    (this.$refs[formName] as ElForm).validate((valid) => {
+      if (valid) {
+        $responseStore.fetchUserCheck({ userName: this.ruleForm.userName, surveyId: this.surveyId })
+          .then((result) => {
+            if(result.data.isChecked) {
+              this.$router.push( { name: PageRouteNames.surveyResponse, params: { surveyId: this.surveyId, userName: this.ruleForm.userName } });
+            }
+          });
+      } else {
+        console.log('error submit!!');
+        return false;
+      }
+    });
   }
   // endregion
 }

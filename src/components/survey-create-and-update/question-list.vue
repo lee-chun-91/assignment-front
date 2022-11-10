@@ -1,5 +1,5 @@
 <template>
-  <div class="question-list">
+  <div class="survey-create-and-update question-list">
     <draggable
                :questionList="questionList"
                class="question-list__draggable"
@@ -13,21 +13,63 @@
                v-model="questionList"
     >
       <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
-        <div class="question" v-for="{ questionId, questionName, answerType } in questionList" :key="questionId">
+        <div class="survey-create-and-update question"
+             v-for="{ questionId, questionName, answerType, answerOptionList } in questionList"
+             :key="questionId">
           <i class="el-icon-rank handle"></i>
-          <div class="question__title">
+          <div class="survey-create-and-update question__title">
             <label for="질문내용"></label>
-            <input class="question__input" type="text" id="질문내용"  placeholder="질문을 입력해주세요"
-                   name="questionName" :value="questionName" @input="updateQuestionName(questionId, $event)"/>
-            <select name="answerType" :value="answerType" @change="updateAnswerType(questionId, $event)">
-              <option :value="AnswerTypes.yesNo">YES/NO</option>
-              <option :value="AnswerTypes.oneChoice">단일선택</option>
-              <option :value="AnswerTypes.multipleChoice">다중선택</option>
-            </select>
+            <el-input class="question__input" type="text" id="질문내용" placeholder="질문을 입력해주세요"
+                      name="questionName" :value="questionName" @input="updateQuestionName(questionId, $event)">
+            </el-input>
+            <el-select :value="answerType" @change="handleUpdateAnswerType(questionId, $event)">
+              <el-option label="YES/NO" :value="AnswerTypes.yesNo"></el-option>
+              <el-option label="단일선택" :value="AnswerTypes.oneChoice"></el-option>
+              <el-option label="다중선택" :value="AnswerTypes.multipleChoice"></el-option>
+            </el-select>
           </div>
-          <answer-option-list :questionId="questionId"></answer-option-list>
+
+          <div class="answer-option-list">
+            <div class="answer-option__wrapper" v-for="(item, index) in answerOptionList" :key="index">
+              <div class="answer-option" v-if="isRadioButton(answerType)">
+                  <el-radio style="{ margin-right: 0px }" disabled value="false"></el-radio>
+                  <el-input class="answer-option__input"
+                            type="text"
+                            :id="index"
+                            :value="item.text"
+                            @input="handleUpdateAnswerOption(questionId, index, $event)">
+                  </el-input>
+                  <el-button size="mini"
+                             circle
+                             :style="isShowDeleteAnswerOptionButton(questionId)"
+                             @click="deleteAnswerOption(questionId, index)">
+                    <i class="el-icon-delete"></i>
+                  </el-button>
+              </div>
+              <div class="answer-option" v-else-if="isCheckbox(answerType)">
+                <el-checkbox disabled value="false"></el-checkbox>
+                  <el-input class="answer-option__input"
+                            type="text"
+                            :id="index"
+                            :value="item.text"
+                            @input="handleUpdateAnswerOption(questionId, index, $event)">
+                  </el-input>
+                <el-button size="mini"
+                           circle
+                           :style="isShowDeleteAnswerOptionButton(questionId)"
+                           @click="deleteAnswerOption(questionId, index)">
+                  <i class="el-icon-delete"></i>
+                </el-button>
+              </div>
+            </div>
+          </div>
           <div class="question__footer">
-            <el-button square size="mini" @click="addAnswerOption(questionId)" :style="isShowAddAnswerOptionButton(answerType)">+ 답변 옵션 추가</el-button>
+            <el-button size="mini"
+                       square
+                       @click="addAnswerOption(questionId)"
+                       :style="isShowAddAnswerOptionButton(answerType)">
+              + 답변 옵션 추가
+            </el-button>
             <el-button size="mini" @click="deleteQuestion(questionId)"> - 질문 삭제 </el-button>
           </div>
         </div>
@@ -40,11 +82,10 @@
 import { Vue, Component } from 'vue-property-decorator';
 import draggable from 'vuedraggable';
 import { $surveyStore } from '@/store';
-import AnswerOptionList from '@/components/survey-create-and-update/answer-option-list.vue';
 import { IQuestion } from '@/store/modules/module-survey';
 import { AnswerTypes } from '@/enum/answer-types';
 
-@Component({ components: { draggable, AnswerOptionList } })
+@Component({ components: { draggable } })
 export default class QuestionList extends Vue {
   // region local
   enabled = true
@@ -60,26 +101,14 @@ export default class QuestionList extends Vue {
   set questionList(questionList: IQuestion[]) {
     $surveyStore.fetchUpdateQuestionOrder(questionList);
   }
-
-
   // endregion
 
   // region method
-  updateQuestionName(questionId: string, e: InputEvent) {
-    if (!e.target) {
-      return;
-    }
-    const eventTarget = e.target as HTMLInputElement;
-    const questionName = eventTarget.value;
+  updateQuestionName(questionId: string, questionName: string) {
     $surveyStore.fetchUpdateQuestionName({ questionId, questionName });
   }
 
-  updateAnswerType(questionId: string, e: Event) {
-    if (!e.target) {
-      return;
-    }
-    const eventTarget = e.target as HTMLSelectElement;
-    const answerType = Number(eventTarget.value);
+  handleUpdateAnswerType(questionId: string, answerType: number) {
     $surveyStore.fetchUpdateAnswerType({ questionId, answerType });
   }
 
@@ -95,15 +124,28 @@ export default class QuestionList extends Vue {
   deleteQuestion(questionId: string) {
     $surveyStore.fetchDeleteQuestion(questionId);
   }
+
+  isRadioButton(answerType: number) {
+    return answerType === AnswerTypes.yesNo || answerType === AnswerTypes.oneChoice;
+  }
+
+  isCheckbox(answerType: number) {
+    return answerType === AnswerTypes.multipleChoice;
+  }
+
+  isShowDeleteAnswerOptionButton(questionId: string) {
+    const foundIndex = $surveyStore.survey.questionList.findIndex((i) => i.questionId === questionId);
+    return ($surveyStore.survey.questionList[foundIndex].answerOptionList.length > 2) ?
+      { 'visibility': 'visible' } : { 'visibility': 'hidden' };
+  }
+
+  handleUpdateAnswerOption(questionId: string, answerOptionIndex: number, answerOption: string) {
+    $surveyStore.fetchUpdateAnswerOption( { questionId, answerOptionIndex, answerOption });
+  }
+  //
+  deleteAnswerOption(questionId: string, answerOptionIndex: number) {
+    $surveyStore.fetchDeleteAnswerOption({ questionId, answerOptionIndex });
+  }
   // endregion
-
-  // region lifecycle
-  beforeCreate() {
-    console.log('questionList in question-list at beforeCreate', this.questionList);
-  }
-
-  created() {
-    console.log('questionList in question-list at created', this.questionList);
-  }
 }
 </script>

@@ -39,11 +39,10 @@ instance.interceptors.response.use(
   },
 
   (error) => {
-    console.log('response interceptor rejected', error);
-
+    // console.log('response interceptor rejected', error);
     if (router.currentRoute.name === PageRouteNames.signIn) {
       Message({
-        type: 'info',
+        type: 'error',
         message: error.response.data
       });
     }
