@@ -10,7 +10,9 @@ import { Button, Radio, Checkbox, Input, Select, Switch, Pagination, Loading, Me
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
-Vue.use(Button, Radio, Checkbox, Input, Select, Switch, Pagination, Loading, Loading.directive, MessageBox);
+Vue.use(Button, Radio, Checkbox, Input, Select, Switch, Pagination, Loading, MessageBox);
+Vue.use(Loading.directive);
+
 Vue.prototype.$loading = Loading.service;
 
 new Vue({

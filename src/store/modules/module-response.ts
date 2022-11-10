@@ -242,7 +242,10 @@ export default class ModuleResponse extends VuexModule {
   @Action
   public async fetchGetLogDetail({ surveyId, userName }: {surveyId: string, userName: string}){
     await responseApi.getLogDetail(surveyId, userName)
-      .then((res) => { this.getLogDetail(res.data); })
+      .then((res) => {
+        this.getLogDetail(res.data);
+        return res;
+      })
       .catch((error) => { return Promise.reject(error); });
   }
 }

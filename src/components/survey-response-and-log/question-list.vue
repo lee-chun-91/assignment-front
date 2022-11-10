@@ -36,5 +36,13 @@ export default class QuestionList extends Vue {
     }
   }
   // endregion
+
+  // mounted() {
+  //   console.log('mounted execute questionList');
+  // }
+  //
+  // updated() {
+  //   console.log('updated execute questionList');
+  // }
 }
 </script>
