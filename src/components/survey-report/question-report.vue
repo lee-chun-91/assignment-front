@@ -10,6 +10,7 @@
     </div>
     <div class="question-report__body">
       <div class="question-report__noResponse" v-if="hasNoQuestionResponse">문항에 대한 응답이 없습니다.</div>
+
       <div class="question-report__response" v-else>
         <div v-if="isPieChart">
           <Doughnut :chartData="this.chartData"></Doughnut>

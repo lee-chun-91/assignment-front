@@ -3,6 +3,7 @@ import { AnswerTypes } from '@/enum/answer-types';
 import { surveyApi } from '@/apis/surveyApi';
 import { UTILS } from '@/utils/index';
 import _ from 'lodash';
+import { NoticeMessages } from '@/enum/notice-messages';
 
 export interface ISurveyList {
   total: number;
@@ -292,19 +293,16 @@ export default class ModuleSurvey extends VuexModule {
   // 설문 저장
   @Action({ rawError: true })
   public async fetchSaveSurvey() {
-
-    // form validation, element ui 적용 시 수정
-    const emptyQuestionNameList = this.survey.questionList.filter((q) => q.questionName === '');
+    const emptyQuestionNameList = _.filter(this.survey.questionList, (q) => q.questionName === '');
 
     if (this.survey.surveyName === '') {
-      console.log(Promise.reject('설문 제목이 비어있습니다. 설문 제목을 입력해주세요'));
-      return Promise.reject('설문 제목이 비어있습니다. 설문 제목을 입력해주세요');
+      console.log(Promise.reject());
+      return Promise.reject(NoticeMessages.emptySurveyName);
     }
     else if (emptyQuestionNameList.length !== 0) {
-      return Promise.reject('비어있는 질문이 있습니다. 모든 질문에 내용을 입력해주세요.');
+      return Promise.reject(NoticeMessages.emptyQuestionName);
     }
 
-    // form validation 통과 시
     const question_list: IBackQuestion[]  = _.map(this.survey.questionList, (question) => {
       return {
         question_id : question.questionId,

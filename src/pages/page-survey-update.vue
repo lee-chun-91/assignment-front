@@ -36,8 +36,10 @@ export default class PageSurveyUpdate extends Vue {
         callback: () => {
           this.$router.push('/');}
       }))
-      .catch((error) => this.$alert(error, '오류', {
-        confirmButtonText: 'OK',
+      .catch((error) => this.$message({
+        showClose: true,
+        message: error,
+        type: 'error'
       }));
   }
   // endregion
