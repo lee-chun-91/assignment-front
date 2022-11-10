@@ -1,17 +1,24 @@
 <template>
   <div class="survey-create-and-update survey-title">
-    <label for="설문지 제목"></label>
-    <input class="survey-create-and-update survey-title__input" type="text" id="설문지 제목" placeholder="제목 없는 설문지"
-           :value="surveyName" @input="updateSurveyName"/>
+      <el-input class="survey-create-and-update survey-title__input"
+                type="text"
+                placeholder="제목 없는 설문지"
+                :value="surveyName"
+                @input="updateSurveyName($event)"
+      >
+      </el-input>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { $surveyStore } from '@/store';
 
 @Component({})
 export default class SurveyTitle extends Vue {
+  // region prop
+  // endregion
+
   // region computed
   get surveyName() {
     return $surveyStore.survey.surveyName;
@@ -19,12 +26,8 @@ export default class SurveyTitle extends Vue {
   // endregion
 
   // region method
-  updateSurveyName(e: InputEvent) {
-    if(!e.target) {
-      return;
-    }
-    const eventTarget = e.target as HTMLInputElement;
-    $surveyStore.fetchUpdateSurveyName(eventTarget.value);
+  updateSurveyName(inputValue: string) {
+    $surveyStore.fetchUpdateSurveyName(inputValue);
   }
   // endregion
 }

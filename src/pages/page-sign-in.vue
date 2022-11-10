@@ -28,18 +28,18 @@ export default class PageSignIn extends Vue {
   ruleForm = {
     userName: '',
     password: '',
-    validateId:  (rule, value, callback) => {
-      if(value === '') {
-        callback(new Error('Id 를 입력해주세요'));
-      }
-      callback();
-    },
-    validatePassword: (rule, value, callback) => {
-      if(value === '') {
-        callback(new Error('password 를 입력해주세요'));
-      }
-      callback();
-    }
+    // validateId:  (rule, value, callback) => {
+    //   if(value === '') {
+    //     callback(new Error('Id 를 입력해주세요'));
+    //   }
+    //   callback();
+    // },
+    // validatePassword: (rule, value, callback) => {
+    //   if(value === '') {
+    //     callback(new Error('password 를 입력해주세요'));
+    //   }
+    //   callback();
+    // }
   }
 
 
