@@ -26,13 +26,14 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { $responseStore, $surveyStore } from '@/store';
+import { $surveyStore } from '@/store';
 import ReportCount from '@/components/survey-report/report-count.vue';
 import QuestionReport from '@/components/survey-report/question-report.vue';
 import { UTILS } from '@/utils/index';
 import _ from 'lodash';
-import { IQuestionResponse } from '@/store/modules/module-response';
+import { ILogList, IQuestionResponse, IResponse } from '@/store/modules/module-response';
 import { IAnswerOption } from '@/store/modules/module-survey';
+import { responseApi } from '@/apis/reponseApi';
 
 export interface IReportDataItem {
   questionName: string;
@@ -59,6 +60,12 @@ export default class PageSurveyReport extends Vue {
   // region local
   totalLogCount = 0
   todayLogCount = 0
+  // logList
+  logList: ILogList = {
+    total: 0,
+    perPage: 0,
+    data: []
+  }
   surveyReportData: IReportDataItem[] = []
   // endregion
 
@@ -72,7 +79,7 @@ export default class PageSurveyReport extends Vue {
   }
 
   get isEmpty() {
-    return $responseStore.logList.data.length === 0;
+    return this.logList.data.length === 0;
   }
   // endregion
 
@@ -90,8 +97,40 @@ export default class PageSurveyReport extends Vue {
   // region lifecycle
   async created() {
     // 1. logList, survey data get
-    await $responseStore.fetchGetLogListAll(this.surveyId);
+    // await $responseStore.fetchGetLogListAll(this.surveyId);
     await $surveyStore.fetchGetSurvey(this.surveyId);
+
+    await responseApi.getLogListAll(this.surveyId)
+      .then((res) => {
+        const data: IResponse[] = _.map(res.data.data, (backResponse) => {
+          const questionResponseList: IQuestionResponse[] = _.map(backResponse.question_response_list,
+            (backQuestionResponse) => {
+              return {
+                questionId: backQuestionResponse.question_id,
+                oneChoiceAnswer: backQuestionResponse.one_choice_answer,
+                multipleChoiceAnswerList: backQuestionResponse.multiple_choice_answer_List,
+              };
+            }
+          );
+
+          return {
+            userName: backResponse.user_name,
+            surveyId: backResponse.survey_id,
+            createdAt: backResponse.created_at,
+            questionResponseList
+          };
+        });
+        const logList: ILogList = {
+          total: res.data.total,
+          perPage: res.data.per_page,
+          data,
+        };
+
+        this.logList = logList;
+      })
+      .catch((error) => { return Promise.reject(error); });
+
+
 
     // 2. reportData 만들기
     // 2.1. survey 의 질문별 응답값과 응답값별 빈도를 산출하기 위해 반복문을 돌린다
@@ -100,16 +139,22 @@ export default class PageSurveyReport extends Vue {
       const qName = question.questionName;
       const qId = question.questionId;
       let sumAnswer: string[] = [];
-      const logList = $responseStore.logList.data;
+      const logList = this.logList.data;
+
+      // console.log('logList', logList);
 
       // 2.2. logList 에서 질문에 대한 응답을 찾고, 그 값들을 answerArray 에 모은다
       // loop 를 3겹으로 쌓았다는 점에서 나쁜 알고리즘이라고 생각. 더 나은 방법을 찾자.
       _.forEach(logList, (log) => {
         _.forEach(log.questionResponseList, (questionResponse: IQuestionResponse) => {
           if(questionResponse.questionId === qId) {
-            _.forEach(questionResponse.choiceAnswerList, (answer: IAnswerOption) =>
-              sumAnswer.push(answer.text));
-            return false;
+            if (questionResponse.multipleChoiceAnswerList.length > 0) {
+              _.forEach(questionResponse.multipleChoiceAnswerList, (answer: IAnswerOption) =>
+                sumAnswer.push(answer.text));
+            }
+            else {
+              sumAnswer.push(questionResponse.oneChoiceAnswer.text);
+            }
           }
         });
       });
@@ -144,11 +189,11 @@ export default class PageSurveyReport extends Vue {
 
 
     // 3. totalLogCount 구하기
-    this.totalLogCount = $responseStore.logList.data.length;
+    this.totalLogCount = this.logList.data.length;
 
     // 4. todayLogCount count 구하기
     const today = new Date();
-    this.todayLogCount = $responseStore.logList.data.filter((i) => {
+    this.todayLogCount = this.logList.data.filter((i) => {
       return UTILS.isSameDate(today, new Date(`${i.createdAt}`));}).length;
   }
   // endregion

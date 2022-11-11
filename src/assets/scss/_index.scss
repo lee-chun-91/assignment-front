@@ -4,7 +4,6 @@
 
 /// layout
 @import "layouts/default-layout.scss";
-//@import "layouts/empty-layout.scss";
 
 /// pages
 @import "pages/page-sign-in.scss";
@@ -15,6 +14,7 @@
 @import "pages/page-survey-log.scss";
 @import "pages/page-survey-log-detail.scss";
 @import "pages/page-survey-response.scss";
+@import "pages/page-survey-response-validate.scss";
 @import "pages/page-not-found.scss";
 
 
@@ -27,7 +27,4 @@
 @import "components/survey-report/report-count.scss";
 @import "components/survey-report/question-report.scss";
 
-// survey-response-and-log-and-log components
-@import "components/survey-response-and-log/survey-title.scss";
-@import "components/survey-response-and-log/question-list.scss";
 
