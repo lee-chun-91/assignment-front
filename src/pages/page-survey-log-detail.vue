@@ -55,8 +55,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
-import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $surveyStore } from '@/store';
 import { responseApi } from '@/apis/reponseApi';
 import { IQuestionResponse, IResponse } from '@/store/modules/module-response';
@@ -64,7 +62,7 @@ import _ from 'lodash';
 import { AnswerTypes } from '@/enum/answer-types';
 import { IAnswerOption } from '@/store/modules/module-survey';
 
-@Component({ components: { QuestionList, SurveyTitle  } })
+@Component({ } )
 export default class PageSurveyLogDetail extends Vue {
   // region local
   log: IResponse = {

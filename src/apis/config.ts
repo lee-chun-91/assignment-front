@@ -8,10 +8,10 @@ import { NoticeMessages } from '@/enum/notice-messages';
 import { $adminStore } from '@/store';
 
 export const instance = axios.create({
-  baseURL: 'https://localhost:7063/',
+  baseURL: 'http://assignmentback-env.eba-vpbdurbn.ap-northeast-2.elasticbeanstalk.com/',
   headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json; charset=utf-8'
+    // 'Accept': 'application/json',
+    // 'Content-Type': 'application/json; charset=utf-8'
   },
 });
 
@@ -33,13 +33,10 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
-    // console.log('response interceptor fulfilled', response);
-    // console.log('response interceptor fulfilled', Promise.resolve(response));
     return response;
   },
 
   (error) => {
-    // console.log('response interceptor rejected', error);
     if (router.currentRoute.name === PageRouteNames.signIn) {
       Message({
         type: 'error',
@@ -54,7 +51,6 @@ instance.interceptors.response.use(
         confirmButtonText: NoticeMessages.goToPageSignIn,
         callback: () => {
           $adminStore.fetchLogout();
-          // router.push({ name: PageRouteNames.signIn });
         }
       });
     }
@@ -63,10 +59,6 @@ instance.interceptors.response.use(
       Message({
         type: 'error',
         message: error.response.data,
-        // confirmButtonText: '확인',
-        // callback: () => {
-        //   router.push({ name: PageRouteNames.signIn });
-        // }
       });
     }
 

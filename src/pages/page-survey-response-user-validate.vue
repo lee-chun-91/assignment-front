@@ -14,14 +14,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
-import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $responseStore } from '@/store';
 import { NoticeMessages } from '@/enum/notice-messages';
 import { PageRouteNames } from '@/enum/page-names';
 import { ElForm } from 'element-ui/types/form';
 
-@Component({ components: { QuestionList, SurveyTitle  } })
+@Component({ })
 export default class PageSurveyResponseUserValidate extends Vue {
   // region local
   ruleForm = {
