@@ -1,16 +1,14 @@
 <template>
-  <div class="survey-response">
-    <div class="container container--userCheck">
-      <el-form  :model="ruleForm" :rules="rules" ref="ruleForm" label-position="top" label-width="100px">
-        <h1 class="container__title">설문지 응답</h1>
-        <el-form-item label="응답자 이름" prop="userName">
-          <el-input :placeholder="NoticeMessages.emptyUserNameField" v-model="ruleForm.userName"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button class="container__button--userCheck" type="success" name="설문 시작" @click="userCheck('ruleForm')">설문 시작</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+  <div class="survey-response-validate">
+    <el-form class="form__container" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="top" label-width="100px">
+      <h1 class="container__title">설문지 응답</h1>
+      <el-form-item label="응답자 이름" prop="userName">
+        <el-input :placeholder="NoticeMessages.emptyUserNameField" v-model="ruleForm.userName"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" name="설문 시작" @click="userCheck('ruleForm')">설문 시작</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -18,7 +16,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
 import QuestionList from '@/components/survey-response-and-log/question-list.vue';
-import { $adminStore, $responseStore } from '@/store';
+import { $responseStore } from '@/store';
 import { NoticeMessages } from '@/enum/notice-messages';
 import { PageRouteNames } from '@/enum/page-names';
 import { ElForm } from 'element-ui/types/form';

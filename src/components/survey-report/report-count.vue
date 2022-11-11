@@ -14,20 +14,5 @@ export default class ResponseCount extends Vue {
   @Prop ( { type: String, required: true }) title!: string;
   @Prop ( { type: Number, required: true }) count!: number;
   // endregion
-
-  // region local
-  // endregion
-
-  // region computed
-  // endregion
-
-  // region method
-  // endregion
-
-  // region emit
-  // endregion
-
-  // region lifecycle
-  // endregion
 }
 </script>

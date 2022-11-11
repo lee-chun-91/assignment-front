@@ -134,6 +134,10 @@ export default class ModuleSurvey extends VuexModule {
     _.forEach(this.survey.questionList, (question) => {
       if(question.questionId === questionId) {
         question.answerType = answerType;
+        if (answerType === AnswerTypes.yesNo) {
+          const leftOption = question.answerOptionList.slice(0, 2);
+          question.answerOptionList = leftOption;
+        }
         return false;
       }
     });

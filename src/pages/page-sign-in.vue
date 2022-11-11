@@ -3,11 +3,11 @@
     <h1 class="sign-in__title">설문지 시스템</h1>
     <div class="sign-in__body">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="sign-in__form">
-        <el-form-item label="ID" prop="userName">
-          <el-input placeholder="id를 입력해주세요" v-model="ruleForm.userName" autocomplete="off"></el-input>
+        <el-form-item label="Id" prop="userName">
+          <el-input type="text" placeholder="id를 입력해주세요" v-model="ruleForm.userName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="Password" prop="password">
-          <el-input placeholder="password를 입력해주세요" v-model="ruleForm.password" autocomplete="off"></el-input>
+          <el-input type="password" placeholder="password 를 입력해주세요" v-model="ruleForm.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button class="sign-in__button" type="success" name="로그인" @click="login('ruleForm')">로그인</el-button>

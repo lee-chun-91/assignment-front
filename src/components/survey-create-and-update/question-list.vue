@@ -19,6 +19,7 @@
         >
           <i class="el-icon-rank handle"></i>
             <div class="survey-create-and-update question__title">
+              <div class="question__questionName">
                 <el-input class="question__input"
                           type="text" id="질문내용"
                           placeholder="질문을 입력해주세요"
@@ -27,11 +28,14 @@
                           @input="updateQuestionName(questionId, $event)"
                 >
                 </el-input>
+              </div>
+              <div>
                 <el-select :value="answerType" @change="handleUpdateAnswerType(questionId, $event)">
                   <el-option label="YES/NO" :value="AnswerTypes.yesNo"></el-option>
                   <el-option label="단일선택" :value="AnswerTypes.oneChoice"></el-option>
                   <el-option label="다중선택" :value="AnswerTypes.multipleChoice"></el-option>
                 </el-select>
+              </div>
             </div>
 
             <div class="answer-option-list">
@@ -90,10 +94,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import draggable from 'vuedraggable';
 import { $surveyStore } from '@/store';
-import { IQuestion, ISurvey } from '@/store/modules/module-survey';
+import { IQuestion } from '@/store/modules/module-survey';
 import { AnswerTypes } from '@/enum/answer-types';
 import _ from 'lodash';
 
