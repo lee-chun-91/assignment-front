@@ -41,8 +41,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import SurveyTitle from '@/components/survey-response-and-log/survey-title.vue';
-import QuestionList from '@/components/survey-response-and-log/question-list.vue';
 import { $surveyStore } from '@/store';
 import { UTILS } from '@/utils/index';
 import { NoticeMessages } from '@/enum/notice-messages';
@@ -53,7 +51,7 @@ import _ from 'lodash';
 import { IBackResponse, IResponse } from '@/store/modules/module-response';
 import { responseApi } from '@/apis/reponseApi';
 
-@Component({ components: { QuestionList, SurveyTitle  } })
+@Component({ })
 export default class PageSurveyResponse extends Vue {
   // region local
   fullscreenLoading = true
