@@ -1,6 +1,7 @@
 <template>
   <div class="survey-response">
-    <div class="container" v-loading.fullscreen.lock="fullscreenLoading">
+    <div class="container" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
+    <div class="container" v-else>
       <div class="container--response__wrapper">
         <div class="survey-title">
           <h1 class="survey-title__surveyName">{{surveyName}}</h1>
@@ -195,6 +196,17 @@ export default class PageSurveyResponse extends Vue {
 
   // region lifecycle
   async created() {
+    // params 가 변경된 것이지 라우팅이 변경된 게 아니기 때문에, $watch 로 변화를 비교할 수 있다.
+    this.$watch(() => this.$route.params, (current, old) => {
+      if (current.userName !== old.userName) {
+        this.$router.push({ name: PageRouteNames.surveyResponseUserValidate });
+      }
+    });
+
+    //
+    console.log(document.referrer);
+
+
     await $surveyStore.fetchGetSurvey(this.surveyId)
       .then(() => {
         this.userResponse.questionResponseList = _.map($surveyStore.survey.questionList, (question)=> {
@@ -206,13 +218,6 @@ export default class PageSurveyResponse extends Vue {
         });
         this.fullscreenLoading = false;
       });
-
-    // params 가 변경된 것이지 라우팅이 변경된 게 아니기 때문에, $watch 로 변화를 비교할 수 있다.
-    this.$watch(() => this.$route.params, (current, old) => {
-      if (current.userName !== old.userName) {
-        this.$router.push({ name: PageRouteNames.surveyResponseUserValidate });
-      }
-    });
   }
 }
 </script>
