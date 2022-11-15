@@ -8,7 +8,8 @@ import { NoticeMessages } from '@/enum/notice-messages';
 import { $adminStore } from '@/store';
 
 export const instance = axios.create({
-  baseURL: 'http://assignmentback-env.eba-vpbdurbn.ap-northeast-2.elasticbeanstalk.com/',
+  // baseURL: 'http://assignmentback-env.eba-vpbdurbn.ap-northeast-2.elasticbeanstalk.com/',
+  baseURL: 'https://localhost:7063/',
   headers: {
     // 'Accept': 'application/json',
     // 'Content-Type': 'application/json; charset=utf-8'
@@ -60,6 +61,10 @@ instance.interceptors.response.use(
         type: 'error',
         message: error.response.data,
       });
+    }
+
+    else if (error.response.status === 404) {
+      router.push({ name: PageRouteNames.notFound });
     }
 
     return Promise.reject(error);

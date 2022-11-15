@@ -101,7 +101,6 @@ export default class PageSurveyReport extends Vue {
   // region lifecycle
   async created() {
     // 1. logList, survey data get
-    // await $responseStore.fetchGetLogListAll(this.surveyId);
     await $surveyStore.fetchGetSurvey(this.surveyId);
 
     await responseApi.getLogListAll(this.surveyId)
