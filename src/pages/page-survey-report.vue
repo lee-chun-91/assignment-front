@@ -1,27 +1,29 @@
 <template>
-  <div class="survey-report">
-    <div class="survey-report__count">
-      <report-count title="총 참여자" :count="totalLogCount"></report-count>
-      <report-count title="오늘 참여자" :count="todayLogCount"></report-count>
-    </div>
-    <div class="survey-report__result" v-if="isEmpty">
-      <div class="survey-report--noContent">
-        <p>제출된 응답이 없습니다.</p>
+  <DefaultLayout>
+    <div class="survey-report">
+      <div class="survey-report__count">
+        <report-count title="총 참여자" :count="totalLogCount"></report-count>
+        <report-count title="오늘 참여자" :count="todayLogCount"></report-count>
+      </div>
+      <div class="survey-report__result" v-if="isEmpty">
+        <div class="survey-report--noContent">
+          <p>제출된 응답이 없습니다.</p>
+        </div>
+      </div>
+      <div class="survey-report__result" v-else>
+        <div v-for="reportDataItem in surveyReportData" :key="reportDataItem.questionId">
+          <question-report
+            :question-name="reportDataItem.questionName"
+            :questionId="reportDataItem.questionId"
+            :reportType="reportDataItem.reportType"
+            :chartData="reportDataItem.chartData"
+            :datasets="reportDataItem.chartData.datasets"
+            @handle-update-report-type="updateReportType">
+          </question-report>
+        </div>
       </div>
     </div>
-    <div class="survey-report__result" v-else>
-      <div v-for="reportDataItem in surveyReportData" :key="reportDataItem.questionId">
-        <question-report
-          :question-name="reportDataItem.questionName"
-          :questionId="reportDataItem.questionId"
-          :reportType="reportDataItem.reportType"
-          :chartData="reportDataItem.chartData"
-          :datasets="reportDataItem.chartData.datasets"
-          @handle-update-report-type="updateReportType">
-        </question-report>
-      </div>
-    </div>
-  </div>
+  </DefaultLayout>
 </template>
 
 <script lang="ts">
@@ -34,6 +36,8 @@ import _ from 'lodash';
 import { ILogList, IQuestionResponse, IResponse } from '@/store/modules/module-response';
 import { IAnswerOption } from '@/store/modules/module-survey';
 import { responseApi } from '@/apis/reponseApi';
+import DefaultLayout from '@/layouts/default-layout.vue';
+
 
 export interface IReportDataItem {
   questionName: string;
@@ -54,7 +58,7 @@ export interface IDatasets {
 }
 
 @Component({
-  components: { QuestionReport, ReportCount }
+  components: { DefaultLayout, QuestionReport, ReportCount }
 })
 export default class PageSurveyReport extends Vue {
   // region local

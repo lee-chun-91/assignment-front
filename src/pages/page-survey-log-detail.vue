@@ -1,38 +1,41 @@
 <template>
-  <div class="survey-log-detail">
-    <div class="survey-title">
-      <h1 class="survey-title__surveyName">{{surveyName}}</h1>
-      <p class="survey-title__userName">{{log.userName + '님의 응답 결과'}}</p>
-    </div>
-    <div class="question-list">
-      <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, index) in questionList"
-           :key="questionId">
-        <div class="question__title">질문{{index}}. {{questionName}}</div>
-        <div class="question__description">{{questionDescription(answerType)}}</div>
-        <div class="answer-option-list" v-if="isRadioButton(answerType)">
-          <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
-            <div class="answer-option">
-              <el-radio disabled
-                        :label="answerOption.text"
-                        :value="getOneChoiceAnswer(questionId)">
-                {{answerOption.text}}
-              </el-radio>
+  <DefaultLayout>
+    <div class="survey-log-detail" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
+    <div class="survey-log-detail" v-else>
+      <div class="survey-title">
+        <h1 class="survey-title__surveyName">{{surveyName}}</h1>
+        <p class="survey-title__userName">{{log.userName + '님의 응답 결과'}}</p>
+      </div>
+      <div class="question-list">
+        <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, index) in questionList"
+             :key="questionId">
+          <div class="question__title">질문{{index}}. {{questionName}}</div>
+          <div class="question__description">{{questionDescription(answerType)}}</div>
+          <div class="answer-option-list" v-if="isRadioButton(answerType)">
+            <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
+              <div class="answer-option">
+                <el-radio disabled
+                          :label="answerOption.text"
+                          :value="getOneChoiceAnswer(questionId)">
+                  {{answerOption.text}}
+                </el-radio>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="answer-option-list" v-else>
-          <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
-            <div class="answer-option">
-              <el-checkbox disabled
-                           :checked="isCheckedAnswer(questionId, answerOption)">
-                {{answerOption.text}}
-              </el-checkbox>
+          <div class="answer-option-list" v-else>
+            <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
+              <div class="answer-option">
+                <el-checkbox disabled
+                             :checked="isCheckedAnswer(questionId, answerOption)">
+                  {{answerOption.text}}
+                </el-checkbox>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </DefaultLayout>
 </template>
 <!--        <div class="answer-option-list">-->
 <!--          <div class="answer-option" v-if="isRadioButton(answerType)">-->
@@ -61,10 +64,12 @@ import { IQuestionResponse, IResponse } from '@/store/modules/module-response';
 import _ from 'lodash';
 import { AnswerTypes } from '@/enum/answer-types';
 import { IAnswerOption } from '@/store/modules/module-survey';
+import DefaultLayout from '@/layouts/default-layout.vue';
 
-@Component({ } )
+@Component({ components: { DefaultLayout } })
 export default class PageSurveyLogDetail extends Vue {
   // region local
+  fullscreenLoading = true
   log: IResponse = {
     userName: '',
     surveyId: '',
@@ -145,6 +150,8 @@ export default class PageSurveyLogDetail extends Vue {
 
         this.log = log;
       });
+
+    this.fullscreenLoading = false;
   }
   // endregion
 }

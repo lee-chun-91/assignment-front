@@ -25,13 +25,15 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import DefaultLayout from '@/layouts/default-layout.vue';
 import SurveyTitle from '@/components/survey-create-and-update/survey-title.vue';
 import QuestionList from '@/components/survey-create-and-update/question-list.vue';
-import { $adminStore, $surveyStore } from '@/store';
+import { $surveyStore } from '@/store';
 import { NoticeMessages } from '@/enum/notice-messages';
 
 @Component({
   components: {
+    DefaultLayout,
     SurveyTitle,
     QuestionList,
   }
@@ -48,7 +50,7 @@ export default class PageSurveyCreate extends Vue {
     $surveyStore.fetchAddQuestion();
   }
 
-  saveSurvey(formName) {
+  saveSurvey() {
     $surveyStore.fetchSaveSurvey()
       .then(() => this.$alert(NoticeMessages.successSaveSurvey, '안내', {
         confirmButtonText: 'OK',
