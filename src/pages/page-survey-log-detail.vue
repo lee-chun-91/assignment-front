@@ -1,9 +1,16 @@
 <template>
   <DefaultLayout>
+    <div class="breadcrumb">
+      <router-link :to="{ path: '/' }">설문 목록</router-link>
+      <span> > </span>
+      <router-link :to="{ path: `/log/${surveyId}` }">{{survey.surveyName}} 로그</router-link>
+      <span> > </span>
+      <router-link :to="{ path: `/log/${surveyId}/${userName}` }">{{userName}}님의 응답</router-link>
+    </div>
     <div class="survey-log-detail" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
     <div class="survey-log-detail" v-else>
       <div class="survey-title">
-        <h1 class="survey-title__surveyName">{{surveyName}}</h1>
+        <h1 class="survey-title__surveyName">{{survey.surveyName}}</h1>
         <p class="survey-title__userName">{{log.userName + '님의 응답 결과'}}</p>
       </div>
       <div class="question-list">
@@ -82,8 +89,8 @@ export default class PageSurveyLogDetail extends Vue {
     return this.$route.params.surveyId;
   }
 
-  get surveyName() {
-    return $surveyStore.survey.surveyName;
+  get survey() {
+    return $surveyStore.survey;
   }
 
   get userName() {
@@ -129,8 +136,6 @@ export default class PageSurveyLogDetail extends Vue {
 
   // region lifecycle
   async created() {
-    await $surveyStore.fetchGetSurvey(this.surveyId);
-
     await responseApi.getLogDetail(this.surveyId, this.userName)
       .then((res) => {
         const questionResponseList: IQuestionResponse[] = _.map(res.data.question_response_list, (backQuestionResponse) => {

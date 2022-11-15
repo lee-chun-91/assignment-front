@@ -1,5 +1,11 @@
 <template>
-  <div class="survey-create">
+  <DefaultLayout>
+    <div class="breadcrumb">
+      <router-link :to="{ path: '/' }">설문 목록</router-link>
+      <span> > </span>
+      <router-link :to="{ path: '/create' }">설문 생성</router-link>
+    </div>
+    <div class="survey-create">
       <survey-title></survey-title>
       <question-list></question-list>
       <div class="button-group">
@@ -20,7 +26,8 @@
           설문지 저장하기
         </el-button>
       </div>
-  </div>
+    </div>
+  </DefaultLayout>
 </template>
 
 <script lang="ts">

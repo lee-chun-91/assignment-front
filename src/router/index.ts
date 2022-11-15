@@ -23,48 +23,92 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: PageRouteNames.adminMain,
     component: PageAdminMain,
-    meta: {
-      breadCrumb: [
-        {
-          text: PageRouteNames.adminMain,
-        }
-      ]
-    }
+    // meta: {
+    //   breadCrumb: [
+    //     {
+    //       path: '/',
+    //       name: PageRouteNames.adminMain,
+    //     }
+    //   ]
+    // }
   },
   {
     path: '/create',
     name: PageRouteNames.surveyCreate,
     component: PageSurveyCreate,
+    // meta: {
+    //   breadCrumb: [
+    //     {
+    //       path: '/',
+    //       name: PageRouteNames.adminMain,
+    //     },
+    //     {
+    //       path: '/create',
+    //       name: PageRouteNames.surveyCreate,
+    //     }
+    //   ]
+    // }
   },
 
   {
     path: '/update/:surveyId',
     name: PageRouteNames.surveyUpdate,
     component: PageSurveyUpdate,
-    meta: {
-      breadCrumb(route: Route) {
-        const surveyId = route.params.surveyId;
-        return [
-          {
-            text: PageRouteNames.adminMain,
-            to: { name: PageRouteNames.adminMain }
-          },
-          {
-            text: surveyId,
-          }
-        ];
-      }
-    },
+    // meta: {
+    //   breadCrumb(route: Route) {
+    //     const surveyId = route.params.surveyId;
+    //     return [
+    //       {
+    //         path: '/',
+    //         name: PageRouteNames.adminMain,
+    //       },
+    //       {
+    //         path: `/update/${surveyId}`,
+    //         name: '설문지' + ` ${surveyId} `  + '수정',
+    //       }
+    //     ];
+    //   }
+    // }
   },
   {
     path: '/report/:surveyId',
     name: PageRouteNames.surveyReport,
     component: PageSurveyReport,
+    // meta: {
+    //   breadCrumb(route: Route) {
+    //     const surveyId = route.params.surveyId;
+    //     return [
+    //       {
+    //         path: '/',
+    //         name: PageRouteNames.adminMain,
+    //       },
+    //       {
+    //         path: `/report/${surveyId}`,
+    //         name: '설문지' + ` ${surveyId} `  + '리포트',
+    //       }
+    //     ];
+    //   }
+    // }
   },
   {
     path: '/log/:surveyId',
     name: PageRouteNames.surveyLog,
     component: PageSurveyLog,
+    // meta: {
+    //   breadCrumb(route: Route) {
+    //     const surveyId = route.params.surveyId;
+    //     return [
+    //       {
+    //         path: '/',
+    //         name: PageRouteNames.adminMain,
+    //       },
+    //       {
+    //         path: `/log/${surveyId}`,
+    //         name: '설문지' + ` ${surveyId} `  + '로그',
+    //       }
+    //     ];
+    //   }
+    // }
   },
   {
     path: '/log/:surveyId/:userName',

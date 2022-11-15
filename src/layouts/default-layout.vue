@@ -15,14 +15,13 @@
 <!--        <el-breadcrumb-item :to="{ path: `${matched.path}` }">{{matched.name}}</el-breadcrumb-item>-->
 <!--      </div>-->
 <!--    </el-breadcrumb>-->
-    <div class="breadcrumb">
-      <router-link :to="{ path: '/main' }">메인</router-link>
-      <span v-for="(matched, idx) in routeMatchedList"
-            :key="idx">
-        <router-link :to="{ path: `${matched.path}` }">{{matched.name}}</router-link>
-        <span v-if="hasNextRoute(idx)"> > </span>
-        </span>
-    </div>
+<!--    <div class="breadcrumb">-->
+<!--      <span v-for="(routeRecord, idx) in breadCrumbs"-->
+<!--            :key="idx">-->
+<!--        <router-link :to="{ path: `${routeRecord.path}` }">{{routeRecord.name}}</router-link>-->
+<!--        <span v-if="hasNextRoute(idx)"> > </span>-->
+<!--        </span>-->
+<!--    </div>-->
     <div class="page-wrapper">
       <slot></slot>
 <!--      <router-view></router-view>-->
@@ -47,19 +46,30 @@ export default class DefaultLayout extends Vue {
   }
   // endregion
 
+  get breadCrumbs() {
+    if (typeof this.$route.meta?.breadCrumb === 'function') {
+      return this.$route.meta.breadCrumb.call(this, this.$route);
+    }
+    return this.$route.meta?.breadCrumb;
+  }
+
+
   // region method
   logout() {
     $adminStore.fetchLogout();
   }
 
   hasNextRoute(idx: number) {
-    const matchedListLength = this.routeMatchedList.length;
-    return idx !== matchedListLength - 1 && this.$route.name !== undefined;
+    if (this.breadCrumbs.length - 1 > idx) {
+      return true;
+    }
+    return false;
   }
   // endregion
 
   created() {
-    // console.log(this.$route);
+    console.log(this.$route.meta);
+    console.log(this.breadCrumbs);
   }
 }
 </script>

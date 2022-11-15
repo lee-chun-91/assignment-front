@@ -1,5 +1,10 @@
 <template>
   <DefaultLayout>
+    <div class="breadcrumb">
+      <router-link :to="{ path: '/' }">설문 목록</router-link>
+      <span> > </span>
+      <router-link :to="{ path: `/report/${surveyId}` }">{{survey.surveyName}} 리포트</router-link>
+    </div>
     <div class="survey-report">
       <div class="survey-report__count">
         <report-count title="총 참여자" :count="totalLogCount"></report-count>
@@ -79,7 +84,8 @@ export default class PageSurveyReport extends Vue {
   }
 
   get survey() {
-    return $surveyStore.surveyList.data.filter((survey) => survey._id === this.surveyId);
+    return $surveyStore.survey;
+    // return $surveyStore.surveyList.data.filter((survey) => survey._id === this.surveyId);
   }
 
   get isEmpty() {
