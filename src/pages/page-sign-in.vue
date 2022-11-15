@@ -95,11 +95,6 @@ export default class PageSignIn extends Vue {
   // endregion
 
   // region lifecycle
-  // created() {
-  //   console.log(this._backRoute);
-  // }
-
-
   // endregion
 
 }

@@ -8,6 +8,7 @@ export enum PageRouteNames {
   surveyLogDetail = '설문 개별 로그',
   signIn = '로그인',
   surveyResponseUserValidate = '설문 유저 체크',
-  surveyResponse = '설문 응답'
+  surveyResponse = '설문 응답',
+  notFound = 'Not Found'
 }
 

@@ -4,6 +4,8 @@ import { surveyApi } from '@/apis/surveyApi';
 import { UTILS } from '@/utils/index';
 import _ from 'lodash';
 import { NoticeMessages } from '@/enum/notice-messages';
+import router from '@/router';
+import { PageRouteNames } from '@/enum/page-names';
 
 export interface ISurveyList {
   total: number;
@@ -331,17 +333,20 @@ export default class ModuleSurvey extends VuexModule {
   }
 
   // 설문 리스트 get
-  @Action
+  @Action({ rawError: true })
   public async fetchGetSurveyList(page: number) {
     await surveyApi.getSurveyList(page)
       .then((res) => { this.getSurveyList(res.data); });
   }
 
   // 설문 get
-  @Action
+  @Action({ rawError: true })
   public async fetchGetSurvey(surveyId: string) {
     return await surveyApi.getSurvey(surveyId)
-      .then((res) => this.setSurvey(res.data));
+      .then((res) => {
+        this.setSurvey(res.data);
+      });
+    router.push({ name: PageRouteNames.notFound });
   }
 
   // 설문 수정

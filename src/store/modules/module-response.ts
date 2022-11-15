@@ -2,6 +2,7 @@ import { VuexModule, Module ,Mutation, Action } from 'vuex-module-decorators';
 import { responseApi } from '@/apis/reponseApi';
 import { IAnswerOption } from '@/store/modules/module-survey';
 import _ from 'lodash';
+import { ObjectId } from 'bson';
 
 export interface ILogList {
   total: number;
@@ -96,6 +97,8 @@ export default class ModuleResponse extends VuexModule {
       user_name: userName,
       survey_id: surveyId,
     };
+
+    console.log(ObjectId.isValid(surveyId));
     return await responseApi.responseUserCheck(params)
       .then((result) => Promise.resolve(result))
       .catch((error) => Promise.reject(error));

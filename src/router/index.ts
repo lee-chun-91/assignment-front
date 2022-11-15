@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import VueRouter, { Route, RouteConfig } from 'vue-router';
 import PageAdminMain from '@/pages/page-admin-main.vue';
 import PageSurveyCreate from '@/pages/page-survey-create.vue';
 import PageSurveyUpdate from '@/pages/page-survey-update.vue';
@@ -14,6 +14,7 @@ import pageSurveyResponseUserValidate from '@/pages/page-survey-response-user-va
 import { $adminStore } from '@/store';
 import { getCookie } from '@/utils/cookie';
 import { PageRouteNames } from '@/enum/page-names';
+import { ObjectId } from 'bson';
 
 Vue.use(VueRouter);
 
@@ -22,6 +23,13 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: PageRouteNames.adminMain,
     component: PageAdminMain,
+    meta: {
+      breadCrumb: [
+        {
+          text: PageRouteNames.adminMain,
+        }
+      ]
+    }
   },
   {
     path: '/create',
@@ -33,6 +41,20 @@ const routes: Array<RouteConfig> = [
     path: '/update/:surveyId',
     name: PageRouteNames.surveyUpdate,
     component: PageSurveyUpdate,
+    meta: {
+      breadCrumb(route: Route) {
+        const surveyId = route.params.surveyId;
+        return [
+          {
+            text: PageRouteNames.adminMain,
+            to: { name: PageRouteNames.adminMain }
+          },
+          {
+            text: surveyId,
+          }
+        ];
+      }
+    },
   },
   {
     path: '/report/:surveyId',
@@ -48,11 +70,6 @@ const routes: Array<RouteConfig> = [
     path: '/log/:surveyId/:userName',
     name: PageRouteNames.surveyLogDetail,
     component: PageSurveyLogDetail,
-    // beforeEnter: (to, from, next) => {
-    //   $responseStore.fetchGetLogDetail({ surveyId: to.params.surveyId, userName: to.params.userName });
-    //   $surveyStore.fetchGetSurvey(to.params.surveyId);
-    //   next();
-    // }
   },
   {
     path: '/signIn',
@@ -68,21 +85,10 @@ const routes: Array<RouteConfig> = [
     path: '/response/:surveyId/:userName',
     name: PageRouteNames.surveyResponse,
     component: PageSurveyResponse,
-
-    // beforeEnter 는 라우팅이 다시 될 때에 페이지 들어가기 전 실행된다.
-
-    // beforeEnter: (to, from, next) => {
-    //   console.log(to, from);
-    //   if(from.name !== PageRouteNames.userCheck) {
-    //     next({ name: PageRouteNames.userCheck });
-    //   }
-    //   else {
-    //     next();
-    //   }
-    // }
   },
   {
     path: '*',
+    name: PageRouteNames.notFound,
     component: PageNotFound
   }
 ];
@@ -97,15 +103,25 @@ router.beforeEach(async (to, from, next) => {
   const userName = getCookie('userName');
   const token = getCookie('accessToken');
 
-  // 설문 참여 페이지에는 관리자 로그인 여부 확인 안하고 이동
+  // 1. 유저가 url params surveyId 에 임의값 입력 시 가드
+  if(to.params.surveyId) {
+    if (!ObjectId.isValid(to.params.surveyId)) {
+      router.push({ name: PageRouteNames.notFound });
+    }
+  }
+
+  // 2. 설문 참여 페이지에는 관리자 로그인 여부 확인 안하고 이동
   if (to.name === PageRouteNames.surveyResponseUserValidate || to.name === PageRouteNames.surveyResponse ) {
     next();
   }
 
-  // 관리자 페이지 접근 시 쿠키에 관리자 정보 없으면, 로그인 화면으로 이동
-  else if( (!userName) && (!token) && (to.name !== PageRouteNames.signIn)) {next({ name: PageRouteNames.signIn });}
+  // 3-1. 관리자 페이지 접근 시 쿠키에 관리자 정보 없으면, 로그인 화면으로 이동
+  else if( (!userName) && (!token) && (to.name !== PageRouteNames.signIn)) {
+    console.log(to.params);
+    next({ name: PageRouteNames.signIn });
+  }
 
-  // 관리자 페이지 접근 시 쿠키에 관리자 정보 있으면, 관리자 정보 vuex state 에 세팅
+  // 3-2 관리자 페이지 접근 시 쿠키에 관리자 정보 있으면, 관리자 정보 vuex state 에 세팅
   else {
     $adminStore.fetchSetLoggedInfo();
     next();
