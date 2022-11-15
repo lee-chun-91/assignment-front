@@ -1,43 +1,45 @@
 <template>
-  <div class="survey-response">
-    <div class="container" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
-    <div class="container" v-else>
-      <div class="container--response__wrapper">
-        <div class="survey-title">
-          <h1 class="survey-title__surveyName">{{surveyName}}</h1>
-          <p class="survey-title__userName">{{description}}</p>
-        </div>
-        <div class="question-list">
-          <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, index) in questionList"
-               :key="questionId">
-            <div class="question__title">질문{{index}}. {{questionName}}</div>
-            <div class="question__description">{{questionDescription(answerType)}}</div>
-            <div class="answer-option-list" v-if="isRadioButton(answerType)">
-              <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
-                <div class="answer-option">
-                  <el-radio @change="changeOneChoiceAnswer(questionId, answerOption)"
-                            :label="answerOption.text"
-                            :value="getAnswer(questionId).oneChoiceAnswer.text">
-                    {{answerOption.text}}
-                  </el-radio>
+  <DefaultLayout>
+    <div class="survey-response">
+      <div class="container" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
+      <div class="container" v-else>
+        <div class="container--response__wrapper">
+          <div class="survey-title">
+            <h1 class="survey-title__surveyName">{{surveyName}}</h1>
+            <p class="survey-title__userName">{{description}}</p>
+          </div>
+          <div class="question-list">
+            <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, index) in questionList"
+                 :key="questionId">
+              <div class="question__title">질문{{index}}. {{questionName}}</div>
+              <div class="question__description">{{questionDescription(answerType)}}</div>
+              <div class="answer-option-list" v-if="isRadioButton(answerType)">
+                <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
+                  <div class="answer-option">
+                    <el-radio @change="changeOneChoiceAnswer(questionId, answerOption)"
+                              :label="answerOption.text"
+                              :value="getAnswer(questionId).oneChoiceAnswer.text">
+                      {{answerOption.text}}
+                    </el-radio>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="answer-option-list" v-else>
-              <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
-                <div class="answer-option">
-                  <el-checkbox @change="changeMultipleChoiceAnswerList(questionId, answerOption)">
-                    {{answerOption.text}}
-                  </el-checkbox>
+              <div class="answer-option-list" v-else>
+                <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
+                  <div class="answer-option">
+                    <el-checkbox @change="changeMultipleChoiceAnswerList(questionId, answerOption)">
+                      {{answerOption.text}}
+                    </el-checkbox>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <el-button class="container__button container__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
         </div>
-        <el-button class="container__button container__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
       </div>
     </div>
-  </div>
+  </DefaultLayout>
 </template>
 
 <script lang="ts">
@@ -51,8 +53,11 @@ import { IAnswerOption } from '@/store/modules/module-survey';
 import _ from 'lodash';
 import { IBackResponse, IResponse } from '@/store/modules/module-response';
 import { responseApi } from '@/apis/reponseApi';
+import DefaultLayout from '@/layouts/default-layout.vue';
 
-@Component({ })
+@Component({
+  components: { DefaultLayout }
+})
 export default class PageSurveyResponse extends Vue {
   // region local
   fullscreenLoading = true

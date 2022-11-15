@@ -55,7 +55,7 @@ export default class ModuleAdmin extends VuexModule {
       .then((res) => {
         setCookie('accessToken', res.data);
         setCookie('userName', userInfo.userName);
-        history.back();
+        return res;
       });
   }
 

@@ -21,10 +21,17 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { $adminStore } from '@/store';
 import { ElForm } from 'element-ui/types/form';
+import { PageRouteNames } from '@/enum/page-names';
+
+Component.registerHooks([
+  'beforeRouteEnter',
+]);
 
 @Component({})
 export default class PageSignIn extends Vue {
   // region local
+  _backRoute = ''
+
   ruleForm = {
     userName: '',
     password: '',
@@ -42,7 +49,6 @@ export default class PageSignIn extends Vue {
     // }
   }
 
-
   rules = {
     userName: [
       // { validator: this.ruleForm.validateId, trigger: 'blur' }
@@ -58,17 +64,43 @@ export default class PageSignIn extends Vue {
   // endregion
 
   // region method
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      console.log(to, from);
+      vm._backRoute = from.path;
+    });
+  }
+
+  goBack() {
+    if (this._backRoute === '') {
+      this.$router.push({ name: PageRouteNames.adminMain });
+    } else {
+      this.$router.push({ path: this._backRoute });
+    }
+  }
+
   login(formName) {
     (this.$refs[formName] as ElForm).validate((valid) => {
       if (valid) {
         // alert('submit!');
-        $adminStore.fetchLogin({ userName: this.ruleForm.userName, password: this.ruleForm.password });
+        $adminStore.fetchLogin({ userName: this.ruleForm.userName, password: this.ruleForm.password })
+          .then((res) => {
+            this.goBack();
+          });
       } else {
-        console.log('error submit!!');
         return false;
       }
     });
   }
   // endregion
+
+  // region lifecycle
+  // created() {
+  //   console.log(this._backRoute);
+  // }
+
+
+  // endregion
+
 }
 </script>

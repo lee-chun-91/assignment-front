@@ -40,7 +40,7 @@ instance.interceptors.response.use(
     if (router.currentRoute.name === PageRouteNames.signIn) {
       Message({
         type: 'error',
-        message: error.response.data
+        message: error.response.data.title
       });
     }
 

@@ -2,7 +2,7 @@
   <div class="default-layout">
     <div class="header">
       <div class="header__title">
-        <div class="header__logo"><router-link :to="{ path: '/'}">설문지 관리 시스템</router-link></div>
+        <div class="header__logo"><router-link :to="{ path: '/main'}">설문지 관리 시스템</router-link></div>
         <div class="header__logout">
           <p class="header__user">{{ userName }}님 안녕하세요</p>
           <el-button size="mini" @click="logout">로그아웃</el-button>
@@ -16,7 +16,7 @@
 <!--      </div>-->
 <!--    </el-breadcrumb>-->
     <div class="breadcrumb">
-      <router-link :to="{ path: '/' }">메인</router-link>
+      <router-link :to="{ path: '/main' }">메인</router-link>
       <span v-for="(matched, idx) in routeMatchedList"
             :key="idx">
         <router-link :to="{ path: `${matched.path}` }">{{matched.name}}</router-link>
@@ -24,7 +24,8 @@
         </span>
     </div>
     <div class="page-wrapper">
-      <router-view></router-view>
+      <slot></slot>
+<!--      <router-view></router-view>-->
     </div>
   </div>
 

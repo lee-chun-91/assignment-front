@@ -7,61 +7,52 @@ import PageSurveyReport from '@/pages/page-survey-report.vue';
 import PageSurveyLog from '@/pages/page-survey-log.vue';
 import PageSurveyLogDetail from '@/pages/page-survey-log-detail.vue';
 import PageSurveyResponse from '@/pages/page-survey-response.vue';
-import DefaultLayout from '@/layouts/default-layout.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
 import PageNotFound from '@/pages/page-not-found.vue';
 import pageSurveyResponseUserValidate from '@/pages/page-survey-response-user-validate.vue';
 
-import { $adminStore, $responseStore, $surveyStore } from '@/store';
+import { $adminStore } from '@/store';
 import { getCookie } from '@/utils/cookie';
 import { PageRouteNames } from '@/enum/page-names';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
-
-  // 버그 확인
   {
     path: '/',
-    component: DefaultLayout,
-    children: [
-      {
-        path: '',
-        name: PageRouteNames.adminMain,
-        component: PageAdminMain,
-      },
-      {
-        path: 'create',
-        name: PageRouteNames.surveyCreate,
-        component: PageSurveyCreate,
-      },
-      {
-        path: 'update/:surveyId',
-        name: PageRouteNames.surveyUpdate,
-        component: PageSurveyUpdate,
-      },
-      {
-        path: 'report/:surveyId',
-        name: PageRouteNames.surveyReport,
-        component: PageSurveyReport,
-      },
-      {
-        path: 'log/:surveyId',
-        name: PageRouteNames.surveyLog,
-        component: PageSurveyLog,
-      },
-      {
-        path: 'log/:surveyId/:userName',
-        name: PageRouteNames.surveyLogDetail,
-        component: PageSurveyLogDetail,
-        // beforeEnter: (to, from, next) => {
-        //   $responseStore.fetchGetLogDetail({ surveyId: to.params.surveyId, userName: to.params.userName });
-        //   $surveyStore.fetchGetSurvey(to.params.surveyId);
-        //   next();
-        // }
-      },
+    name: PageRouteNames.adminMain,
+    component: PageAdminMain,
+  },
+  {
+    path: '/create',
+    name: PageRouteNames.surveyCreate,
+    component: PageSurveyCreate,
+  },
 
-    ]
+  {
+    path: '/update/:surveyId',
+    name: PageRouteNames.surveyUpdate,
+    component: PageSurveyUpdate,
+  },
+  {
+    path: '/report/:surveyId',
+    name: PageRouteNames.surveyReport,
+    component: PageSurveyReport,
+  },
+  {
+    path: '/log/:surveyId',
+    name: PageRouteNames.surveyLog,
+    component: PageSurveyLog,
+  },
+  {
+    path: '/log/:surveyId/:userName',
+    name: PageRouteNames.surveyLogDetail,
+    component: PageSurveyLogDetail,
+    // beforeEnter: (to, from, next) => {
+    //   $responseStore.fetchGetLogDetail({ surveyId: to.params.surveyId, userName: to.params.userName });
+    //   $surveyStore.fetchGetSurvey(to.params.surveyId);
+    //   next();
+    // }
   },
   {
     path: '/signIn',
@@ -97,7 +88,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   routes
 });
 

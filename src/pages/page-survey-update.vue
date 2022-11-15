@@ -1,12 +1,14 @@
 <template>
-  <div class="survey-update">
-    <survey-title></survey-title>
-    <question-list></question-list>
-    <div class="button-group">
-      <el-button class="button-group__button button-group__button--add" type="primary" round @click="addQuestion">+ 질문 추가</el-button>
-      <el-button class="button-group__button button-group__button--save" type="success" icon="el-icon-check" round @click="updateSurvey">설문지 수정하기</el-button>
+  <DefaultLayout>
+    <div class="survey-update">
+      <survey-title></survey-title>
+      <question-list></question-list>
+      <div class="button-group">
+        <el-button class="button-group__button button-group__button--add" type="primary" round @click="addQuestion">+ 질문 추가</el-button>
+        <el-button class="button-group__button button-group__button--save" type="success" icon="el-icon-check" round @click="updateSurvey">설문지 수정하기</el-button>
+      </div>
     </div>
-  </div>
+  </DefaultLayout>
  </template>
 
 <script lang="ts">
@@ -15,8 +17,9 @@ import SurveyTitle from '@/components/survey-create-and-update/survey-title.vue'
 import QuestionList from '@/components/survey-create-and-update/question-list.vue';
 import { $surveyStore } from '@/store';
 import { NoticeMessages } from '@/enum/notice-messages';
+import DefaultLayout from '@/layouts/default-layout.vue';
 
-@Component({ components: { SurveyTitle, QuestionList } })
+@Component({ components: { DefaultLayout, SurveyTitle, QuestionList } })
 export default class PageSurveyUpdate extends Vue {
   // region computed
   get surveyId() {
