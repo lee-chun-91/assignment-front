@@ -1,45 +1,43 @@
 <template>
-  <DefaultLayout>
-    <div class="survey-response">
-      <div class="container" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
-      <div class="container" v-else>
-        <div class="container--response__wrapper">
-          <div class="survey-title">
-            <h1 class="survey-title__surveyName">{{surveyName}}</h1>
-            <p class="survey-title__userName">{{description}}</p>
-          </div>
-          <div class="question-list">
-            <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, index) in questionList"
-                 :key="questionId">
-              <div class="question__title">질문{{index}}. {{questionName}}</div>
-              <div class="question__description">{{questionDescription(answerType)}}</div>
-              <div class="answer-option-list" v-if="isRadioButton(answerType)">
-                <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
-                  <div class="answer-option">
-                    <el-radio @change="changeOneChoiceAnswer(questionId, answerOption)"
-                              :label="answerOption.text"
-                              :value="getAnswer(questionId).oneChoiceAnswer.text">
-                      {{answerOption.text}}
-                    </el-radio>
-                  </div>
+  <div class="survey-response">
+    <div class="container" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
+    <div class="container" v-else>
+      <div class="container--response__wrapper">
+        <div class="survey-title">
+          <h1 class="survey-title__surveyName">{{surveyName}}</h1>
+          <p class="survey-title__userName">{{description}}</p>
+        </div>
+        <div class="question-list">
+          <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, index) in questionList"
+               :key="questionId">
+            <div class="question__title">질문{{index}}. {{questionName}}</div>
+            <div class="question__description">{{questionDescription(answerType)}}</div>
+            <div class="answer-option-list" v-if="isRadioButton(answerType)">
+              <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
+                <div class="answer-option">
+                  <el-radio @change="changeOneChoiceAnswer(questionId, answerOption)"
+                            :label="answerOption.text"
+                            :value="getAnswer(questionId).oneChoiceAnswer.text">
+                    {{answerOption.text}}
+                  </el-radio>
                 </div>
               </div>
-              <div class="answer-option-list" v-else>
-                <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
-                  <div class="answer-option">
-                    <el-checkbox @change="changeMultipleChoiceAnswerList(questionId, answerOption)">
-                      {{answerOption.text}}
-                    </el-checkbox>
-                  </div>
+            </div>
+            <div class="answer-option-list" v-else>
+              <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
+                <div class="answer-option">
+                  <el-checkbox @change="changeMultipleChoiceAnswerList(questionId, answerOption)">
+                    {{answerOption.text}}
+                  </el-checkbox>
                 </div>
               </div>
             </div>
           </div>
-          <el-button class="container__button container__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
         </div>
+        <el-button class="container__button container__button--save" type="success" icon="el-icon-check" round @click="saveResponse">응답 제출하기</el-button>
       </div>
     </div>
-  </DefaultLayout>
+  </div>
 </template>
 
 <script lang="ts">
@@ -53,11 +51,12 @@ import { IAnswerOption } from '@/store/modules/module-survey';
 import _ from 'lodash';
 import { IBackResponse, IResponse } from '@/store/modules/module-response';
 import { responseApi } from '@/apis/reponseApi';
-import DefaultLayout from '@/layouts/default-layout.vue';
 
-@Component({
-  components: { DefaultLayout }
-})
+Component.registerHooks([
+  'beforeRouteEnter'
+]);
+
+@Component({ })
 export default class PageSurveyResponse extends Vue {
   // region local
   fullscreenLoading = true
@@ -91,11 +90,11 @@ export default class PageSurveyResponse extends Vue {
   // endregion
 
   // region method
-  // beforeRouteUpdate
-  // 컴포넌트 라우트 시 자동 실행
-  // beforeRouteUpdate(to, from) {
-  //   console.log(to, from);
-  // }
+  beforeRouteEnter(to, from, next) {
+    console.log(to, from);
+    next();
+  }
+
 
   questionDescription(answerType: number) {
     if (answerType === AnswerTypes.yesNo || answerType === AnswerTypes.oneChoice) {
@@ -201,16 +200,14 @@ export default class PageSurveyResponse extends Vue {
 
   // region lifecycle
   async created() {
+    // console.log(this.$route.params);
     // params 가 변경된 것이지 라우팅이 변경된 게 아니기 때문에, $watch 로 변화를 비교할 수 있다.
     this.$watch(() => this.$route.params, (current, old) => {
+      // console.log('current', current, 'old', old);
       if (current.userName !== old.userName) {
         this.$router.push({ name: PageRouteNames.surveyResponseUserValidate });
       }
     });
-
-    //
-    console.log(document.referrer);
-
 
     await $surveyStore.fetchGetSurvey(this.surveyId)
       .then(() => {

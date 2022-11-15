@@ -6,8 +6,6 @@ import _ from 'lodash';
 import { NoticeMessages } from '@/enum/notice-messages';
 import router from '@/router';
 import { PageRouteNames } from '@/enum/page-names';
-import { checkForHexRegExp } from '@/utils/utils';
-import { ObjectId } from 'bson';
 
 export interface ISurveyList {
   total: number;

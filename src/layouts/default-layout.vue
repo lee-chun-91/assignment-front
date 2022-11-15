@@ -59,7 +59,7 @@ export default class DefaultLayout extends Vue {
   // endregion
 
   created() {
-    console.log(this.$route);
+    // console.log(this.$route);
   }
 }
 </script>

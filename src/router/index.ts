@@ -14,7 +14,6 @@ import pageSurveyResponseUserValidate from '@/pages/page-survey-response-user-va
 import { $adminStore } from '@/store';
 import { getCookie } from '@/utils/cookie';
 import { PageRouteNames } from '@/enum/page-names';
-import { checkForHexRegExp } from '@/utils/utils';
 import { ObjectId } from 'bson';
 
 Vue.use(VueRouter);
@@ -56,53 +55,21 @@ const routes: Array<RouteConfig> = [
         ];
       }
     },
-    // beforeEnter(to, from, next) {
-    //   if (!checkForHexRegExp.test(to.params.surveyId)) {
-    //     router.push({ name: PageRouteNames.notFound });
-    //   }
-    //   else {
-    //     next();
-    //   }
-    // }
   },
   {
     path: '/report/:surveyId',
     name: PageRouteNames.surveyReport,
     component: PageSurveyReport,
-    // beforeEnter(to, from, next) {
-    //   if (!checkForHexRegExp.test(to.params.surveyId)) {
-    //     router.push({ name: PageRouteNames.notFound });
-    //   }
-    //   else {
-    //     next();
-    //   }
-    // }
   },
   {
     path: '/log/:surveyId',
     name: PageRouteNames.surveyLog,
     component: PageSurveyLog,
-    // beforeEnter(to, from, next) {
-    //   if (!checkForHexRegExp.test(to.params.surveyId)) {
-    //     router.push({ name: PageRouteNames.notFound });
-    //   }
-    //   else {
-    //     next();
-    //   }
-    // }
   },
   {
     path: '/log/:surveyId/:userName',
     name: PageRouteNames.surveyLogDetail,
     component: PageSurveyLogDetail,
-    // beforeEnter(to, from, next) {
-    //   if (!checkForHexRegExp.test(to.params.surveyId)) {
-    //     router.push({ name: PageRouteNames.notFound });
-    //   }
-    //   else {
-    //     next();
-    //   }
-    // }
   },
   {
     path: '/signIn',
@@ -113,27 +80,11 @@ const routes: Array<RouteConfig> = [
     path: '/response/:surveyId',
     name: PageRouteNames.surveyResponseUserValidate,
     component: pageSurveyResponseUserValidate,
-    // beforeEnter(to, from, next) {
-    //   if (!checkForHexRegExp.test(to.params.surveyId)) {
-    //     router.push({ name: PageRouteNames.notFound });
-    //   }
-    //   else {
-    //     next();
-    //   }
-    // }
   },
   {
     path: '/response/:surveyId/:userName',
     name: PageRouteNames.surveyResponse,
     component: PageSurveyResponse,
-    // beforeEnter(to, from, next) {
-    //   if (!checkForHexRegExp.test(to.params.surveyId)) {
-    //     router.push({ name: PageRouteNames.notFound });
-    //   }
-    //   else {
-    //     next();
-    //   }
-    // }
   },
   {
     path: '*',

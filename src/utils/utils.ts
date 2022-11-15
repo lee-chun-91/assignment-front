@@ -43,5 +43,3 @@ export const uuid = () => {
   }
   return uuidValue;
 };
-
-export const checkForHexRegExp = new RegExp('^[0-9a-fA-F]{24}$');

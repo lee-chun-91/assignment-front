@@ -60,7 +60,7 @@ export default class PageSurveyResponseUserValidate extends Vue {
   // endregion
 
   created() {
-    console.log(this.$route.params);
+    console.log(this.$route);
   }
 }
 </script>
