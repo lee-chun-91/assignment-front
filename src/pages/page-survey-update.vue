@@ -1,5 +1,10 @@
 <template>
   <DefaultLayout>
+    <div class="breadcrumb">
+      <router-link :to="{ path: '/' }">설문 목록</router-link>
+      <span> > </span>
+      <router-link :to="{ path: `/update/${surveyId}` }">{{survey.surveyName}} 수정</router-link>
+    </div>
     <div class="survey-update">
       <survey-title></survey-title>
       <question-list></question-list>
@@ -24,6 +29,10 @@ export default class PageSurveyUpdate extends Vue {
   // region computed
   get surveyId() {
     return this.$route.params.surveyId;
+  }
+
+  get survey() {
+    return $surveyStore.survey;
   }
   // endregion
 

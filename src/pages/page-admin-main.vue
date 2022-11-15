@@ -1,5 +1,8 @@
 <template>
   <DefaultLayout>
+    <div class="breadcrumb">
+      <router-link :to="{ path: '/' }">설문 목록</router-link>
+    </div>
     <div class="admin-main">
       <div class="button">
         <router-link to="/create"><el-button plain class="button button--create">설문지 추가</el-button></router-link>

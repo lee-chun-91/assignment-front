@@ -1,5 +1,10 @@
 <template>
   <DefaultLayout>
+    <div class="breadcrumb">
+      <router-link :to="{ path: '/' }">설문 목록</router-link>
+      <span> > </span>
+      <router-link :to="{ path: `/log/${surveyId}` }">{{survey.surveyName}} 로그</router-link>
+    </div>
     <div class="survey-log">
       <div class="survey-log__body" v-show="isResponseListEmpty">
         <div class="survey-log--noContent">
@@ -36,7 +41,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { $responseStore } from '@/store';
+import { $responseStore, $surveyStore } from '@/store';
 import { PageRouteNames } from '@/enum/page-names';
 import DefaultLayout from '@/layouts/default-layout.vue';
 
@@ -49,6 +54,10 @@ export default class PageSurveyLog extends Vue {
   // region computed
   get surveyId() {
     return this.$route.params.surveyId;
+  }
+
+  get survey() {
+    return $surveyStore.survey;
   }
 
   get responseList() {
@@ -75,6 +84,8 @@ export default class PageSurveyLog extends Vue {
 
   // region lifecycle
   async created() {
+    await $surveyStore.fetchGetSurvey(this.surveyId);
+
     await $responseStore.fetchGetLogList({ page: 1, surveyId: this.surveyId });
   }
   // endregion
