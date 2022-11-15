@@ -6,8 +6,10 @@
       <router-link :to="{ path: '/create' }">설문 생성</router-link>
     </div>
     <div class="survey-create">
-      <survey-title></survey-title>
-      <question-list></question-list>
+      <el-form :model="survey" :rules="rules" ref="surveyForm">
+        <survey-title :survey="survey"></survey-title>
+        <question-list :survey="survey"></question-list>
+      </el-form>
       <div class="button-group">
         <el-button class="button-group__button button-group__button--add"
                    type="primary"
@@ -47,6 +49,30 @@ import { NoticeMessages } from '@/enum/notice-messages';
 })
 export default class PageSurveyCreate extends Vue {
   // region local
+  rules = {
+    surveyName: { required: true, message: '설문명을 입력해주세요', trigger: 'blur' },
+    questionList: {
+      type: 'array',
+      required: true,
+      defaultField: {
+        type: 'object',
+        required: true,
+        fields: {
+          questionName: { required: true, message: '질문을 입력해주세요', trigger: 'blur' },
+          answerOptionList: {
+            type: 'array',
+            required: true,
+            defaultField: {
+              type: 'object',
+              fields: {
+                text: { required: true, message: '답변 옵션을 입력해주세요', trigger: 'blur' },
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   // endregion
 
   get survey() {

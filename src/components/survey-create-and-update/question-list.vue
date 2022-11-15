@@ -14,20 +14,24 @@
     >
       <transition-group type="transition" :name="!dragging ? 'flip-list' : null">
         <div class="survey-create-and-update question"
-             v-for="{ questionId, questionName, answerType, answerOptionList } in questionList"
+             v-for="({ questionId, questionName, answerType, answerOptionList }, questionIndex ) in questionList"
              :key="questionId"
         >
           <i class="el-icon-rank handle"></i>
             <div class="survey-create-and-update question__title">
               <div class="question__questionName">
-                <el-input class="question__input"
-                          type="text" id="질문내용"
-                          placeholder="질문을 입력해주세요"
-                          name="questionName"
-                          :value="questionName"
-                          @input="updateQuestionName(questionId, $event)"
-                >
-                </el-input>
+                <el-form-item :prop="'questionList.' + questionIndex + '.questionName'">
+<!--                <el-form-item :prop="'questionList.' + questionIndex + '.questionName'"-->
+<!--                              :rules="{required: true, message: '질문을 입력해주세요', trigger: 'blur'}">-->
+                  <el-input class="question__input"
+                            type="text" id="질문내용"
+                            placeholder="질문을 입력해주세요"
+                            name="questionName"
+                            :value="questionName"
+                            @input="updateQuestionName(questionId, $event)"
+                  >
+                  </el-input>
+                </el-form-item>
               </div>
               <div>
                 <el-select :value="answerType" @change="handleUpdateAnswerType(questionId, $event)">
@@ -39,20 +43,27 @@
             </div>
 
             <div class="answer-option-list">
-              <div class="answer-option__wrapper" v-for="(item, index) in answerOptionList" :key="index">
+              <div class="answer-option__wrapper" v-for="(item, answerOptionIndex) in answerOptionList" :key="item.id">
                 <div class="answer-option" v-if="isRadioButton(answerType)">
                     <el-radio style="{ margin-right: 0 }" disabled value="false"></el-radio>
-                    <el-input class="answer-option__input"
-                              type="text"
-                              :id="index"
-                              :value="item.text"
-                              @input="handleUpdateAnswerOption(questionId, index, $event)"
-                    >
-                    </el-input>
+                    <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.item'">
+<!--                    <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.item'"-->
+<!--                                  :rules="{type: 'object', required: true, fields: {-->
+<!--                                    text: { required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}-->
+<!--                                  }}">-->
+                      <el-input class="answer-option__input"
+                                type="text"
+                                :id="answerOptionIndex"
+                                :value="item.text"
+                                @input="handleUpdateAnswerOption(questionId, answerOptionIndex, $event)"
+                      >
+                      </el-input>
+                      {{'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.item'}}
+                    </el-form-item>
                     <el-button size="mini"
                                circle
                                :style="isShowDeleteAnswerOptionButton(questionId)"
-                               @click="deleteAnswerOption(questionId, index)"
+                               @click="deleteAnswerOption(questionId, answerOptionIndex)"
                     >
                       <i class="el-icon-delete"></i>
                     </el-button>
@@ -61,15 +72,15 @@
                   <el-checkbox disabled value="false"></el-checkbox>
                   <el-input class="answer-option__input"
                             type="text"
-                            :id="index"
+                            :id="answerOptionIndex"
                             :value="item.text"
-                            @input="handleUpdateAnswerOption(questionId, index, $event)"
+                            @input="handleUpdateAnswerOption(questionId, answerOptionIndex, $event)"
                   >
                   </el-input>
                   <el-button size="mini"
                              circle
                              :style="isShowDeleteAnswerOptionButton(questionId)"
-                             @click="deleteAnswerOption(questionId, index)"
+                             @click="deleteAnswerOption(questionId, answerOptionIndex)"
                   >
                     <i class="el-icon-delete"></i>
                   </el-button>
@@ -94,16 +105,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import draggable from 'vuedraggable';
 import { $surveyStore } from '@/store';
-import { IQuestion } from '@/store/modules/module-survey';
+import { IQuestion, ISurvey } from '@/store/modules/module-survey';
 import { AnswerTypes } from '@/enum/answer-types';
 import _ from 'lodash';
 
 @Component({ components: { draggable } })
 export default class QuestionList extends Vue {
   // region Prop
+  @Prop ( { type: Object as () => ISurvey }) survey!: ISurvey
   // endregion
 
   // region local

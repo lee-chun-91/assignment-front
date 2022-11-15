@@ -67,9 +67,9 @@ export default class DefaultLayout extends Vue {
   }
   // endregion
 
-  created() {
-    console.log(this.$route.meta);
-    console.log(this.breadCrumbs);
-  }
+  // created() {
+  //   console.log(this.$route.meta);
+  //   console.log(this.breadCrumbs);
+  // }
 }
 </script>
