@@ -20,9 +20,8 @@
           <i class="el-icon-rank handle"></i>
             <div class="survey-create-and-update question__title">
               <div class="question__questionName">
-                <el-form-item :prop="'questionList.' + questionIndex + '.questionName'">
-<!--                <el-form-item :prop="'questionList.' + questionIndex + '.questionName'"-->
-<!--                              :rules="{required: true, message: '질문을 입력해주세요', trigger: 'blur'}">-->
+                <el-form-item :prop="'questionList.' + questionIndex + '.questionName'"
+                              :rules="{required: true, message: '질문을 입력해주세요', trigger: 'blur'}">
                   <el-input class="question__input"
                             type="text" id="질문내용"
                             placeholder="질문을 입력해주세요"
@@ -43,22 +42,18 @@
             </div>
 
             <div class="answer-option-list">
-              <div class="answer-option__wrapper" v-for="(item, answerOptionIndex) in answerOptionList" :key="item.id">
+              <div class="answer-option__wrapper" v-for="({id, text}, answerOptionIndex) in answerOptionList" :key="id">
                 <div class="answer-option" v-if="isRadioButton(answerType)">
                     <el-radio style="{ margin-right: 0 }" disabled value="false"></el-radio>
-                    <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.item'">
-<!--                    <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.item'"-->
-<!--                                  :rules="{type: 'object', required: true, fields: {-->
-<!--                                    text: { required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}-->
-<!--                                  }}">-->
+                      <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.text'"
+                                    :rules="{required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}">
                       <el-input class="answer-option__input"
                                 type="text"
                                 :id="answerOptionIndex"
-                                :value="item.text"
+                                :value="text"
                                 @input="handleUpdateAnswerOption(questionId, answerOptionIndex, $event)"
                       >
                       </el-input>
-                      {{'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.item'}}
                     </el-form-item>
                     <el-button size="mini"
                                circle

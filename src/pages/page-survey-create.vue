@@ -51,27 +51,27 @@ export default class PageSurveyCreate extends Vue {
   // region local
   rules = {
     surveyName: { required: true, message: '설문명을 입력해주세요', trigger: 'blur' },
-    questionList: {
-      type: 'array',
-      required: true,
-      defaultField: {
-        type: 'object',
-        required: true,
-        fields: {
-          questionName: { required: true, message: '질문을 입력해주세요', trigger: 'blur' },
-          answerOptionList: {
-            type: 'array',
-            required: true,
-            defaultField: {
-              type: 'object',
-              fields: {
-                text: { required: true, message: '답변 옵션을 입력해주세요', trigger: 'blur' },
-              }
-            }
-          }
-        }
-      }
-    }
+    // questionList: {
+    //   type: 'array',
+    //   required: true,
+    //   defaultField: {
+    //     type: 'object',
+    //     required: true,
+    //     fields: {
+    //       questionName: { required: true, message: '질문을 입력해주세요', trigger: 'blur' },
+    //       answerOptionList: {
+    //         type: 'array',
+    //         required: true,
+    //         defaultField: {
+    //           type: 'object',
+    //           fields: {
+    //             text: { required: true, message: '답변 옵션을 입력해주세요', trigger: 'blur' },
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
   // endregion
 
