@@ -1,5 +1,8 @@
 .survey-report {
   background-color: $backgroundColor;
+  overflow-y: auto;
+  min-height: 1020px;
+  height:95%;
 }
 
 .survey-report__count{

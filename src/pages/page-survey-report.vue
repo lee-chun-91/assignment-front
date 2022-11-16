@@ -1,33 +1,35 @@
 <template>
   <DefaultLayout>
-    <div class="breadcrumb">
-      <router-link :to="{ path: '/' }">설문 목록</router-link>
-      <span> > </span>
-      <router-link :to="{ path: `/report/${surveyId}` }">{{survey.surveyName}} 리포트</router-link>
-    </div>
-    <div class="survey-report">
-      <div class="survey-report__count">
-        <report-count title="총 참여자" :count="totalLogCount"></report-count>
-        <report-count title="오늘 참여자" :count="todayLogCount"></report-count>
+      <div class="breadcrumb">
+        <router-link :to="{ path: '/' }">설문 목록</router-link>
+        <span> > </span>
+        <router-link :to="{ path: `/report/${surveyId}` }">{{survey.surveyName}} 리포트</router-link>
       </div>
-      <div class="survey-report__result" v-if="isEmpty">
-        <div class="survey-report--noContent">
-          <p>제출된 응답이 없습니다.</p>
+      <div class="survey-report" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
+      <div class="survey-report" v-else>
+        <div class="survey-report__count">
+          <report-count title="총 참여자" :count="totalLogCount"></report-count>
+          <report-count title="오늘 참여자" :count="todayLogCount"></report-count>
+        </div>
+        <div class="survey-report__result" v-if="isEmpty">
+          <div class="survey-report--noContent">
+            <p>제출된 응답이 없습니다.</p>
+          </div>
+        </div>
+        <div class="survey-report__result" v-else>
+          <div v-for="reportDataItem in surveyReportData" :key="reportDataItem.questionId">
+            <question-report
+              :question-name="reportDataItem.questionName"
+              :questionId="reportDataItem.questionId"
+              :reportType="reportDataItem.reportType"
+              :chartData="reportDataItem.chartData"
+              :datasets="reportDataItem.chartData.datasets"
+              @handle-update-report-type="updateReportType">
+            </question-report>
+          </div>
         </div>
       </div>
-      <div class="survey-report__result" v-else>
-        <div v-for="reportDataItem in surveyReportData" :key="reportDataItem.questionId">
-          <question-report
-            :question-name="reportDataItem.questionName"
-            :questionId="reportDataItem.questionId"
-            :reportType="reportDataItem.reportType"
-            :chartData="reportDataItem.chartData"
-            :datasets="reportDataItem.chartData.datasets"
-            @handle-update-report-type="updateReportType">
-          </question-report>
-        </div>
-      </div>
-    </div>
+
   </DefaultLayout>
 </template>
 
@@ -76,6 +78,7 @@ export default class PageSurveyReport extends Vue {
     data: []
   }
   surveyReportData: IReportDataItem[] = []
+  fullscreenLoading = true
   // endregion
 
   // region computed
@@ -104,7 +107,9 @@ export default class PageSurveyReport extends Vue {
   // endregion
 
   // region lifecycle
-  async created() {
+
+  async mounted() {
+    // console.log('mounted', this.$route);
     // 1. logList, survey data get
     await $surveyStore.fetchGetSurvey(this.surveyId);
 
@@ -135,9 +140,8 @@ export default class PageSurveyReport extends Vue {
         };
 
         this.logList = logList;
-      })
-      .catch((error) => { return Promise.reject(error); });
-
+      });
+    // .catch((error) => { return Promise.reject(error); });
 
 
     // 2. reportData 만들기
@@ -148,8 +152,6 @@ export default class PageSurveyReport extends Vue {
       const qId = question.questionId;
       let sumAnswer: string[] = [];
       const logList = this.logList.data;
-
-      // console.log('logList', logList);
 
       // 2.2. logList 에서 질문에 대한 응답을 찾고, 그 값들을 answerArray 에 모은다
       // loop 를 3겹으로 쌓았다는 점에서 나쁜 알고리즘이라고 생각. 더 나은 방법을 찾자.
@@ -195,7 +197,6 @@ export default class PageSurveyReport extends Vue {
       this.surveyReportData.push(reportDataItem);
     }));
 
-
     // 3. totalLogCount 구하기
     this.totalLogCount = this.logList.data.length;
 
@@ -203,6 +204,10 @@ export default class PageSurveyReport extends Vue {
     const today = new Date();
     this.todayLogCount = this.logList.data.filter((i) => {
       return UTILS.isSameDate(today, new Date(`${i.createdAt}`));}).length;
+  }
+
+  updated() {
+    this.fullscreenLoading = false;
   }
   // endregion
 }

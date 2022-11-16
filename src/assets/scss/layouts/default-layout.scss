@@ -11,15 +11,12 @@
 
   > * {
     width: 100%;
+    height: 95%;
   }
 }
 
-.page-wrapper {
-  overflow-y: auto;
-}
-
-
 .header {
+  height: 5%;
   background-color: white;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -53,9 +50,16 @@
   }
 }
 
+
+.page-wrapper {
+}
+
+
 .breadcrumb {
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
+
+
 

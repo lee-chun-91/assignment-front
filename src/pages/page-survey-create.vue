@@ -133,7 +133,7 @@ export default class PageSurveyCreate extends Vue {
   // endregion
 
   // region lifecycle
-  destroyed() {
+  beforeDestroy() {
     $surveyStore.fetchInitSurveyState();
   }
   // endregion
