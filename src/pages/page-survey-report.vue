@@ -85,7 +85,6 @@ export default class PageSurveyReport extends Vue {
 
   get survey() {
     return $surveyStore.survey;
-    // return $surveyStore.surveyList.data.filter((survey) => survey._id === this.surveyId);
   }
 
   get isEmpty() {
