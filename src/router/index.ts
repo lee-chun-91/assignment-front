@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import VueRouter, { Route, RouteConfig } from 'vue-router';
+import VueRouter, { RouteConfig } from 'vue-router';
 import PageAdminMain from '@/pages/page-admin-main.vue';
 import PageSurveyCreate from '@/pages/page-survey-create.vue';
 import PageSurveyUpdate from '@/pages/page-survey-update.vue';
@@ -161,6 +161,8 @@ router.beforeEach(async (to, from, next) => {
 
   // 3-1. 관리자 페이지 접근 시 쿠키에 관리자 정보 없으면, 로그인 화면으로 이동
   else if( (!userName) && (!token) && (to.name !== PageRouteNames.signIn)) {
+    console.log(userName);
+    console.log(token);
     console.log(to.params);
     next({ name: PageRouteNames.signIn });
   }

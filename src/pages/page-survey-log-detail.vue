@@ -140,7 +140,6 @@ export default class PageSurveyLogDetail extends Vue {
         this.log = log;
       });
 
-    console.log(this.log);
     this.fullscreenLoading = false;
   }
   // endregion

@@ -120,65 +120,41 @@ export default class ModuleSurvey extends VuexModule {
 
   // 질문 내용 수정
   @Mutation
-  private updateQuestionName({ questionId, questionName }: Pick<IQuestion, 'questionId'|'questionName'>) {
-    _.forEach(this.survey.questionList, (question) => {
-      if(question.questionId === questionId) {
-        question.questionName = questionName;
-        return false;
-      }
-    });
+  private updateQuestionName({ questionIndex, questionName }: { questionIndex: number, questionName: string }) {
+    this.survey.questionList[questionIndex].questionName = questionName;
   }
 
   // 질문 답변 타입 수정
   @Mutation
-  private updateAnswerType({ questionId, answerType }: Pick<IQuestion, 'questionId'|'answerType'>) {
-    _.forEach(this.survey.questionList, (question) => {
-      if(question.questionId === questionId) {
-        question.answerType = answerType;
-        if (answerType === AnswerTypes.yesNo) {
-          const leftOption = question.answerOptionList.slice(0, 2);
-          question.answerOptionList = leftOption;
-        }
-        return false;
-      }
-    });
+  private updateAnswerType({ questionIndex, answerType }: { questionIndex: number, answerType: number }) {
+    this.survey.questionList[questionIndex].answerType = answerType;
+    // 답변 타입이 yesNo 일 때 answerOption 을 2개로 고정
+    if (answerType === AnswerTypes.yesNo) {
+      const leftOption = this.survey.questionList[questionIndex].answerOptionList.slice(0, 2);
+      this.survey.questionList[questionIndex].answerOptionList = leftOption;
+    }
   }
 
   // 질문 답변 옵션 추가
   @Mutation
-  private addAnswerOption(questionId: string) {
-    _.forEach(this.survey.questionList, (question) => {
-      if(question.questionId === questionId) {
-        const answerOptionLength = question.answerOptionList.length;
-        const newAnswerOption = { id: UTILS.uuid(), text: `답변 옵션 ${answerOptionLength + 1}` };
-        question.answerOptionList.push(newAnswerOption);
-        return false;
-      }
-    });
+  private addAnswerOption(questionIndex: number) {
+    const answerOptionLength =this.survey.questionList[questionIndex].answerOptionList.length;
+    const newAnswerOption = { id: UTILS.uuid(), text: `답변 옵션 ${answerOptionLength + 1}` };
+    this.survey.questionList[questionIndex].answerOptionList.push(newAnswerOption);
   }
 
 
   // 질문 답변 옵션 수정
   @Mutation
-  private updateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
+  private updateAnswerOption({ questionIndex, answerOptionIndex, answerOption }: {questionIndex: number,
     answerOptionIndex: number, answerOption: string}) {
-    _.forEach(this.survey.questionList, (question) => {
-      if(question.questionId === questionId) {
-        question.answerOptionList[answerOptionIndex].text = answerOption;
-        return false;
-      }
-    });
+    this.survey.questionList[questionIndex].answerOptionList[answerOptionIndex].text = answerOption;
   }
 
   // 질문 답변 옵션 삭제
   @Mutation
-  private deleteAnswerOption({ questionId, answerOptionIndex }: { questionId: string, answerOptionIndex: number }) {
-    _.forEach(this.survey.questionList, (question) => {
-      if (question.questionId === questionId) {
-        question.answerOptionList.splice(answerOptionIndex, 1);
-        return false;
-      }}
-    );
+  private deleteAnswerOption({ questionIndex, answerOptionIndex }: { questionIndex: number, answerOptionIndex: number }) {
+    this.survey.questionList[questionIndex].answerOptionList.splice(answerOptionIndex, 1);
   }
 
   // 질문 순서 수정
@@ -260,33 +236,33 @@ export default class ModuleSurvey extends VuexModule {
 
   // 질문 내용 수정
   @Action
-  public fetchUpdateQuestionName({ questionId, questionName }: Pick<IQuestion, 'questionId'|'questionName'>) {
-    this.updateQuestionName({ questionId, questionName });
+  public fetchUpdateQuestionName({ questionIndex, questionName }: { questionIndex: number, questionName: string }) {
+    this.updateQuestionName({ questionIndex, questionName });
   }
 
   // 질문 답변 타입 수정
   @Action
-  public fetchUpdateAnswerType({ questionId , answerType }: Pick<IQuestion, 'questionId'|'answerType'>) {
-    this.updateAnswerType({ questionId, answerType });
+  public fetchUpdateAnswerType({ questionIndex , answerType }: { questionIndex: number, answerType: number }) {
+    this.updateAnswerType({ questionIndex, answerType });
   }
 
   // 질문 답변 옵션 추가
   @Action
-  public fetchAddAnswerOption(questionId: string) {
-    this.addAnswerOption(questionId);
+  public fetchAddAnswerOption(questionIndex: number,) {
+    this.addAnswerOption(questionIndex);
   }
 
   // 질문 답변 옵션 수정
   @Action
-  public fetchUpdateAnswerOption({ questionId, answerOptionIndex, answerOption }: {questionId: string,
+  public fetchUpdateAnswerOption({ questionIndex, answerOptionIndex, answerOption }: {questionIndex: number,
     answerOptionIndex: number, answerOption: string}) {
-    this.updateAnswerOption({ questionId, answerOptionIndex, answerOption });
+    this.updateAnswerOption({ questionIndex, answerOptionIndex, answerOption });
   }
 
   // 질문 답변 옵션 삭제
   @Action
-  public fetchDeleteAnswerOption({ questionId, answerOptionIndex }: {questionId: string, answerOptionIndex: number}) {
-    this.deleteAnswerOption({ questionId, answerOptionIndex });
+  public fetchDeleteAnswerOption({ questionIndex, answerOptionIndex }: { questionIndex: number, answerOptionIndex: number }) {
+    this.deleteAnswerOption({ questionIndex, answerOptionIndex });
   }
 
   // 질문 순서 변경
@@ -343,9 +319,13 @@ export default class ModuleSurvey extends VuexModule {
   public async fetchGetSurvey(surveyId: string) {
     return await surveyApi.getSurvey(surveyId)
       .then((res) => {
+        // console.log('res', res);
         this.setSurvey(res.data);
-      });
-    router.push({ name: PageRouteNames.notFound });
+      })
+      .catch((error) => {
+        // console.log('error', error);
+        router.push({ name: PageRouteNames.notFound });
+      } );
   }
 
   // 설문 수정
