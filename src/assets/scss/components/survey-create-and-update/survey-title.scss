@@ -17,7 +17,7 @@
     box-sizing: border-box;
     border: none;
     outline: none;
-    margin: 0 24px;
+    margin: 20px 24px 0;
     font-size: 32px;
     border-bottom: 1px solid $white;
 
@@ -33,6 +33,10 @@
     &::placeholder {
       color: $border_gray;
     }
+  }
+
+  .el-form-item__error {
+    margin: 0 24px;
   }
 
 }

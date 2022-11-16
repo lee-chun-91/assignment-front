@@ -1,6 +1,6 @@
 <template>
   <div class="survey-create-and-update survey-title">
-    <el-form-item prop="surveyName">
+    <el-form-item prop="surveyName" :rules="{ required: true, message: '설문명을 입력해주세요', trigger: 'blur' }">
       <el-input class="survey-create-and-update survey-title__input"
                 type="text"
                 placeholder="제목 없는 설문지"
