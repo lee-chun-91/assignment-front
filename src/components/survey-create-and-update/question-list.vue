@@ -40,7 +40,9 @@
                 <div class="answer-option" v-if="isRadioButton(answerType)">
                     <el-radio style="{ margin-right: 0 }" disabled value="false"></el-radio>
                     <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.text'"
-                                    :rules="{required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}">
+                                :rules="[{required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}]">
+<!--                    <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.text'"-->
+<!--                                    :rules="[{required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}]">-->
                       <el-input class="answer-option__input"
                                 type="text"
                                 :id="answerOptionIndex"
@@ -115,6 +117,19 @@ export default class QuestionList extends Vue {
   enabled = true
   dragging= false
   AnswerTypes = AnswerTypes
+  // data() {
+  //   return {
+  //     validateAnswerOption: () => (rule, value, callback) => {
+  //       // console.log(rule, value);
+  //       if(!value) {
+  //         callback(new Error('답변옵션을 입력해주세요'));
+  //       }
+  //       else {
+  //         callback();
+  //       }
+  //     }
+  //   };
+  // }
   // endregion
 
   // region computed

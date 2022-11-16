@@ -30,10 +30,10 @@
             </div>
           </div>
           <div class="answer-option-list" v-else>
-            <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
+            <div class="answer-option-wrapper" v-for="answerOption in answerOptionList" :key="answerOption.id">
               <div class="answer-option">
                 <el-checkbox disabled
-                             :checked="isCheckedAnswer(questionId, answerOption)">
+                             :checked="isMultipleChoiceAnswer(questionId, answerOption)">
                   {{answerOption.text}}
                 </el-checkbox>
               </div>
@@ -44,23 +44,7 @@
     </div>
   </DefaultLayout>
 </template>
-<!--        <div class="answer-option-list">-->
-<!--          <div class="answer-option" v-if="isRadioButton(answerType)">-->
-<!--            <el-radio disabled-->
-<!--                      v-for="(answerOption) in answerOptionList" :key="answerOption.id"-->
-<!--                      :label="answerOption.text"-->
-<!--                      :value="getOneChoiceAnswer(questionId)">-->
-<!--              {{answerOption.text}}-->
-<!--            </el-radio>-->
-<!--          </div>-->
-<!--          <div class="answer-option" v-else>-->
-<!--            <el-checkbox disabled-->
-<!--                         v-for="(answerOption) in answerOptionList" :key="answerOption.id"-->
-<!--                         :checked="isCheckedAnswer(questionId, answerOption)">-->
-<!--              {{answerOption.text}}-->
-<!--            </el-checkbox>-->
-<!--          </div>-->
-<!--        </div>-->
+
 
 
 <script lang="ts">
@@ -128,9 +112,9 @@ export default class PageSurveyLogDetail extends Vue {
     return '';
   }
 
-  isCheckedAnswer(questionId: string, answerOption: IAnswerOption) {
+  isMultipleChoiceAnswer(questionId: string, answerOption: IAnswerOption) {
     const questionResponse = _.find(this.log.questionResponseList, { questionId }) as IQuestionResponse;
-    return _.filter(questionResponse.multipleChoiceAnswerList, { text: answerOption.text }).length > 0;
+    return _.filter(questionResponse.multipleChoiceAnswerList, { id: answerOption.id }).length > 0;
   }
   // endregion
 
@@ -156,6 +140,7 @@ export default class PageSurveyLogDetail extends Vue {
         this.log = log;
       });
 
+    console.log(this.log);
     this.fullscreenLoading = false;
   }
   // endregion
