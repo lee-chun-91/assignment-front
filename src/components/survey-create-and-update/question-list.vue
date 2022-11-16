@@ -18,34 +18,28 @@
              :key="questionId"
         >
           <i class="el-icon-rank handle"></i>
-            <div class="survey-create-and-update question__title">
-              <div class="question__questionName">
-                <el-form-item :prop="'questionList.' + questionIndex + '.questionName'"
-                              :rules="{required: true, message: '질문을 입력해주세요', trigger: 'blur'}">
-                  <el-input class="question__input"
-                            type="text" id="질문내용"
-                            placeholder="질문을 입력해주세요"
-                            name="questionName"
-                            :value="questionName"
-                            @input="updateQuestionName(questionId, $event)"
-                  >
-                  </el-input>
-                </el-form-item>
-              </div>
-              <div>
-                <el-select :value="answerType" @change="handleUpdateAnswerType(questionId, $event)">
-                  <el-option label="YES/NO" :value="AnswerTypes.yesNo"></el-option>
-                  <el-option label="단일선택" :value="AnswerTypes.oneChoice"></el-option>
-                  <el-option label="다중선택" :value="AnswerTypes.multipleChoice"></el-option>
-                </el-select>
-              </div>
+            <div class="question__questionName">
+              <el-form-item :prop="'questionList.' + questionIndex + '.questionName'"
+                            :rules="{required: true, message: '질문을 입력해주세요', trigger: 'blur'}">
+                <el-input class="question__input"
+                          type="text" id="질문내용"
+                          placeholder="질문을 입력해주세요"
+                          name="questionName"
+                          :value="questionName"
+                          @input="updateQuestionName(questionId, $event)">
+                </el-input>
+              </el-form-item>
+              <el-select :value="answerType" @change="handleUpdateAnswerType(questionId, $event)">
+                <el-option label="YES/NO" :value="AnswerTypes.yesNo"></el-option>
+                <el-option label="단일선택" :value="AnswerTypes.oneChoice"></el-option>
+                <el-option label="다중선택" :value="AnswerTypes.multipleChoice"></el-option>
+              </el-select>
             </div>
-
             <div class="answer-option-list">
               <div class="answer-option__wrapper" v-for="({id, text}, answerOptionIndex) in answerOptionList" :key="id">
                 <div class="answer-option" v-if="isRadioButton(answerType)">
                     <el-radio style="{ margin-right: 0 }" disabled value="false"></el-radio>
-                      <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.text'"
+                    <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.text'"
                                     :rules="{required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}">
                       <el-input class="answer-option__input"
                                 type="text"
@@ -55,34 +49,38 @@
                       >
                       </el-input>
                     </el-form-item>
-                    <el-button size="mini"
-                               circle
-                               :style="isShowDeleteAnswerOptionButton(questionId)"
-                               @click="deleteAnswerOption(questionId, answerOptionIndex)"
-                    >
-                      <i class="el-icon-delete"></i>
-                    </el-button>
+                    <div class="answer-option__button--delete">
+                      <el-button size="mini"
+                                 circle
+                                 :style="isShowDeleteAnswerOptionButton(questionId)"
+                                 @click="deleteAnswerOption(questionId, answerOptionIndex)">
+                        <i class="el-icon-delete"></i>
+                      </el-button>
+                    </div>
                 </div>
                 <div class="answer-option" v-else-if="isCheckbox(answerType)">
                   <el-checkbox disabled value="false"></el-checkbox>
-                  <el-input class="answer-option__input"
-                            type="text"
-                            :id="answerOptionIndex"
-                            :value="item.text"
-                            @input="handleUpdateAnswerOption(questionId, answerOptionIndex, $event)"
-                  >
-                  </el-input>
-                  <el-button size="mini"
-                             circle
-                             :style="isShowDeleteAnswerOptionButton(questionId)"
-                             @click="deleteAnswerOption(questionId, answerOptionIndex)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </el-button>
+                  <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.text'"
+                                :rules="{required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}">
+                    <el-input class="answer-option__input"
+                              type="text"
+                              :id="answerOptionIndex"
+                              :value="text"
+                              @input="handleUpdateAnswerOption(questionId, answerOptionIndex, $event)"
+                    >
+                    </el-input>
+                  </el-form-item>
+                  <div class="answer-option__button--delete">
+                    <el-button size="mini"
+                               circle
+                               :style="isShowDeleteAnswerOptionButton(questionId)"
+                               @click="deleteAnswerOption(questionId, answerOptionIndex)">
+                      <i class="el-icon-delete"></i>
+                    </el-button>
+                  </div>
                 </div>
               </div>
             </div>
-
           <div class="question__footer">
             <el-button size="mini"
                        square

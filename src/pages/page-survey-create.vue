@@ -6,7 +6,7 @@
       <router-link :to="{ path: '/create' }">설문 생성</router-link>
     </div>
     <div class="survey-create">
-      <el-form :model="survey" :rules="rules" ref="surveyForm">
+      <el-form :model="survey" ref="surveyForm">
         <survey-title :survey="survey"></survey-title>
         <question-list :survey="survey"></question-list>
       </el-form>
@@ -23,7 +23,7 @@
                    type="success"
                    icon="el-icon-check"
                    round
-                   @click="saveSurvey('survey')"
+                   @click="saveSurvey('surveyForm')"
         >
           설문지 저장하기
         </el-button>
@@ -39,6 +39,7 @@ import SurveyTitle from '@/components/survey-create-and-update/survey-title.vue'
 import QuestionList from '@/components/survey-create-and-update/question-list.vue';
 import { $surveyStore } from '@/store';
 import { NoticeMessages } from '@/enum/notice-messages';
+import { ElForm } from 'element-ui/types/form';
 
 @Component({
   components: {
@@ -49,52 +50,85 @@ import { NoticeMessages } from '@/enum/notice-messages';
 })
 export default class PageSurveyCreate extends Vue {
   // region local
-  rules = {
-    surveyName: { required: true, message: '설문명을 입력해주세요', trigger: 'blur' },
-    // questionList: {
-    //   type: 'array',
-    //   required: true,
-    //   defaultField: {
-    //     type: 'object',
-    //     required: true,
-    //     fields: {
-    //       questionName: { required: true, message: '질문을 입력해주세요', trigger: 'blur' },
-    //       answerOptionList: {
-    //         type: 'array',
-    //         required: true,
-    //         defaultField: {
-    //           type: 'object',
-    //           fields: {
-    //             text: { required: true, message: '답변 옵션을 입력해주세요', trigger: 'blur' },
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-  }
+  // validateQuestionName = (rule, value, callback) => {
+  //   if(!value) {
+  //     callback(new Error('질문을 입력해주세요'));
+  //   }
+  //   callback();
+  // }
+  // validateAnswerOption = (rule, value, callback) => {
+  //   if(!value) {
+  //     callback(new Error('답변옵션을 입력해주세요'));
+  //   }
+  //   callback();
+  // }
+
+  // rules = {
+  //   surveyName: { required: true, message: '설문명을 입력해주세요', trigger: 'blur' },
+  //   questionList: {
+  //     type: 'array',
+  //     required: true,
+  //     fields: {
+  //       type: 'object',
+  //       required: true,
+  //       defaultField: {
+  //         questionId: { type:'string', required: true },
+  //         questionName: [{ validator: this.validateQuestionName, trigger: 'blur' }],
+  //         // questionName: { type:'string', required: true, message: '질문을 입력해주세요', trigger: 'blur' },
+  //         answerType: { type: 'number', required: true },
+  //         answerOptionList: {
+  //           type: 'array',
+  //           required: true,
+  //           defaultField: {
+  //             type: 'object',
+  //             required: true,
+  //             defaultField: {
+  //               id: { type: 'string', required: true },
+  //               text: [{ validator: this.validateAnswerOption, trigger: 'blur' }],
+  //               // text: { type:'string', required: true, message: '답변 옵션을 입력해주세요', trigger: 'blur' },
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   // endregion
 
+  // region computed
   get survey() {
     return $surveyStore.survey;
   }
+  // endregion
+
   // region method
   addQuestion() {
     $surveyStore.fetchAddQuestion();
   }
 
-  saveSurvey() {
-    $surveyStore.fetchSaveSurvey()
-      .then(() => this.$alert(NoticeMessages.successSaveSurvey, '안내', {
-        confirmButtonText: 'OK',
-        callback: () => {
-          this.$router.push('/');}
-      }))
-      .catch((error) => this.$message({
-        showClose: true,
-        message: error,
-        type: 'error'
-      }));
+  saveSurvey(formName) {
+    (this.$refs[formName] as ElForm).validate((valid) => {
+      if (valid) {
+        $surveyStore.fetchSaveSurvey()
+          .then(() => this.$alert(NoticeMessages.successSaveSurvey, '안내', {
+            confirmButtonText: 'OK',
+            callback: () => {
+              this.$router.push('/');}
+          }))
+          .catch((error) => this.$message({
+            showClose: true,
+            message: error,
+            type: 'error'
+          }));
+      }
+      else {
+        return this.$message({
+          showClose: true,
+          message: NoticeMessages.emptyInput,
+          type: 'error'
+        });
+      }
+    });
   }
   // endregion
 
