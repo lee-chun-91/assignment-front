@@ -8,14 +8,14 @@
           <p class="survey-title__userName">{{description}}</p>
         </div>
         <div class="question-list">
-          <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, index) in questionList"
+          <div class="question" v-for="({ questionId, questionName, answerType, answerOptionList }, questionIndex) in questionList"
                :key="questionId">
-            <div class="question__title">질문{{index}}. {{questionName}}</div>
+            <div class="question__title">질문{{questionIndex}}. {{questionName}}</div>
             <div class="question__description">{{questionDescription(answerType)}}</div>
             <div class="answer-option-list" v-if="isRadioButton(answerType)">
               <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
                 <div class="answer-option">
-                  <el-radio @change="changeOneChoiceAnswer(questionId, answerOption)"
+                  <el-radio @change="changeOneChoiceAnswer(questionIndex, answerOption)"
                             :label="answerOption.text"
                             :value="getAnswer(questionId).oneChoiceAnswer.text">
                     {{answerOption.text}}
@@ -26,7 +26,7 @@
             <div class="answer-option-list" v-else>
               <div class="answer-option-wrapper" v-for="(answerOption) in answerOptionList" :key="answerOption.id">
                 <div class="answer-option">
-                  <el-checkbox @change="changeMultipleChoiceAnswerList(questionId, answerOption)">
+                  <el-checkbox @change="changeMultipleChoiceAnswerList(questionIndex, answerOption)">
                     {{answerOption.text}}
                   </el-checkbox>
                 </div>
@@ -117,43 +117,31 @@ export default class PageSurveyResponse extends Vue {
     return this.userResponse.questionResponseList.find((a) => a.questionId === questionId);
   }
 
-  changeOneChoiceAnswer(questionId: string, selectedAnswerOption: IAnswerOption) {
-    // find, filter 등 다른 메서드 시도해보았으나, 조건을 만족하는 객체의 복사본을 반환하는 것으로 보여 state 의 값을 바로 바꾸지 못함.
-    // findIndex 불가피하게 사용.
-    const indexOfQuestionResponse = _.findIndex(this.userResponse.questionResponseList,
-      (questionResponse) => { return questionResponse.questionId === questionId; });
-
-    const oldState = this.userResponse.questionResponseList[indexOfQuestionResponse];
-    Vue.set(this.userResponse.questionResponseList, indexOfQuestionResponse, { ...oldState, oneChoiceAnswer: selectedAnswerOption });
+  changeOneChoiceAnswer(questionIndex: number, selectedAnswerOption: IAnswerOption) {
+    const oldState = this.userResponse.questionResponseList[questionIndex];
+    Vue.set(this.userResponse.questionResponseList, questionIndex, { ...oldState, oneChoiceAnswer: selectedAnswerOption });
   }
 
-  changeMultipleChoiceAnswerList (questionId: string, selectedAnswerOption: IAnswerOption) {
-    // find, filter 등 다른 메서드 시도해보았으나, 조건을 만족하는 객체의 복사본을 반환하는 것으로 보여 state 의 값을 바로 바꾸지 못함.
-    // findIndex 불가피하게 사용.
-    const indexOfQuestionResponse =  _.findIndex(this.userResponse.questionResponseList,
-      (questionResponse) => {
-        return questionResponse.questionId === questionId; });
+  changeMultipleChoiceAnswerList (questionIndex: number, selectedAnswerOption: IAnswerOption) {
 
-    const questionResponse = this.userResponse.questionResponseList[indexOfQuestionResponse];
+    const questionResponse = this.userResponse.questionResponseList[questionIndex];
 
-    // choiceAnswerList 에 유저가 체크한 selectedAnswer 가 있는지 여부 확인
+    // choiceAnswerList 에 유저의 multipleChoiceAnswerList 에 있는지 여부 확인
     const indexOfChoiceAnswer = _.findIndex(questionResponse.multipleChoiceAnswerList,
       (choiceAnswer) => {return choiceAnswer.text === selectedAnswerOption.text ;});
 
     // 답변 타입이 multiple 인 경우 selectedAnswer 의 기저장 여부에 따라 처리
     // 유저가 체크한 selectedAnswer 가 저장되어 있으면 splice 로 삭제
     if(indexOfChoiceAnswer !== -1) {
-      this.userResponse.questionResponseList[indexOfQuestionResponse].multipleChoiceAnswerList.splice(indexOfChoiceAnswer,1);
+      this.userResponse.questionResponseList[questionIndex].multipleChoiceAnswerList.splice(indexOfChoiceAnswer,1);
     }
     // 유저가 체크한 selectedAnswer 가 저장되어 있지 않으면 push 로 추가
     else if (indexOfChoiceAnswer === -1) {
-      this.userResponse.questionResponseList[indexOfQuestionResponse].multipleChoiceAnswerList.push(selectedAnswerOption);
+      this.userResponse.questionResponseList[questionIndex].multipleChoiceAnswerList.push(selectedAnswerOption);
     }
   }
 
   async saveResponse() {
-    console.log(this.userResponse);
-
     // 질문 응답 여부 validation
     const hasUnchecked = _.filter(this.userResponse.questionResponseList, (questionResponse) => {
       return questionResponse.oneChoiceAnswer.id === '' && questionResponse.multipleChoiceAnswerList.length === 0;
@@ -200,7 +188,6 @@ export default class PageSurveyResponse extends Vue {
 
   // region lifecycle
   async created() {
-    // console.log(this.$route.params);
     // params 가 변경된 것이지 라우팅이 변경된 게 아니기 때문에, $watch 로 변화를 비교할 수 있다.
     this.$watch(() => this.$route.params, (current, old) => {
       // console.log('current', current, 'old', old);

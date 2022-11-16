@@ -26,10 +26,10 @@
                           placeholder="질문을 입력해주세요"
                           name="questionName"
                           :value="questionName"
-                          @input="updateQuestionName(questionId, $event)">
+                          @input="updateQuestionName(questionIndex, $event)">
                 </el-input>
               </el-form-item>
-              <el-select :value="answerType" @change="handleUpdateAnswerType(questionId, $event)">
+              <el-select :value="answerType" @change="handleUpdateAnswerType(questionIndex, $event)">
                 <el-option label="YES/NO" :value="AnswerTypes.yesNo"></el-option>
                 <el-option label="단일선택" :value="AnswerTypes.oneChoice"></el-option>
                 <el-option label="다중선택" :value="AnswerTypes.multipleChoice"></el-option>
@@ -41,13 +41,11 @@
                     <el-radio style="{ margin-right: 0 }" disabled value="false"></el-radio>
                     <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.text'"
                                 :rules="[{required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}]">
-<!--                    <el-form-item :prop="'questionList.' + questionIndex + '.answerOptionList.' + answerOptionIndex + '.text'"-->
-<!--                                    :rules="[{required: true, message: '답변옵션을 입력해주세요', trigger: 'blur'}]">-->
                       <el-input class="answer-option__input"
                                 type="text"
                                 :id="answerOptionIndex"
                                 :value="text"
-                                @input="handleUpdateAnswerOption(questionId, answerOptionIndex, $event)"
+                                @input="handleUpdateAnswerOption(questionIndex, answerOptionIndex, $event)"
                       >
                       </el-input>
                     </el-form-item>
@@ -55,7 +53,7 @@
                       <el-button size="mini"
                                  circle
                                  :style="isShowDeleteAnswerOptionButton(questionId)"
-                                 @click="deleteAnswerOption(questionId, answerOptionIndex)">
+                                 @click="deleteAnswerOption(questionIndex, answerOptionIndex)">
                         <i class="el-icon-delete"></i>
                       </el-button>
                     </div>
@@ -68,7 +66,7 @@
                               type="text"
                               :id="answerOptionIndex"
                               :value="text"
-                              @input="handleUpdateAnswerOption(questionId, answerOptionIndex, $event)"
+                              @input="handleUpdateAnswerOption(questionIndex, answerOptionIndex, $event)"
                     >
                     </el-input>
                   </el-form-item>
@@ -76,7 +74,7 @@
                     <el-button size="mini"
                                circle
                                :style="isShowDeleteAnswerOptionButton(questionId)"
-                               @click="deleteAnswerOption(questionId, answerOptionIndex)">
+                               @click="deleteAnswerOption(questionIndex, answerOptionIndex)">
                       <i class="el-icon-delete"></i>
                     </el-button>
                   </div>
@@ -86,7 +84,7 @@
           <div class="question__footer">
             <el-button size="mini"
                        square
-                       @click="addAnswerOption(questionId)"
+                       @click="addAnswerOption(questionIndex)"
                        :style="isShowAddAnswerOptionButton(answerType)"
             >
               + 답변 옵션 추가
@@ -143,12 +141,12 @@ export default class QuestionList extends Vue {
   // endregion
 
   // region method
-  updateQuestionName(questionId: string, questionName: string) {
-    $surveyStore.fetchUpdateQuestionName({ questionId, questionName });
+  updateQuestionName(questionIndex: number, questionName: string) {
+    $surveyStore.fetchUpdateQuestionName({ questionIndex, questionName });
   }
 
-  handleUpdateAnswerType(questionId: string, answerType: number) {
-    $surveyStore.fetchUpdateAnswerType({ questionId, answerType });
+  handleUpdateAnswerType(questionIndex: number, answerType: number) {
+    $surveyStore.fetchUpdateAnswerType({ questionIndex, answerType });
   }
 
   isShowAddAnswerOptionButton(answerType: number) {
@@ -156,8 +154,8 @@ export default class QuestionList extends Vue {
       { 'visibility': 'hidden' } : { 'visibility': 'visible' };
   }
 
-  addAnswerOption(questionId: string) {
-    $surveyStore.fetchAddAnswerOption(questionId);
+  addAnswerOption(questionIndex: number,) {
+    $surveyStore.fetchAddAnswerOption(questionIndex);
   }
 
   deleteQuestion(questionId: string) {
@@ -178,12 +176,12 @@ export default class QuestionList extends Vue {
       { 'visibility': 'visible' } : { 'visibility': 'hidden' };
   }
 
-  handleUpdateAnswerOption(questionId: string, answerOptionIndex: number, answerOption: string) {
-    $surveyStore.fetchUpdateAnswerOption( { questionId, answerOptionIndex, answerOption });
+  handleUpdateAnswerOption(questionIndex: number, answerOptionIndex: number, answerOption: string) {
+    $surveyStore.fetchUpdateAnswerOption( { questionIndex, answerOptionIndex, answerOption });
   }
   //
-  deleteAnswerOption(questionId: string, answerOptionIndex: number) {
-    $surveyStore.fetchDeleteAnswerOption({ questionId, answerOptionIndex });
+  deleteAnswerOption(questionIndex: number, answerOptionIndex: number) {
+    $surveyStore.fetchDeleteAnswerOption({ questionIndex, answerOptionIndex });
   }
   // endregion
 }
