@@ -84,7 +84,7 @@ export default class PageSignIn extends Vue {
       if (valid) {
         // alert('submit!');
         $adminStore.fetchLogin({ userName: this.ruleForm.userName, password: this.ruleForm.password })
-          .then((res) => {
+          .then(() => {
             this.goBack();
           });
       } else {
@@ -93,9 +93,5 @@ export default class PageSignIn extends Vue {
     });
   }
   // endregion
-
-  // region lifecycle
-  // endregion
-
 }
 </script>

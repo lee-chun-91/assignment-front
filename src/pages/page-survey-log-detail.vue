@@ -3,9 +3,9 @@
     <div class="breadcrumb">
       <router-link :to="{ path: '/' }">설문 목록</router-link>
       <span> > </span>
-      <router-link :to="{ path: `/log/${surveyId}` }">{{survey.surveyName}} 로그</router-link>
+      <router-link :to="{ path: `/log/${this.surveyId}` }">{{survey.surveyName}} 로그</router-link>
       <span> > </span>
-      <router-link :to="{ path: `/log/${surveyId}/${userName}` }">{{userName}}님의 응답</router-link>
+      <router-link :to="{ path: `/log/${this.surveyId}/${this.userName}` }">{{userName}}님의 응답</router-link>
     </div>
     <div class="survey-log-detail" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
     <div class="survey-log-detail" v-else>
@@ -73,12 +73,12 @@ export default class PageSurveyLogDetail extends Vue {
     return this.$route.params.surveyId;
   }
 
-  get survey() {
-    return $surveyStore.survey;
-  }
-
   get userName() {
     return this.$route.params.userName;
+  }
+
+  get survey() {
+    return $surveyStore.survey;
   }
 
   get questionList() {
@@ -120,6 +120,11 @@ export default class PageSurveyLogDetail extends Vue {
 
   // region lifecycle
   async created() {
+    await $surveyStore.fetchGetSurvey(this.surveyId);
+  }
+
+  async mounted() {
+    // await $surveyStore.fetchGetSurvey(this.surveyId);
     await responseApi.getLogDetail(this.surveyId, this.userName)
       .then((res) => {
         const questionResponseList: IQuestionResponse[] = _.map(res.data.question_response_list, (backQuestionResponse) => {
@@ -137,9 +142,11 @@ export default class PageSurveyLogDetail extends Vue {
           questionResponseList,
         };
 
+        console.log(log);
         this.log = log;
-      });
 
+        console.log(this.log);
+      });
     this.fullscreenLoading = false;
   }
   // endregion

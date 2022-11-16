@@ -9,6 +9,10 @@
       </div>
       <div class="admin-main__body" v-show="isSurveyListEmpty">생성된 설문이 없습니다.</div>
       <div class="admin-main__body" v-show="!isSurveyListEmpty">
+<!--        <div>-->
+<!--          <p>{{ val }} | edited {{ count }} times</p>-->
+<!--          <button @click="val = Math.random(0, 100)">Click to Change</button>-->
+<!--        </div>-->
         <table class="table">
           <thead class="table__thead">
           <tr class="table__tr">
@@ -71,6 +75,24 @@ export default class PageAdminMain extends Vue {
   PageRouteNames = PageRouteNames
   // endregion
 
+  // 라이프사이클 update 부분 학습 위한 코드
+  // val = 0
+  // count = 0
+  //
+  // beforeUpdate() {
+  //   this.count++;
+  //   console.log('beforeUpdate() val: ' + this.val);
+  // }
+  // updated() {
+  //   // this.count = this.count + 1;
+  //   console.log('updated() val: ' + this.val);
+  // }
+  //
+  // @Watch('val')
+  // onValueChange(val, old) {
+  //   console.log(val, old);
+  // }
+
   // region computed
   get surveyList() {
     return $surveyStore.surveyList.data;
@@ -90,9 +112,9 @@ export default class PageAdminMain extends Vue {
   // endregion
 
   // region method
-  beforeRouteEnter(to, from, next) {
-    console.log(to, from);
-  }
+  // beforeRouteEnter(to, from, next) {
+  //   console.log(to, from);
+  // }
 
   async handleCurrentChange(page: number) {
     await $surveyStore.fetchGetSurveyList(page);
@@ -100,7 +122,7 @@ export default class PageAdminMain extends Vue {
   // endregion
 
   // region lifecycle
-  async created() {
+  async mounted() {
     await $surveyStore.fetchGetSurveyList(1);
   }
   // endregion

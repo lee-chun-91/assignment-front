@@ -5,7 +5,8 @@
       <span> > </span>
       <router-link :to="{ path: `/update/${surveyId}` }">{{survey.surveyName}} 수정</router-link>
     </div>
-    <div class="survey-update">
+    <div class="survey-update" v-if="fullscreenLoading" v-loading="fullscreenLoading"></div>
+    <div class="survey-update" v-else>
       <el-form :model="survey" ref="surveyForm">
         <survey-title :survey="survey"></survey-title>
         <question-list :survey="survey"></question-list>
@@ -60,6 +61,7 @@ export default class PageSurveyUpdate extends Vue {
   //     }
   //   }
   // }
+  fullscreenLoading = true
   // endregion
 
   // region computed
@@ -108,7 +110,11 @@ export default class PageSurveyUpdate extends Vue {
     await $surveyStore.fetchGetSurvey(this.surveyId);
   }
 
-  destroyed() {
+  updated() {
+    this.fullscreenLoading = false;
+  }
+
+  beforeDestroy() {
     $surveyStore.fetchInitSurveyState();
   }
   // endregion

@@ -85,7 +85,9 @@ export default class PageSurveyLog extends Vue {
   // region lifecycle
   async created() {
     await $surveyStore.fetchGetSurvey(this.surveyId);
+  }
 
+  async mounted() {
     await $responseStore.fetchGetLogList({ page: 1, surveyId: this.surveyId });
   }
   // endregion
