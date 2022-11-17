@@ -8,8 +8,10 @@ import { NoticeMessages } from '@/enum/notice-messages';
 import { $adminStore } from '@/store';
 
 export const instance = axios.create({
-  // baseURL: 'http://assignmentback-env.eba-vpbdurbn.ap-northeast-2.elasticbeanstalk.com/',
-  baseURL: 'https://localhost:7063/',
+  baseURL: 'http://assignmentback-env.eba-vpbdurbn.ap-northeast-2.elasticbeanstalk.com/',
+  // baseURL: 'https://chunlee.link/',
+  // baseURL: 'http://assignmentback3-env.eba-h4dqvdjq.ap-northeast-2.elasticbeanstalk.com/',
+  // baseURL: 'https://localhost:7063/',
   headers: {
     // 'Accept': 'application/json',
     // 'Content-Type': 'application/json; charset=utf-8'

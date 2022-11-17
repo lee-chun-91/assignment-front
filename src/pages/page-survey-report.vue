@@ -109,7 +109,6 @@ export default class PageSurveyReport extends Vue {
   // region lifecycle
 
   async mounted() {
-    // console.log('mounted', this.$route);
     // 1. logList, survey data get
     await $surveyStore.fetchGetSurvey(this.surveyId);
 
