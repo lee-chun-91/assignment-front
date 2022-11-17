@@ -4,7 +4,7 @@ import { IBackAdminInfo } from '@/store/modules/module-admin';
 export const adminApi = {
   // 관리자 로그인
   adminLogin: (userInfo: IBackAdminInfo) => {
-    const data = instance.post('api/user/login', userInfo);
+    const data = instance.post('api/user/login', userInfo, { withCredentials: true });
     return data;
   },
 };

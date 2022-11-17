@@ -10,6 +10,7 @@ import PageSurveyResponse from '@/pages/page-survey-response.vue';
 import PageSignIn from '@/pages/page-sign-in.vue';
 import PageNotFound from '@/pages/page-not-found.vue';
 import pageSurveyResponseUserValidate from '@/pages/page-survey-response-user-validate.vue';
+
 import { $adminStore } from '@/store';
 import { getCookie } from '@/utils/cookie';
 import { PageRouteNames } from '@/enum/page-names';
@@ -94,10 +95,9 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // 3-1. 관리자 페이지 접근 시 쿠키에 관리자 정보 없으면, 로그인 화면으로 이동
-  else if( (!userName) && (!token) && (to.name !== PageRouteNames.signIn)) {
+  else if( (!userName || !token) && (to.name !== PageRouteNames.signIn)) {
     console.log(userName);
     console.log(token);
-    console.log(to.params);
     next({ name: PageRouteNames.signIn });
   }
 
